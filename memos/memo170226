@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ramadan Memo - Absar Alomran Construction</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&family=Noto+Sans+Arabic:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans', 'Noto Sans Arabic', sans-serif;
+            background-color: #f3f4f6;
+            color: #1f2937;
+        }
+        .page-break {
+            page-break-after: always;
+        }
+        .company-blue {
+            color: #003366;
+        }
+        .bg-company-blue {
+            background-color: #003366;
+        }
+        .memo-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            background: white;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            min-height: 1120px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .content-padding {
+            padding: 2rem 3.5rem 4rem 3.5rem;
+        }
+        /* Header image sizing */
+        .header-img {
+            width: 100%;
+            height: auto;
+            max-height: 180px; 
+            object-fit: contain;
+        }
+        @media print {
+            body { background: white; }
+            .memo-container { 
+                margin: 0; 
+                box-shadow: none;
+                width: 100%;
+                max-width: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- PAGE 1: ENGLISH VERSION -->
+    <div class="memo-container page-break">
+        <!-- Header Image -->
+        <div class="w-full">
+            <img src="https://i.ibb.co/yFq45k7N/header.png" alt="Company Header" class="header-img">
+        </div>
+
+        <!-- Content -->
+        <main class="flex-grow content-padding">
+            <h2 class="text-xl font-bold mb-6 underline">INTERNAL MEMO</h2>
+            
+            <div class="space-y-1 mb-8">
+                <p><strong>Date:</strong> February 17, 2026</p>
+                <p><strong>To:</strong> All Employees</p>
+                <p><strong>From:</strong> General Management</p>
+                <p><strong>Subject:</strong> Working Hours during the Holy Month of Ramadan</p>
+            </div>
+
+            <p class="mb-6">Dear Team,</p>
+            <p class="mb-6">We would like to extend our warmest congratulations and best wishes to you and your families on the occasion of the Holy Month of Ramadan.</p>
+            <p class="mb-6">Please be informed that the official working hours during the holy month will be adjusted as follows:</p>
+
+            <table class="w-full border-collapse border border-gray-400 mb-8 text-center">
+                <thead>
+                    <tr class="bg-company-blue text-white">
+                        <th class="border border-gray-400 p-3">Department</th>
+                        <th class="border border-gray-400 p-3">Ramadan Timing</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="border border-gray-400 p-3 font-bold">Office Staff</td>
+                        <td class="border border-gray-400 p-3 font-bold">9:00 AM – 3:00 PM</td>
+                    </tr>
+                    <tr>
+                        <td class="border border-gray-400 p-3 font-bold">Site Staff</td>
+                        <td class="border border-gray-400 p-3 font-bold">8:00 PM – 2:00 AM</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p class="mb-6">Regular working hours will resume immediately after the Eid Al-Fitr holiday. We appreciate your dedication and cooperation.</p>
+            <p class="font-bold text-lg">Ramadan Kareem!</p>
+        </main>
+    </div>
+
+    <!-- PAGE 2: ARABIC VERSION -->
+    <div class="memo-container" dir="rtl">
+        <!-- Header Image -->
+        <div class="w-full">
+            <img src="https://i.ibb.co/yFq45k7N/header.png" alt="Company Header" class="header-img">
+        </div>
+
+        <!-- Content -->
+        <main class="flex-grow text-right content-padding">
+            <h2 class="text-2xl font-bold mb-6 underline">تعميم إداري</h2>
+            
+            <div class="space-y-1 mb-8 text-lg">
+                <p><strong>التاريخ:</strong> 17 فبراير 2026 م</p>
+                <p><strong>إلى:</strong> جميع منسوبي الشركة</p>
+                <p><strong>من:</strong> الإدارة العامة</p>
+                <p><strong>الموضوع:</strong> ساعات العمل الرسمي خلال شهر رمضان المبارك</p>
+            </div>
+
+            <p class="mb-6 text-lg">الزملاء الأعزاء،،</p>
+            <p class="mb-6 text-lg">بمناسبة حلول شهر رمضان المبارك، يسر إدارة الشركة أن تتقدم إليكم بأصدق التهاني وأطيب التبريكات، سائلين المولى عز وجل أن يتقبل منا ومنكم صالح الأعمال.</p>
+            <p class="mb-6 text-lg">نود إفادتكم بأن ساعات العمل الرسمي خلال الشهر الفضيل ستكون وفقاً للجدول التالي:</p>
+
+            <table class="w-full border-collapse border border-gray-400 mb-8 text-center text-lg">
+                <thead>
+                    <tr class="bg-company-blue text-white">
+                        <th class="border border-gray-400 p-3">القسم</th>
+                        <th class="border border-gray-400 p-3">توقيت رمضان</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="border border-gray-400 p-3 font-bold">موظفي المكتب</td>
+                        <td class="border border-gray-400 p-3 font-bold" dir="ltr">09:00 AM – 03:00 PM</td>
+                    </tr>
+                    <tr>
+                        <td class="border border-gray-400 p-3 font-bold">موظفي الموقع</td>
+                        <td class="border border-gray-400 p-3 font-bold" dir="ltr">08:00 PM – 02:00 AM</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p class="mb-8 text-lg">علماً بأن العمل سيعود للمواعيد الاعتيادية فور انتهاء إجازة عيد الفطر المبارك.</p>
+            
+            <div class="mt-10">
+                <p class="font-bold text-lg">وتقبلوا خالص التحية،،</p>
+                <p class="font-bold text-lg">وكل عام وأنتم بخير.</p>
+            </div>
+        </main>
+    </div>
+
+</body>
+</html>
