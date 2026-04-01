@@ -168,6 +168,26 @@
                 </div>
             </section>
         </div>
+
+        <!-- Footer Credits -->
+        <div class="px-8 py-6 bg-slate-50 border-t border-slate-200 flex flex-col items-center justify-center space-y-2">
+            <div class="flex items-center gap-2 text-slate-400">
+                <span class="h-px w-8 bg-slate-200"></span>
+                <span class="text-[10px] uppercase tracking-[0.2em] font-semibold en">Curated Design</span>
+                <span class="text-[10px] uppercase tracking-[0.1em] font-semibold font-arabic ar">تصميم مختار</span>
+                <span class="h-px w-8 bg-slate-200"></span>
+            </div>
+            <div class="flex items-center gap-1 text-slate-600 font-medium text-sm">
+                <span class="en italic">Designed by</span>
+                <span class="ar font-arabic italic">صُمم بواسطة</span>
+                <span class="text-saudi-800 font-bold ml-1 tracking-tight">Kinan Ammar</span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="mt-4 text-center">
+        <p class="text-[11px] text-slate-400 font-medium en uppercase tracking-widest">© 2026 Saudi Labor Law Tool</p>
+        <p class="text-[11px] text-slate-400 font-medium font-arabic ar tracking-widest">© 2026 أداة نظام العمل السعودي</p>
     </div>
 </div>
 
@@ -205,17 +225,11 @@ function calc() {
         return;
     }
 
-    // Calculate exact difference in days, rounded to prevent millisecond floating point issues
     const diffMs = end - start;
     const totalDays = Math.round(diffMs / (1000 * 60 * 60 * 24));
     
-    // Using 365 as base for cleaner whole-year calculations. 
-    // If user enters 2020-01-01 to 2021-01-01, it is 366 days (leap), 
-    // but usually labor office calculations normalize.
     let totalYears = totalDays / 365;
     
-    // If the decimal is extremely close to a whole number (e.g., within 1 day of a leap year cycle), 
-    // we normalize it to prevent things like "5.998"
     if (Math.abs(totalYears - Math.round(totalYears)) < 0.01) {
         totalYears = Math.round(totalYears);
     }
