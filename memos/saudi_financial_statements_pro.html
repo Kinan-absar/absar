@@ -1,1 +1,1354 @@
 
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--ink:#1a1a1a;--ink2:#555;--ink3:#888;--line:#e0e0e0;--surf:#fff;--surf2:#f8f8f7;--surf3:#f2f1ef;--accent:#1a1a1a;--r:6px;--r2:10px}
+body{font-family:'Arial',sans-serif;direction:rtl;font-size:13px;color:var(--ink);background:var(--surf2)}
+
+.shell{display:flex;min-height:640px;background:var(--surf2)}
+.side{width:190px;flex-shrink:0;background:var(--surf);border-left:1px solid var(--line);display:flex;flex-direction:column}
+.side-logo{padding:16px 14px 12px;border-bottom:1px solid var(--line)}
+.side-logo .logo-mark{width:28px;height:28px;background:var(--ink);border-radius:6px;display:flex;align-items:center;justify-content:center;margin-bottom:8px}
+.side-logo .logo-mark svg{width:16px;height:16px;fill:#fff}
+.side-logo p{font-size:11px;font-weight:500;color:var(--ink);line-height:1.3}
+.side-logo small{font-size:10px;color:var(--ink3);display:block;margin-top:1px}
+.side-nav{flex:1;padding:8px 6px;overflow-y:auto}
+.nav-group{margin-bottom:4px}
+.nav-label{font-size:10px;color:var(--ink3);padding:8px 8px 3px;letter-spacing:.06em;font-weight:500}
+.nav-item{display:flex;align-items:center;gap:7px;width:100%;padding:7px 8px;font-size:12px;border:none;background:none;color:var(--ink2);border-radius:var(--r);cursor:pointer;text-align:right}
+.nav-item:hover{background:var(--surf2);color:var(--ink)}
+.nav-item.active{background:var(--ink);color:#fff;font-weight:500}
+.nav-item .icon{font-size:13px;flex-shrink:0}
+.side-foot{padding:10px 12px;border-top:1px solid var(--line)}
+.side-foot button{width:100%;padding:7px;font-size:12px;border:1px solid var(--ink);border-radius:var(--r);background:var(--ink);color:#fff;cursor:pointer;font-weight:500}
+.side-foot button:hover{opacity:.85}
+
+.main{flex:1;display:flex;flex-direction:column;min-width:0}
+.topbar{display:flex;align-items:center;gap:10px;padding:11px 16px;background:var(--surf);border-bottom:1px solid var(--line)}
+.topbar-title{font-size:14px;font-weight:500;flex:1}
+.topbar-sub{font-size:11px;color:var(--ink3);margin-top:1px}
+.topbar-actions{display:flex;gap:6px}
+.btn{padding:6px 13px;font-size:12px;border:1px solid var(--line);border-radius:var(--r);cursor:pointer;background:var(--surf);color:var(--ink);font-family:inherit}
+.btn:hover{background:var(--surf2)}
+.btn-dark{background:var(--ink);color:#fff;border-color:var(--ink)}
+.btn-dark:hover{opacity:.85}
+.btn-sm{padding:4px 10px;font-size:11px}
+.btn-ghost{border-color:transparent;background:none}
+.btn-ghost:hover{background:var(--surf2)}
+.btn-del{padding:2px 7px;font-size:10px;border:1px solid #fca5a5;border-radius:4px;background:none;cursor:pointer;color:#dc2626;opacity:.7}
+.btn-del:hover{opacity:1;background:#fef2f2}
+.btn-add{padding:4px 10px;font-size:11px;border:1px dashed var(--line);border-radius:var(--r);background:none;cursor:pointer;color:var(--ink3)}
+.btn-add:hover{background:var(--surf2);color:var(--ink);border-color:var(--ink3)}
+
+.content{flex:1;overflow-y:auto;padding:20px}
+
+/* Cards */
+.card{background:var(--surf);border:1px solid var(--line);border-radius:var(--r2);padding:16px 18px;margin-bottom:14px}
+.card-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.card-hdr h3{font-size:13px;font-weight:500}
+.card-hdr .badge{font-size:10px;padding:2px 8px;background:var(--surf2);border:1px solid var(--line);border-radius:20px;color:var(--ink3)}
+
+/* Forms */
+.field-grid{display:grid;gap:10px;margin-bottom:10px}
+.field-grid.cols2{grid-template-columns:1fr 1fr}
+.field-grid.cols3{grid-template-columns:1fr 1fr 1fr}
+.field-grid.cols1{grid-template-columns:1fr}
+label{font-size:11px;color:var(--ink2);display:block;margin-bottom:3px;font-weight:500}
+input[type=text],select,textarea{width:100%;font-size:12px;padding:7px 10px;border:1px solid var(--line);border-radius:var(--r);background:var(--surf);color:var(--ink);font-family:inherit;transition:border-color .15s}
+input[type=text]:focus,select:focus,textarea:focus{outline:none;border-color:var(--ink)}
+textarea{resize:vertical;min-height:65px;line-height:1.6}
+
+.creator-signature{
+  text-align:center;
+  padding:14px 18px;
+  font-size:13px;
+  color:#5f5f5f;
+  background:linear-gradient(90deg, #fafaf8 0%, #f2f1ef 50%, #fafaf8 100%);
+  border-top:1px solid #ddd8cf;
+  letter-spacing:.2px;
+  font-weight:500;
+  box-shadow:0 -2px 8px rgba(0,0,0,.04);
+}
+.creator-signature strong{
+  color:#b08d57;
+  font-size:14px;
+}
+/* Statement tables */
+.tbl-wrap{overflow-x:auto;margin-bottom:6px}
+.stmt{width:100%;border-collapse:collapse;font-size:12px}
+.stmt th{text-align:center;font-size:11px;font-weight:500;padding:8px 10px;background:var(--surf3);color:var(--ink2);border-bottom:1.5px solid var(--line);white-space:nowrap}
+.stmt th.lft{text-align:right}
+.stmt td{padding:5px 10px;border-bottom:1px solid #f0ede8;vertical-align:middle}
+.stmt td.ctr{text-align:center}
+.stmt td.num{text-align:center;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.stmt td.note{text-align:center;width:42px;color:var(--ink3);font-size:11px}
+.stmt tr.sec td{background:var(--surf3);font-weight:500;font-size:12px;padding-top:8px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+.stmt tr.tot td{font-weight:500;border-top:1.5px solid #c8c4bc;border-bottom:1px solid var(--line)}
+.stmt tr.grand td{font-weight:500;border-top:2px solid var(--ink);border-bottom:2px solid var(--ink)}
+.stmt tr.sub td:first-child{padding-right:22px;color:var(--ink2)}
+.stmt tr.spacer td{height:10px;border:none;background:transparent}
+.stmt tr:hover:not(.sec):not(.tot):not(.grand):not(.spacer) td{background:#fafaf8}
+.stmt input.cell-input{border:none;background:none;font-size:12px;font-family:inherit;color:var(--ink);width:100%;padding:0}
+.stmt input.cell-input:focus{outline:1px solid var(--ink);outline-offset:1px;border-radius:2px;background:var(--surf)}
+.stmt input.cell-input.ctr{text-align:center}
+
+/* Add bar */
+.add-bar{display:flex;gap:6px;align-items:center;padding:6px 0 8px;flex-wrap:wrap}
+
+/* Note cards */
+.note-card{background:var(--surf);border:1px solid var(--line);border-radius:var(--r2);margin-bottom:10px;overflow:hidden}
+.note-hdr{display:flex;align-items:center;gap:10px;padding:11px 14px;border-bottom:1px solid var(--line);background:var(--surf2)}
+.note-num{width:26px;height:26px;border-radius:50%;background:var(--ink);color:#fff;font-size:11px;font-weight:500;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.note-body{padding:12px 14px}
+.note-table{width:100%;border-collapse:collapse;font-size:11px;margin-top:8px}
+.note-table th{background:var(--surf3);text-align:center;padding:6px 8px;font-weight:500;border:1px solid var(--line)}
+.note-table td{border:1px solid var(--line);padding:5px 8px;text-align:center}
+.note-table td.lft{text-align:right;padding-right:12px}
+
+/* Preview */
+.preview-page{max-width:740px;margin:0 auto;background:var(--surf);border:1px solid var(--line);border-radius:var(--r2);padding:32px 36px;margin-bottom:20px}
+.preview-title{font-size:18px;font-weight:500;text-align:center;margin-bottom:3px}
+.preview-sub{font-size:12px;color:var(--ink2);text-align:center;margin-bottom:6px}
+.preview-sect{font-size:11px;font-weight:500;text-align:center;color:var(--ink3);margin-bottom:16px;letter-spacing:.03em}
+.preview-info{display:flex;justify-content:center;margin-bottom:20px}
+.preview-info table{font-size:11px;border-collapse:collapse}
+.preview-info td{padding:3px 12px;border-bottom:1px solid var(--line)}
+.preview-info td:first-child{color:var(--ink2);text-align:right;font-weight:500}
+.preview-info td:last-child{color:var(--ink)}
+.pstmt{width:100%;border-collapse:collapse;font-size:11.5px;margin-bottom:6px}
+.pstmt th{text-align:center;font-size:10.5px;font-weight:500;padding:7px 8px;background:var(--surf3);border-bottom:1.5px solid var(--line)}
+.pstmt th.lft{text-align:right}
+.pstmt td{padding:5px 8px;border-bottom:1px solid #f0ede8}
+.pstmt td.num{text-align:center;font-variant-numeric:tabular-nums}
+.pstmt td.note{text-align:center;width:36px;font-size:10px;color:var(--ink3)}
+.pstmt tr.sec td{background:var(--surf3);font-weight:500;border-bottom:1px solid var(--line);font-size:11px}
+.pstmt tr.tot td{font-weight:500;border-top:1.5px solid #c8c4bc}
+.pstmt tr.grand td{font-weight:500;border-top:2px solid var(--ink);border-bottom:2px solid var(--ink)}
+.pstmt tr.sub td:first-child{padding-right:20px;color:var(--ink2)}
+.pstmt tr.spacer td{height:8px;border:none;background:transparent}
+.pfootnote{font-size:10px;color:var(--ink3);text-align:center;margin-top:8px;font-style:italic;border-top:1px solid var(--line);padding-top:7px}
+.ppage-break{margin-top:28px;border-top:2px dashed var(--line);padding-top:28px}
+.hint{font-size:11px;color:var(--ink3);margin-bottom:14px;padding:8px 12px;background:var(--surf3);border-radius:var(--r);border-right:3px solid #c8c4bc}
+.note-table,
+.pnote-table{
+  width:100%;
+  border-collapse:collapse;
+  table-layout:fixed;
+}
+
+.note-table th,
+.note-table td,
+.pnote-table th,
+.pnote-table td{
+  vertical-align:middle;
+}
+
+.note-table th:first-child,
+.note-table td:first-child,
+.pnote-table th:first-child,
+.pnote-table td:first-child{
+  width:56%;
+}
+
+.note-table th:nth-child(2),
+.note-table td:nth-child(2),
+.pnote-table th:nth-child(2),
+.pnote-table td:nth-child(2){
+  width:22%;
+}
+
+.note-table th:nth-child(3),
+.note-table td:nth-child(3),
+.pnote-table th:nth-child(3),
+.pnote-table td:nth-child(3){
+  width:22%;
+}
+
+.note-col-head{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  line-height:1.25;
+  min-height:38px;
+  white-space:normal;
+}
+
+.note-col-head .yr{
+  font-size:12px;
+  font-weight:600;
+  color:var(--ink);
+}
+
+.note-col-head .cur{
+  font-size:10px;
+  color:var(--ink3);
+}
+
+.note-table input[type=text]{
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.pnote-wrap{
+  margin-top:6px;
+  margin-bottom:14px;
+}
+/* Eq table */
+.eq-wrap{overflow-x:auto}
+.eqtbl{border-collapse:collapse;font-size:12px;white-space:nowrap}
+.eqtbl th,.eqtbl td{border:1px solid var(--line);padding:6px 10px;text-align:center}
+.eqtbl th{background:var(--surf3);font-weight:500;font-size:11px}
+.eqtbl td:first-child{text-align:right;font-weight:500}
+.eqtbl input.cell-input{border:none;background:none;font-size:12px;text-align:center;width:90px}
+.eqtbl input.cell-input.wide{width:160px;text-align:right}
+.eqtbl tr.tot-eq td{font-weight:500;border-top:2px solid var(--ink)}
+
+@media print{
+  body,
+  .main,
+  .content{
+    background:#fff!important;
+  }
+
+  .shell{display:block}
+
+  .side,
+  .topbar,
+  .topbar-actions,
+  .btn,
+  .btn-sm,
+  .btn-add,
+  .btn-del,
+  .btn-dark,
+  .add-bar,
+  .creator-signature{
+    display:none!important;
+  }
+
+  .content{
+    padding:0!important;
+  }
+
+  .preview-page{
+    border:none;
+    padding:0;
+    margin:26mm auto 0 auto;
+    box-shadow:none;
+    width:168mm;
+    max-width:168mm;
+    min-height:240mm;
+    background:#fff!important;
+    page-break-after:always;
+    break-after:page;
+    page-break-inside:avoid;
+  }
+
+  .preview-page:last-child{
+    page-break-after:auto;
+    break-after:auto;
+  }
+  .pnote-wrap{
+  page-break-inside:avoid;
+  break-inside:avoid;
+}
+
+.pnote-table th,
+.pnote-table td{
+  padding-top:6px;
+  padding-bottom:6px;
+}
+}
+</style>
+
+<div class="shell">
+
+<!-- SIDEBAR -->
+<div class="side">
+  <div class="side-logo">
+    <div class="logo-mark"><svg viewBox="0 0 16 16"><rect x="2" y="2" width="5" height="5" rx="1"/><rect x="9" y="2" width="5" height="5" rx="1"/><rect x="2" y="9" width="5" height="5" rx="1"/><rect x="9" y="9" width="5" height="5" rx="1"/></svg></div>
+    <p>القوائم المالية</p>
+    <small>وفق معايير IFRS — المملكة العربية السعودية</small>
+  </div>
+  <div class="side-nav">
+    <div class="nav-group">
+      <div class="nav-label">الشركة</div>
+      <button class="nav-item active" id="nav-company" onclick="go('company')"><span class="icon">🏢</span>معلومات الشركة</button>
+    </div>
+    <div class="nav-group">
+      <div class="nav-label">القوائم المالية</div>
+      <button class="nav-item" id="nav-bs" onclick="go('bs')"><span class="icon">⚖️</span>المركز المالي</button>
+      <button class="nav-item" id="nav-pl" onclick="go('pl')"><span class="icon">📊</span>الدخل الشامل</button>
+      <button class="nav-item" id="nav-eq" onclick="go('eq')"><span class="icon">🔄</span>التغيرات في الملكية</button>
+      <button class="nav-item" id="nav-cf" onclick="go('cf')"><span class="icon">💸</span>التدفقات النقدية</button>
+    </div>
+    <div class="nav-group">
+      <div class="nav-label">الإيضاحات</div>
+      <button class="nav-item" id="nav-notes" onclick="go('notes')"><span class="icon">📋</span>الإيضاحات (١-١٩)</button>
+    </div>
+  </div>
+  <div class="side-foot">
+    <button onclick="go('preview')">معاينة وطباعة ←</button>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="topbar">
+    <div><div class="topbar-title" id="ttl">معلومات الشركة</div><div class="topbar-sub" id="tsub">أدخل بيانات الشركة والفترة المالية</div></div>
+    <div class="topbar-actions">
+  <button class="btn btn-sm" onclick="exportExcel()">تصدير Excel</button>
+  <button class="btn btn-sm" onclick="go('preview')">معاينة ←</button>
+ <button class="btn btn-sm" onclick="resetAll()" style="
+  background:#fff;
+  color:#d32f2f;
+  border:1px solid #d32f2f;
+  font-weight:600;
+">
+  🗑️ إعادة ضبط
+</button>
+</div>
+  </div>
+
+  <div class="content" id="ct"></div>
+
+  <div class="creator-signature">
+  Designed & Developed by <strong>Kinan Ammar</strong>
+</div>
+<div id="saveIndicator" style="
+  position:fixed;
+  bottom:20px;
+  left:20px;
+  background:#e8f5e9;
+  color:#2e7d32;
+  padding:8px 14px;
+  border-radius:8px;
+  font-size:13px;
+  box-shadow:0 4px 12px rgba(0,0,0,0.1);
+  opacity:0;
+  transition:opacity 0.3s ease;
+  pointer-events:none;
+">
+  تم الحفظ تلقائياً ✓
+</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+<script>
+const S={
+  co:{name:'',type:'شركة شخص واحد',cr:'',vat:'',addr:'الرياض، المملكة العربية السعودية',basis:'المعايير الدولية لإعداد التقارير المالية (IFRS)',cur:'ريال سعودي',yr:'2025',py:'2024',pe:'٣١ ديسمبر ٢٠٢٥م'},
+  bs:{
+  ca:[
+    {l:'نقد وما في حكمه',v1:'',v2:'',n:'٥'},
+    {l:'ذمم مدينة تجارية وأخرى',v1:'',v2:'',n:'٦'},
+    {l:'مدفوع مقدماً وأرصدة مدينة أخرى',v1:'',v2:'',n:'٧'},
+  ],
+  nca:[
+    {l:'حق استخدام أصل (صافي) — IFRS 16',v1:'',v2:'',n:'٩'},
+    {l:'ممتلكات وآلات ومعدات وأصول غير ملموسة (صافي)',v1:'',v2:'',n:'٨'},
+  ],
+  eq:[
+    {l:'رأس المال',v1:'',v2:'',n:''},
+    {l:'احتياطي نظامي',v1:'',v2:'',n:''},
+    {l:'أرباح مبقاة',v1:'',v2:'',n:''},
+  ],
+  cl:[
+    {l:'ذمم دائنة تجارية',v1:'',v2:'',n:'١١'},
+    {l:'مستحقات وأرصدة دائنة أخرى',v1:'',v2:'',n:'١٢'},
+    {l:'مخصص ضريبة القيمة المضافة',v1:'',v2:'',n:'١٢'},
+    {l:'مخصص الزكاة الشرعية',v1:'',v2:'',n:'١٥'},
+  ],
+  ncl:[
+    {l:'التزام إيجار تمويلي — IFRS 16',v1:'',v2:'',n:'١٠'},
+    {l:'جاري الشريك',v1:'',v2:'',n:'١٦'},
+    {l:'التزامات المنافع المحددة للموظفين',v1:'',v2:'',n:'١٣'},
+  ]
+},
+  pl:{
+  rev:[{l:'إجمالي الإيرادات',v1:'',v2:'',n:'١٤',fixed:true}],
+  cogs:[{l:'تكاليف الإيرادات',v1:'',v2:'',n:'',fixed:true}],
+  opex:[
+    {l:'رواتب وأجور وبدلات ومكافآت',v1:'',v2:'',n:''},
+    {l:'عمالة وأيدي عاملة',v1:'',v2:'',n:''},
+    {l:'إيجارات مكاتب وسكن',v1:'',v2:'',n:''},
+    {l:'مصاريف إدارية وعمومية أخرى',v1:'',v2:'',n:''},
+    {l:'إهلاك وإطفاء',v1:'',v2:'',n:''},
+  ],
+  other:[
+    {l:'مصروف الزكاة الشرعية',v1:'',v2:'',n:'١٥'},
+    {l:'الدخل الشامل الآخر',v1:'',v2:'',n:''},
+  ]
+},
+  eq:{
+    cols:['رأس المال','الاحتياطي النظامي','الأرباح المبقاة'],
+    rows:[
+      {l:'صافي الربح للسنة',vals:['','','']},
+      {l:'ترحيل الأرباح إلى جاري الشريك',vals:['','','']},
+      {l:'الدخل الشامل الآخر للسنة',vals:['','','']},
+    ],
+    open:['','',''],
+    close:['','','']
+  },
+  cf:{
+    op:[
+      {l:'الربح قبل خصم الزكاة الشرعية',v1:'',v2:''},
+    ],
+    adj:[
+      {l:'الإهلاك والإطفاء',v1:'',v2:''},
+      {l:'مخصص التزامات المنافع المحددة للموظفين',v1:'',v2:''},
+    ],
+    wc:[
+      {l:'(زيادة) / نقص في الذمم المدينة',v1:'',v2:''},
+      {l:'(زيادة) في المدفوع مقدماً وأرصدة مدينة أخرى',v1:'',v2:''},
+      {l:'زيادة / (نقص) في الذمم الدائنة',v1:'',v2:''},
+      {l:'(نقص) في المستحقات وأرصدة دائنة أخرى',v1:'',v2:''},
+    ],
+    zakat:[{l:'الزكاة الشرعية المدفوعة',v1:'',v2:''}],
+    inv:[
+      {l:'شراء ممتلكات وآلات ومعدات',v1:'',v2:''},
+      {l:'شراء أصول غير ملموسة',v1:'',v2:''},
+    ],
+    fin:[
+      {l:'مدفوعات التزامات عقود الإيجار (IFRS 16)',v1:'',v2:''},
+      {l:'تمويل من الشريك',v1:'',v2:''},
+    ],
+    cashOpen:[{l:'النقد وما في حكمه في بداية السنة',v1:'',v2:''}]
+  },
+  notes:[
+  {
+    id:1,
+    title:'معلومات عامة',
+    type:'text',
+    text:'تأسست الشركة في المملكة العربية السعودية وتمارس أنشطتها وفقاً لسجلها التجاري ونظامها الأساسي. يتمثل النشاط الرئيسي للشركة في الأنشطة المرخصة نظاماً داخل المملكة العربية السعودية. يقع المركز الرئيسي للشركة في الرياض، المملكة العربية السعودية.'
+  },
+  {
+    id:2,
+    title:'أساس الإعداد وبيان الالتزام',
+    type:'text',
+    text:'أُعدّت هذه القوائم المالية وفقاً للمعايير الدولية للتقرير المالي (IFRS) المعتمدة في المملكة العربية السعودية والمعايير والإصدارات الأخرى المعتمدة من الهيئة السعودية للمراجعين والمحاسبين، وعلى أساس التكلفة التاريخية ما لم يرد خلاف ذلك. أُعدّت هذه القوائم على أساس الاستحقاق المحاسبي ومفهوم الاستمرارية. تم عرض القوائم المالية بالريال السعودي وهو العملة الوظيفية وعملة العرض للشركة.'
+  },
+  {
+    id:3,
+    title:'السياسات المحاسبية الهامة',
+    type:'text',
+    text:'تشمل السياسات المحاسبية الهامة المطبقة من قبل الشركة ما يلي: (1) الاعتراف بالإيراد عند انتقال السيطرة على السلع أو الخدمات إلى العميل بالقيمة المتوقعة للمقابل. (2) تصنيف النقد وما في حكمه ليشمل النقد بالصندوق والأرصدة البنكية والودائع قصيرة الأجل ذات الاستحقاق الأصلي ثلاثة أشهر أو أقل. (3) إثبات الذمم المدينة بالتكلفة المطفأة بعد خصم مخصص خسائر الائتمان المتوقعة. (4) إثبات الممتلكات والآلات والمعدات بالتكلفة ناقصاً الإهلاك المتراكم والانخفاض في القيمة إن وجد. (5) إثبات الأصول غير الملموسة بالتكلفة ناقصاً الإطفاء المتراكم والانخفاض في القيمة إن وجد. (6) إثبات عقود الإيجار وفق IFRS 16 من خلال أصل حق استخدام والتزام إيجار، باستثناء العقود قصيرة الأجل أو منخفضة القيمة عند انطباق الإعفاءات. (7) إثبات منافع نهاية الخدمة وفق IAS 19. (8) إثبات الزكاة وفق الأنظمة والتعليمات المعمول بها في المملكة العربية السعودية. (9) لا يتم مقاصة الموجودات والمطلوبات أو الإيرادات والمصروفات إلا عند وجود متطلب أو سماح صريح بذلك في المعايير المعتمدة.'
+  },
+  {
+    id:4,
+    title:'الأحكام والتقديرات المحاسبية الجوهرية',
+    type:'text',
+    text:'يتطلب إعداد القوائم المالية من الإدارة استخدام أحكام وتقديرات وافتراضات تؤثر على المبالغ المدرجة في القوائم المالية والإيضاحات المرفقة. ومن أبرز هذه الأحكام والتقديرات: تقدير الأعمار الإنتاجية والقيم التخريدية للممتلكات والآلات والمعدات، تقدير خسائر الائتمان المتوقعة للذمم المدينة، تحديد مدة عقود الإيجار ومعدل الخصم المستخدم لقياس التزام الإيجار، وتقدير التزامات منافع نهاية الخدمة للموظفين. تتم مراجعة هذه التقديرات والافتراضات بشكل دوري ويتم إثبات أثر التعديلات في الفترة التي تنشأ فيها.'
+  },
+  {
+    id:5,
+    title:'النقد وما في حكمه',
+    type:'table',
+    cols:['البيان','السنة الحالية','السنة السابقة'],
+    rows:[
+      ['نقد بالصندوق','',''],
+      ['أرصدة لدى البنوك','',''],
+      ['ودائع قصيرة الأجل','',''],
+      ['الإجمالي','','']
+    ]
+  },
+  {
+    id:6,
+    title:'الذمم المدينة التجارية وخسائر الائتمان المتوقعة',
+    type:'table',
+    cols:['البيان','السنة الحالية','السنة السابقة'],
+    rows:[
+      ['ذمم مدينة تجارية','',''],
+      ['ذمم مدينة على أطراف ذات علاقة','',''],
+      ['مخصص خسائر الائتمان المتوقعة','',''],
+      ['الصافي','','']
+    ]
+  },
+  {
+    id:7,
+    title:'المدفوع مقدماً والأرصدة المدينة الأخرى',
+    type:'table',
+    cols:['البيان','السنة الحالية','السنة السابقة'],
+    rows:[
+      ['مصاريف مدفوعة مقدماً','',''],
+      ['عهد وسلف موظفين','',''],
+      ['تأمينات مستردة','',''],
+      ['أرصدة مدينة أخرى','',''],
+      ['الإجمالي','','']
+    ]
+  },
+  {
+    id:8,
+    title:'الممتلكات والآلات والمعدات والأصول غير الملموسة',
+    type:'table',
+    cols:['البيان','السنة الحالية','السنة السابقة'],
+    rows:[
+      ['التكلفة في بداية السنة','',''],
+      ['إضافات السنة','',''],
+      ['استبعادات السنة','',''],
+      ['التكلفة في نهاية السنة','',''],
+      ['مجمع الإهلاك / الإطفاء في نهاية السنة','',''],
+      ['صافي القيمة الدفترية','','']
+    ]
+  },
+  {
+    id:9,
+    title:'حق استخدام الأصل — IFRS 16',
+    type:'table',
+    cols:['البيان','السنة الحالية','السنة السابقة'],
+    rows:[
+      ['التكلفة في بداية السنة','',''],
+      ['إضافات السنة','',''],
+      ['التكلفة في نهاية السنة','',''],
+      ['مجمع الاهتلاك المتراكم','',''],
+      ['صافي حق استخدام الأصل','','']
+    ]
+  },
+  {
+    id:10,
+    title:'التزامات الإيجار — IFRS 16',
+    type:'table',
+    cols:['البيان','السنة الحالية','السنة السابقة'],
+    rows:[
+      ['الرصيد في بداية السنة','',''],
+      ['إضافات عقود خلال السنة','',''],
+      ['مصروفات تمويل خلال السنة','',''],
+      ['مدفوعات خلال السنة','',''],
+      ['الرصيد في نهاية السنة','',''],
+      ['الجزء المتداول','',''],
+      ['الجزء غير المتداول','','']
+    ]
+  },
+  {
+    id:11,
+    title:'الذمم الدائنة التجارية',
+    type:'table',
+    cols:['البيان','السنة الحالية','السنة السابقة'],
+    rows:[
+      ['ذمم دائنة موردين','',''],
+      ['فواتير مستلمة وغير مسددة','',''],
+      ['الإجمالي','','']
+    ]
+  },
+  {
+    id:12,
+    title:'المستحقات والأرصدة الدائنة الأخرى وضريبة القيمة المضافة',
+    type:'table',
+    cols:['البيان','السنة الحالية','السنة السابقة'],
+    rows:[
+      ['مصاريف مستحقة','',''],
+      ['رواتب ومزايا مستحقة','',''],
+      ['ضريبة قيمة مضافة مستحقة','',''],
+      ['أرصدة دائنة أخرى','',''],
+      ['الإجمالي','','']
+    ]
+  },
+  {
+    id:13,
+    title:'التزامات المنافع المحددة للموظفين',
+    type:'table',
+    cols:['البيان','السنة الحالية','السنة السابقة'],
+    rows:[
+      ['الرصيد في بداية السنة','',''],
+      ['تكلفة الخدمة الحالية','',''],
+      ['تكلفة الفائدة / الأثر المالي','',''],
+      ['المدفوع خلال السنة','',''],
+      ['الرصيد في نهاية السنة','','']
+    ]
+  },
+  {
+    id:14,
+    title:'الإيرادات',
+    type:'table',
+    cols:['البيان','السنة الحالية','السنة السابقة'],
+    rows:[
+      ['إيرادات النشاط الرئيسي','',''],
+      ['إيرادات أخرى مرتبطة بالنشاط','',''],
+      ['الإجمالي','','']
+    ]
+  },
+  {
+    id:15,
+    title:'الزكاة',
+    type:'table',
+    cols:['البيان','السنة الحالية','السنة السابقة'],
+    rows:[
+      ['الرصيد في بداية السنة','',''],
+      ['مخصص الزكاة للسنة','',''],
+      ['المدفوع خلال السنة','',''],
+      ['تسويات / فروقات ربوط','',''],
+      ['الرصيد في نهاية السنة','','']
+    ]
+  },
+  {
+    id:16,
+    title:'الأطراف ذات العلاقة',
+    type:'text',
+    text:'تمثل الأطراف ذات العلاقة الشريك / المساهم الرئيسي والمنشآت أو الأشخاص ذوي العلاقة بالشركة من خلال الملكية أو الإدارة أو السيطرة المشتركة. تتم المعاملات مع الأطراف ذات العلاقة وفق شروط تعتمدها الإدارة. ويمثل جاري الشريك المبالغ المضافة أو المسحوبة لحساب الشريك / المساهم خلال السنة، إن وجدت.'
+  },
+  {
+    id:17,
+    title:'إدارة المخاطر المالية والسيولة',
+    type:'text',
+    text:'تتعرض الشركة ضمن نشاطها المعتاد لمخاطر مالية تشمل مخاطر الائتمان ومخاطر السيولة ومخاطر السوق بدرجة محدودة. تتمثل مخاطر الائتمان بصورة رئيسية في الأرصدة البنكية والذمم المدينة التجارية. وتتم إدارة هذه المخاطر من خلال التعامل مع جهات ذات ملاءة مناسبة ومتابعة أعمار الذمم المدينة وتكوين مخصصات عند الحاجة. كما تقوم الإدارة بإدارة مخاطر السيولة من خلال مراقبة التدفقات النقدية المتوقعة والاحتفاظ بأرصدة نقدية وتسهيلات مناسبة للوفاء بالالتزامات عند استحقاقها.'
+  },
+  {
+    id:18,
+    title:'الالتزامات والارتباطات المحتملة',
+    type:'text',
+    text:'لا توجد لدى الشركة، بتاريخ القوائم المالية، ارتباطات رأسمالية جوهرية أو التزامات محتملة تستوجب الإفصاح، ما لم يذكر خلاف ذلك في هذه القوائم المالية.'
+  },
+  {
+    id:19,
+    title:'أحداث لاحقة',
+    type:'text',
+    text:'لم تقع بعد تاريخ القوائم المالية وحتى تاريخ اعتمادها أحداث جوهرية تستوجب التعديل أو الإفصاح في هذه القوائم المالية، ما لم يذكر خلاف ذلك.'
+  }
+]
+};
+
+let cur='company';
+const uid=()=>Math.random().toString(36).slice(2,7);
+const fmt=v=>{if(v===''||v===null||v===undefined)return '—';const n=parseFloat(String(v).replace(/,/g,''));if(isNaN(n))return v||'—';if(n<0)return '('+Math.abs(n).toLocaleString('en',{minimumFractionDigits:2,maximumFractionDigits:2})+')';return n.toLocaleString('en',{minimumFractionDigits:2,maximumFractionDigits:2})};
+
+const pageMeta={
+  company:['معلومات الشركة','أدخل بيانات الشركة والفترة المالية'],
+  bs:['قائمة المركز المالي','الموجودات • الملكية • المطلوبات'],
+  pl:['قائمة الربح أو الخسارة والدخل الشامل الآخر','الإيرادات • المصاريف • الزكاة'],
+  eq:['قائمة التغيرات في حقوق الملكية','رأس المال • الاحتياطيات • الأرباح'],
+  cf:['قائمة التدفقات النقدية','التشغيلية • الاستثمارية • التمويلية'],
+  notes:['الإيضاحات على القوائم المالية','إيضاحات من (١) إلى (١٩)'],
+  preview:['معاينة وطباعة','القوائم المالية الكاملة جاهزة للطباعة']
+};
+
+function go(p){
+  cur=p;
+  document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
+  const nb=document.getElementById('nav-'+p);if(nb)nb.classList.add('active');
+  const m=pageMeta[p]||[p,''];
+  document.getElementById('ttl').textContent=m[0];
+  document.getElementById('tsub').textContent=m[1];
+  const ct=document.getElementById('ct');ct.innerHTML='';
+  ({company:renderCo,bs:renderBS,pl:renderPL,eq:renderEQ,cf:renderCF,notes:renderNotes,preview:renderPreview}[p]||renderCo)(ct);
+}
+
+/* ── COMPANY ─────────────────────────────────────────────────────── */
+function renderCo(ct){
+  const c=S.co;
+  ct.innerHTML=`
+<div class="card">
+  <div class="card-hdr"><h3>هوية الشركة</h3><span class="badge">البيانات الأساسية</span></div>
+  <div class="field-grid cols1"><label>اسم الشركة</label><input type="text" id="c-name" value="${c.name}" placeholder="شركة..."></div>
+  <div class="field-grid cols3">
+    <div><label>نوع الشركة</label><select id="c-type"><option>شركة شخص واحد</option><option>ذات مسؤولية محدودة</option><option>شركة مساهمة</option><option>شركة تضامن</option></select></div>
+    <div><label>السجل التجاري</label><input type="text" id="c-cr" value="${c.cr}" placeholder="1010XXXXXXX"></div>
+    <div><label>الرقم الضريبي (VAT)</label><input type="text" id="c-vat" value="${c.vat}" placeholder="3XXXXXXXXXXXXXX"></div>
+  </div>
+  <div class="field-grid cols2">
+    <div><label>عملة العرض</label><input type="text" id="c-cur" value="${c.cur}" placeholder="ريال سعودي"></div>
+    <div><label>العنوان</label><input type="text" id="c-addr" value="${c.addr}"></div>
+  </div>
+  <div class="field-grid cols1"><label>المعايير المحاسبية المستخدمة</label><input type="text" id="c-basis" value="${c.basis}"></div>
+</div>
+<div class="card">
+  <div class="card-hdr"><h3>الفترة المالية</h3><span class="badge">السنة المالية</span></div>
+  <div class="field-grid cols3">
+    <div><label>السنة الحالية</label><input type="text" id="c-yr" value="${c.yr}" placeholder="2025"></div>
+    <div><label>السنة المقارنة</label><input type="text" id="c-py" value="${c.py}" placeholder="2024"></div>
+    <div><label>تاريخ نهاية الفترة (عربي)</label><input type="text" id="c-pe" value="${c.pe}" placeholder="٣١ ديسمبر ٢٠٢٥م"></div>
+  </div>
+</div>
+<button class="btn btn-dark" onclick="saveCo()">حفظ والانتقال إلى المركز المالي ←</button>`;
+  document.getElementById('c-type').value=c.type;
+}
+function saveCo(){
+  const f=(id)=>document.getElementById(id)?.value||'';
+  Object.assign(S.co,{name:f('c-name'),type:f('c-type'),cr:f('c-cr'),vat:f('c-vat'),cur:f('c-cur'),addr:f('c-addr'),basis:f('c-basis'),yr:f('c-yr'),py:f('c-py'),pe:f('c-pe')});
+  go('bs');
+}
+
+/* ── BS ──────────────────────────────────────────────────────────── */
+function stmtHdr(y1,y2){
+  return `<tr><th class="lft" style="width:48%">البيان</th><th style="width:36px">إيضاح</th><th>${y1}<br><small>${S.co.cur}</small></th><th>${y2}<br><small>${S.co.cur}</small></th><th style="width:28px"></th></tr>`;
+}
+function secRow(lbl,span=5){return `<tr class="sec"><td colspan="${span}">${lbl}</td></tr>`;}
+function totRow(lbl,v1='',v2='',span1=1){return `<tr class="tot"><td colspan="${span1}">${lbl}</td>${span1===1?'<td></td>':''}<td class="num">${v1?fmt(v1):''}</td><td class="num">${v2?fmt(v2):''}</td><td></td></tr>`;}
+function grandRow(lbl,v1='',v2=''){return `<tr class="grand"><td colspan="2">${lbl}</td><td class="num">${v1?fmt(v1):''}</td><td class="num">${v2?fmt(v2):''}</td><td></td></tr>`;}
+function spacer(){return `<tr class="spacer"><td colspan="5"></td></tr>`;}
+function edRows(arr,sec,pg){
+  return arr.map((r,i)=>`<tr class="sub">
+    <td><input class="cell-input" style="width:100%" value="${r.l||''}" placeholder="البيان" onchange="S.${pg}.${sec}[${i}].l=this.value"></td>
+    <td class="note"><input class="cell-input ctr" style="width:36px" value="${r.n||''}" placeholder="—" onchange="S.${pg}.${sec}[${i}].n=this.value"></td>
+    <td><input class="cell-input ctr" value="${r.v1||''}" placeholder="0.00" onchange="S.${pg}.${sec}[${i}].v1=this.value"></td>
+    <td><input class="cell-input ctr" value="${r.v2||''}" placeholder="0.00" onchange="S.${pg}.${sec}[${i}].v2=this.value"></td>
+    <td><button class="btn-del" onclick="S.${pg}.${sec}.splice(${i},1);go('${pg}')">✕</button></td>
+  </tr>`).join('');
+}
+function addBtn(sec,pg,lbl='+ إضافة بند'){return `<tr><td colspan="5" style="padding:4px 8px;border:none"><button class="btn-add" onclick="S.${pg}.${sec}.push({l:'',v1:'',v2:'',n:''});go('${pg}')">${lbl}</button></td></tr>`;}
+
+function renderBS(ct){
+  ct.innerHTML=`
+<p class="hint">انقر مباشرة على أي خلية للتعديل. عمود "إيضاح" للإشارة إلى رقم الإيضاح.</p>
+<div class="card" style="padding:12px">
+  <div class="tbl-wrap"><table class="stmt">
+    <thead>${stmtHdr(S.co.yr,S.co.py)}</thead>
+    <tbody>
+    ${secRow('الموجودات')}
+    ${secRow('الموجودات المتداولة:')}
+    ${edRows(S.bs.ca,'ca','bs')}
+    ${addBtn('ca','bs')}
+    ${totRow('إجمالي الموجودات المتداولة')}
+    ${spacer()}
+    ${secRow('الموجودات غير المتداولة:')}
+    ${edRows(S.bs.nca,'nca','bs')}
+    ${addBtn('nca','bs')}
+    ${totRow('إجمالي الموجودات غير المتداولة')}
+    ${grandRow('إجمالي الموجودات')}
+    ${spacer()}
+    ${secRow('حقوق الملكية والمطلوبات')}
+    ${secRow('حقوق الملكية:')}
+    ${edRows(S.bs.eq,'eq','bs')}
+    ${addBtn('eq','bs')}
+    ${totRow('إجمالي حقوق الملكية')}
+    ${spacer()}
+    ${secRow('المطلوبات المتداولة:')}
+    ${edRows(S.bs.cl,'cl','bs')}
+    ${addBtn('cl','bs')}
+    ${totRow('إجمالي المطلوبات المتداولة')}
+    ${spacer()}
+    ${secRow('المطلوبات غير المتداولة:')}
+    ${edRows(S.bs.ncl,'ncl','bs')}
+    ${addBtn('ncl','bs')}
+    ${totRow('إجمالي المطلوبات غير المتداولة')}
+    ${totRow('إجمالي المطلوبات')}
+    ${grandRow('إجمالي حقوق الملكية والمطلوبات')}
+    </tbody>
+  </table></div>
+</div>
+<p style="font-size:11px;color:var(--ink3);text-align:center;font-style:italic">تُقرأ القوائم المالية مع الإيضاحات المرفقة التي تُعدّ جزءاً لا يتجزأ منها.</p>`;
+}
+
+/* ── PL ──────────────────────────────────────────────────────────── */
+function renderPL(ct){
+  ct.innerHTML=`
+<p class="hint">قائمة الربح أو الخسارة والدخل الشامل الآخر — أضف بنوداً إضافية أو عدّل الموجودة.</p>
+<div class="card" style="padding:12px">
+  <div class="tbl-wrap"><table class="stmt">
+    <thead>${stmtHdr(S.co.yr,S.co.py)}</thead>
+    <tbody>
+    ${secRow('الإيرادات')}
+    ${edRows(S.pl.rev,'rev','pl')}
+    ${addBtn('rev','pl','+ إضافة بند إيرادات')}
+    ${spacer()}
+    ${secRow('تكاليف الإيرادات')}
+    ${edRows(S.pl.cogs,'cogs','pl')}
+    ${addBtn('cogs','pl','+ إضافة بند تكاليف')}
+    ${totRow('إجمالي الربح')}
+    ${spacer()}
+    ${secRow('المصاريف التشغيلية:')}
+    ${edRows(S.pl.opex,'opex','pl')}
+    ${addBtn('opex','pl','+ إضافة مصروف')}
+    ${totRow('إجمالي المصاريف التشغيلية')}
+    ${spacer()}
+    <tr class="sub"><td colspan="2">الربح قبل خصم الزكاة الشرعية</td><td class="num"></td><td class="num"></td><td></td></tr>
+    ${edRows(S.pl.other,'other','pl')}
+    ${addBtn('other','pl','+ زكاة / دخل شامل آخر')}
+    ${grandRow('إجمالي الدخل الشامل للسنة')}
+    </tbody>
+  </table></div>
+</div>
+<p style="font-size:11px;color:var(--ink3);text-align:center;font-style:italic">تُقرأ القوائم المالية مع الإيضاحات المرفقة التي تُعدّ جزءاً لا يتجزأ منها.</p>`;
+}
+
+/* ── EQ ──────────────────────────────────────────────────────────── */
+function renderEQ(ct){
+  const eq=S.eq;
+  const colHdrs=eq.cols.map((c,i)=>`<th>${c} <button class="btn-del" style="margin-right:4px" onclick="delEqCol(${i})">✕</button></th>`).join('');
+  const totCols=eq.cols.length;
+
+  function eqInputRow(label,vals,isFixed,ri){
+    const dels=isFixed?'':'<td><button class="btn-del" onclick="S.eq.rows.splice('+ri+',1);go(\'eq\')">✕</button></td>';
+    return `<tr>
+      <td><input class="cell-input" style="width:100%;text-align:right;font-weight:${isFixed?'500':'400'}" value="${label}" ${isFixed?'readonly':'onchange="S.eq.rows['+ri+'].l=this.value"'}></td>
+      ${vals.map((v,ci)=>`<td><input class="cell-input ctr" style="width:90px" value="${v}" onchange="${isFixed?'S.eq.open['+ci+']=this.value':'S.eq.rows['+ri+'].vals['+ci+']=this.value'}"></td>`).join('')}
+      <td></td>
+      ${dels}
+    </tr>`;
+  }
+
+  ct.innerHTML=`
+<p class="hint">قائمة التغيرات في حقوق الملكية — أضف أعمدة وصفوفاً حسب هيكل الملكية.</p>
+<div class="add-bar">
+  <input type="text" id="newCol" placeholder="اسم العمود..." style="width:160px">
+  <button class="btn btn-sm" onclick="addEqCol()">+ عمود</button>
+  <button class="btn btn-sm" onclick="S.eq.rows.push({l:'',vals:S.eq.cols.map(()=>'')});go('eq')">+ صف</button>
+</div>
+<div class="card" style="padding:12px">
+  <div class="eq-wrap"><table class="eqtbl" style="width:100%">
+    <thead><tr>
+      <th style="text-align:right;min-width:200px">البيان</th>
+      ${colHdrs}
+      <th>الإجمالي</th>
+      <th style="width:28px"></th>
+    </tr></thead>
+    <tbody>
+    <tr>
+      <td style="font-weight:500">الرصيد في بداية السنة<br><small style="font-size:10px;font-weight:400;color:var(--ink3)">١ يناير ${S.co.yr}</small></td>
+      ${eq.open.map((v,ci)=>`<td><input class="cell-input ctr" value="${v}" style="width:90px" onchange="S.eq.open[${ci}]=this.value"></td>`).join('')}
+      <td></td><td></td>
+    </tr>
+    ${eq.rows.map((r,ri)=>eqInputRow(r.l,r.vals,false,ri)).join('')}
+    <tr class="tot-eq">
+      <td>الرصيد في نهاية السنة<br><small style="font-size:10px;font-weight:400">٣١ ديسمبر ${S.co.yr}</small></td>
+      ${eq.close.map((v,ci)=>`<td><input class="cell-input ctr" value="${v}" style="width:90px" onchange="S.eq.close[${ci}]=this.value"></td>`).join('')}
+      <td></td><td></td>
+    </tr>
+    </tbody>
+  </table></div>
+</div>
+<p style="font-size:11px;color:var(--ink3);text-align:center;font-style:italic">تُقرأ القوائم المالية مع الإيضاحات المرفقة التي تُعدّ جزءاً لا يتجزأ منها.</p>`;
+}
+function addEqCol(){
+  const v=document.getElementById('newCol')?.value.trim();if(!v)return;
+  S.eq.cols.push(v);S.eq.open.push('');S.eq.close.push('');
+  S.eq.rows.forEach(r=>r.vals.push(''));go('eq');
+}
+function delEqCol(i){
+  S.eq.cols.splice(i,1);S.eq.open.splice(i,1);S.eq.close.splice(i,1);
+  S.eq.rows.forEach(r=>r.vals.splice(i,1));go('eq');
+}
+
+/* ── CF ──────────────────────────────────────────────────────────── */
+function cfEdRows(arr,key){
+  return arr.map((r,i)=>`<tr class="sub">
+    <td><input class="cell-input" style="width:100%" value="${r.l||''}" placeholder="البيان" onchange="S.cf.${key}[${i}].l=this.value"></td>
+    <td class="note"></td>
+    <td><input class="cell-input ctr" value="${r.v1||''}" placeholder="0.00" onchange="S.cf.${key}[${i}].v1=this.value"></td>
+    <td><input class="cell-input ctr" value="${r.v2||''}" placeholder="0.00" onchange="S.cf.${key}[${i}].v2=this.value"></td>
+    <td><button class="btn-del" onclick="S.cf.${key}.splice(${i},1);go('cf')">✕</button></td>
+  </tr>`).join('');
+}
+function cfAddBtn(key,lbl='+ إضافة بند'){return `<tr><td colspan="5" style="padding:3px 8px;border:none"><button class="btn-add" onclick="S.cf.${key}.push({l:'',v1:'',v2:''});go('cf')">${lbl}</button></td></tr>`;}
+function cfTot(lbl){return `<tr class="tot"><td colspan="2">${lbl}</td><td class="num"></td><td class="num"></td><td></td></tr>`;}
+
+function renderCF(ct){
+  ct.innerHTML=`
+<p class="hint">قائمة التدفقات النقدية — الطريقة غير المباشرة.</p>
+<div class="card" style="padding:12px">
+  <div class="tbl-wrap"><table class="stmt">
+    <thead>${stmtHdr(S.co.yr,S.co.py)}</thead>
+    <tbody>
+    ${secRow('الأنشطة التشغيلية:')}
+    ${cfEdRows(S.cf.op,'op')}
+    ${secRow('تعديلات لتسوية البنود غير النقدية:')}
+    ${cfEdRows(S.cf.adj,'adj')}
+    ${cfAddBtn('adj','+ إضافة تعديل')}
+    ${secRow('التغيرات في الموجودات والمطلوبات التشغيلية:')}
+    ${cfEdRows(S.cf.wc,'wc')}
+    ${cfAddBtn('wc','+ إضافة بند تغير')}
+    ${cfTot('النقد الناتج من / (المستخدم في) العمليات')}
+    ${cfEdRows(S.cf.zakat,'zakat')}
+    ${cfTot('صافي التدفقات النقدية من الأنشطة التشغيلية')}
+    ${spacer()}
+    ${secRow('الأنشطة الاستثمارية:')}
+    ${cfEdRows(S.cf.inv,'inv')}
+    ${cfAddBtn('inv','+ إضافة بند استثماري')}
+    ${cfTot('صافي التدفقات النقدية (المستخدمة في) الأنشطة الاستثمارية')}
+    ${spacer()}
+    ${secRow('الأنشطة التمويلية:')}
+    ${cfEdRows(S.cf.fin,'fin')}
+    ${cfAddBtn('fin','+ إضافة بند تمويلي')}
+    ${cfTot('صافي التدفقات النقدية من الأنشطة التمويلية')}
+    ${spacer()}
+    ${cfTot('صافي التغير في النقد وما في حكمه')}
+    ${cfEdRows(S.cf.cashOpen,'cashOpen')}
+    <tr class="grand"><td colspan="2">النقد وما في حكمه في نهاية السنة</td><td class="num"></td><td class="num"></td><td></td></tr>
+    </tbody>
+  </table></div>
+</div>
+<p style="font-size:11px;color:var(--ink3);text-align:center;font-style:italic">تُقرأ القوائم المالية مع الإيضاحات المرفقة التي تُعدّ جزءاً لا يتجزأ منها.</p>`;
+}
+
+/* ── NOTES ───────────────────────────────────────────────────────── */
+function renderNotes(ct){
+  let html=`<div class="add-bar" style="margin-bottom:14px">
+    <input type="text" id="nt" placeholder="عنوان الإيضاح..." style="width:190px">
+    <select id="ntype"><option value="text">نصي</option><option value="table">جدول</option></select>
+    <button class="btn btn-sm" onclick="addNote()">+ إيضاح جديد</button>
+  </div>`;
+  S.notes.forEach((n,ni)=>{
+    html+=`<div class="note-card">
+      <div class="note-hdr">
+        <div class="note-num">${n.id}</div>
+        <input type="text" value="${n.title}" onchange="S.notes[${ni}].title=this.value" style="flex:1;font-size:13px;font-weight:500;border:none;background:none;color:var(--ink)">
+        <select onchange="S.notes[${ni}].type=this.value;go('notes')" style="font-size:11px;margin-left:8px;width:70px;padding:3px 4px">
+          <option value="text" ${n.type==='text'?'selected':''}>نصي</option>
+          <option value="table" ${n.type==='table'?'selected':''}>جدول</option>
+        </select>
+        <button class="btn-del" style="margin-right:8px" onclick="S.notes.splice(${ni},1);go('notes')">حذف</button>
+      </div>
+      <div class="note-body">`;
+    if(n.type==='text'){
+      html+=`<textarea onchange="S.notes[${ni}].text=this.value" placeholder="نص الإيضاح..." style="width:100%;min-height:70px">${n.text||''}</textarea>`;
+    } else {
+      html+=`<table class="note-table"><thead><tr>
+       ${n.cols.map((c,ci)=>{
+  let label = c;
+
+  if(c.includes('السنة الحالية')){
+    return `<th>
+      <div class="note-col-head">
+        <span class="yr">${S.co.yr}</span>
+        <span class="cur">${S.co.cur}</span>
+      </div>
+    </th>`;
+  }
+
+  if(c.includes('السنة السابقة')){
+    return `<th>
+      <div class="note-col-head">
+        <span class="yr">${S.co.py}</span>
+        <span class="cur">${S.co.cur}</span>
+      </div>
+    </th>`;
+  }
+
+  return `<th>
+    <input type="text" value="${label}"
+      onchange="S.notes[${ni}].cols[${ci}]=this.value"
+      style="border:none;background:none;font-weight:500;width:100%;text-align:center;font-size:11px">
+  </th>`;
+}).join('')}
+        <th><button class="btn-add" style="font-size:10px;padding:2px 6px" onclick="S.notes[${ni}].cols.push('عمود');S.notes[${ni}].rows.forEach(r=>r.push(''));go('notes')">+</button></th>
+      </tr></thead><tbody>
+      ${n.rows.map((row,ri)=>`<tr>
+        ${row.map((cell,ci)=>`<td class="${ci===0?'lft':''}"><input type="text" value="${cell}" onchange="S.notes[${ni}].rows[${ri}][${ci}]=this.value" style="border:none;background:none;font-size:11px;width:100%;text-align:${ci===0?'right':'center'}"></td>`).join('')}
+        <td><button class="btn-del" onclick="S.notes[${ni}].rows.splice(${ri},1);go('notes')">✕</button></td>
+      </tr>`).join('')}
+      </tbody></table>
+      <button class="btn-add" style="margin-top:6px;font-size:11px" onclick="S.notes[${ni}].rows.push(S.notes[${ni}].cols.map(()=>''));go('notes')">+ صف</button>`;
+    }
+    html+=`</div></div>`;
+  });
+  ct.innerHTML=html;
+}
+function addNote(){
+  const t=document.getElementById('nt')?.value.trim()||'إيضاح جديد';
+  const tp=document.getElementById('ntype')?.value||'text';
+  const maxId=Math.max(...S.notes.map(n=>n.id),0);
+  S.notes.push({id:maxId+1,title:t,type:tp,text:'',cols:['البيان','السنة الحالية','السنة السابقة'],rows:[['','','']]});
+  go('notes');
+}
+
+/* ── PREVIEW ──────────────────────────────────────────────────────── */
+function pSecRow(l,n=4){return `<tr class="sec"><td colspan="${n}">${l}</td></tr>`;}
+function pTotRow(l,n=4){return `<tr class="tot"><td colspan="2">${l}</td><td class="num"></td><td class="num"></td></tr>`;}
+function pGrandRow(l){return `<tr class="grand"><td colspan="2">${l}</td><td class="num"></td><td class="num"></td></tr>`;}
+function pSpacer(n=4){return `<tr class="spacer"><td colspan="${n}"></td></tr>`;}
+function pRow(r){if(!r||!r.l)return '';return `<tr class="sub"><td style="padding-right:20px">${r.l}</td><td class="note">${r.n||''}</td><td class="num">${r.v1?fmt(r.v1):''}</td><td class="num">${r.v2?fmt(r.v2):''}</td></tr>`;}
+function pHdr(){return `<thead><tr><th class="lft" style="width:48%">البيان</th><th style="width:36px">إيضاح</th><th>${S.co.yr}<br><small>${S.co.cur}</small></th><th>${S.co.py}<br><small>${S.co.cur}</small></th></tr></thead>`;}
+const pfn=`<p class="pfootnote">تُقرأ القوائم المالية مع الإيضاحات المرفقة التي تُعدّ جزءاً لا يتجزأ منها.</p>`;
+
+function renderPreview(ct){
+  const c=S.co;
+  const eq=S.eq;
+
+  /* cover */
+  let html=`<div style="text-align:center;margin-bottom:20px">
+    <button class="btn btn-dark" onclick="window.print()">طباعة / حفظ PDF</button>
+    <span style="font-size:11px;color:var(--ink3);margin-right:10px"></span>
+  </div>`;
+
+  /* غلاف */
+  html+=`<div class="preview-page">
+    <div style="text-align:center;margin-bottom:22px">
+      <div style="font-size:22px;font-weight:500;margin-bottom:4px">${c.name||'اسم الشركة'}</div>
+      <div style="font-size:13px;color:var(--ink2);margin-bottom:12px">(${c.type})</div>
+      <div style="font-size:16px;font-weight:500;margin-bottom:4px">القوائم المالية</div>
+      <div style="font-size:12px;color:var(--ink2)">للسنة المنتهية في ${c.pe}</div>
+    </div>
+    <div class="preview-info"><table>
+      <tr><td>السجل التجاري</td><td>${c.cr||'—'}</td></tr>
+      <tr><td>الرقم الضريبي</td><td>${c.vat||'—'}</td></tr>
+      <tr><td>العنوان</td><td>${c.addr||'—'}</td></tr>
+      <tr><td>أساس الإعداد</td><td>${c.basis}</td></tr>
+      <tr><td>عملة العرض</td><td>${c.cur}</td></tr>
+    </table></div>
+    <div style="border-top:1px solid var(--line);padding-top:16px">
+      <div style="font-size:13px;font-weight:500;margin-bottom:10px">فهرس القوائم المالية</div>
+      ${[['١','إقرار المدير'],['٢','قائمة المركز المالي'],['٣','قائمة الربح أو الخسارة والدخل الشامل الآخر'],['٤','قائمة التغيرات في حقوق الملكية'],['٥','قائمة التدفقات النقدية'],['٦','إيضاحات على القوائم المالية']].map(([n,t])=>`<div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #f0ede8;font-size:12px"><span>${t}</span><span style="color:var(--ink3)">${n}</span></div>`).join('')}
+    </div>
+  </div>`;
+
+  /* إقرار المدير */
+  html+=`<div class="preview-page">
+    <div class="preview-title">إقرار المدير</div>
+    <div class="preview-sub">للسنة المنتهية في ${c.pe}</div>
+    <div style="font-size:12px;line-height:1.9;color:var(--ink2);margin-top:16px">
+      نُقرّ نحن مدير ${c.name||'الشركة'} (${c.type})، بأن القوائم المالية المرفقة قد أُعدّت وفقاً للمعايير الدولية لإعداد التقارير المالية (IFRS) كما أصدرها مجلس معايير المحاسبة الدولية، وأنها تُظهر بصورة عادلة المركز المالي للشركة كما في ${c.pe}، ونتائج أعمالها وتدفقاتها النقدية للسنة المنتهية في ذلك التاريخ.
+      <br><br>وتشمل هذه القوائم المالية ما يلي:
+      <ol style="margin-right:20px;margin-top:6px;font-size:12px;line-height:2">
+        <li>قائمة المركز المالي كما في ${c.pe}</li>
+        <li>قائمة الربح أو الخسارة والدخل الشامل الآخر</li>
+        <li>قائمة التغيرات في حقوق الملكية</li>
+        <li>قائمة التدفقات النقدية</li>
+        <li>إيضاحات على القوائم المالية</li>
+      </ol>
+      <br>وقد تمت الموافقة على إصدار هذه القوائم المالية بتاريخ ${c.pe}.
+    </div>
+    <div style="margin-top:40px;display:flex;justify-content:flex-end">
+      <div style="text-align:right">
+        <div style="font-size:11px;color:var(--ink3);margin-bottom:30px">التوقيع</div>
+        <div style="border-top:1px solid var(--ink);width:180px;padding-top:6px;font-size:12px">المدير العام<br>${c.name||''}</div>
+      </div>
+    </div>
+  </div>`;
+
+  /* المركز المالي */
+  html+=`<div class="preview-page">
+    <div class="preview-title">قائمة المركز المالي</div>
+    <div class="preview-sub">كما في ${c.pe}</div>
+    <div class="preview-sect">${c.cur}</div>
+    <table class="pstmt">${pHdr()}<tbody>
+    ${pSecRow('الموجودات')}${pSecRow('الموجودات المتداولة:')}
+    ${S.bs.ca.map(r=>pRow(r)).join('')}
+    ${pTotRow('إجمالي الموجودات المتداولة')}${pSpacer()}
+    ${pSecRow('الموجودات غير المتداولة:')}
+    ${S.bs.nca.map(r=>pRow(r)).join('')}
+    ${pTotRow('إجمالي الموجودات غير المتداولة')}
+    ${pGrandRow('إجمالي الموجودات')}${pSpacer()}
+    ${pSecRow('حقوق الملكية والمطلوبات')}${pSecRow('حقوق الملكية:')}
+    ${S.bs.eq.map(r=>pRow(r)).join('')}
+    ${pTotRow('إجمالي حقوق الملكية')}${pSpacer()}
+    ${pSecRow('المطلوبات المتداولة:')}
+    ${S.bs.cl.map(r=>pRow(r)).join('')}
+    ${pTotRow('إجمالي المطلوبات المتداولة')}${pSpacer()}
+    ${pSecRow('المطلوبات غير المتداولة:')}
+    ${S.bs.ncl.map(r=>pRow(r)).join('')}
+    ${pTotRow('إجمالي المطلوبات غير المتداولة')}
+    ${pTotRow('إجمالي المطلوبات')}
+    ${pGrandRow('إجمالي حقوق الملكية والمطلوبات')}
+    </tbody></table>${pfn}
+  </div>`;
+
+  /* قائمة الدخل */
+  html+=`<div class="preview-page">
+    <div class="preview-title">قائمة الربح أو الخسارة والدخل الشامل الآخر</div>
+    <div class="preview-sub">للسنة المنتهية في ${c.pe}</div>
+    <div class="preview-sect">${c.cur}</div>
+    <table class="pstmt">${pHdr()}<tbody>
+    ${pSecRow('الإيرادات')}
+    ${S.pl.rev.map(r=>pRow(r)).join('')}
+    ${pTotRow('إجمالي الإيرادات')}${pSpacer()}
+    ${pSecRow('تكاليف الإيرادات')}
+    ${S.pl.cogs.map(r=>pRow(r)).join('')}
+    ${pTotRow('إجمالي الربح')}${pSpacer()}
+    ${pSecRow('المصاريف التشغيلية:')}
+    ${S.pl.opex.map(r=>pRow(r)).join('')}
+    ${pTotRow('إجمالي المصاريف التشغيلية')}${pSpacer()}
+    <tr class="sub"><td colspan="2" style="padding-right:8px">الربح قبل خصم الزكاة الشرعية</td><td class="num"></td><td class="num"></td></tr>
+    ${S.pl.other.map(r=>pRow(r)).join('')}
+    ${pGrandRow('إجمالي الدخل الشامل للسنة')}
+    </tbody></table>${pfn}
+  </div>`;
+
+  /* التغيرات في الملكية */
+  const eqCols=eq.cols;
+  html+=`<div class="preview-page">
+    <div class="preview-title">قائمة التغيرات في حقوق الملكية</div>
+    <div class="preview-sub">للسنة المنتهية في ${c.pe}</div>
+    <div class="preview-sect">${c.cur}</div>
+    <div style="overflow-x:auto"><table class="pstmt" style="white-space:nowrap">
+      <thead><tr>
+        <th class="lft" style="min-width:180px">البيان</th>
+        ${eqCols.map(col=>`<th>${col}<br><small>${c.cur}</small></th>`).join('')}
+        <th>الإجمالي<br><small>${c.cur}</small></th>
+      </tr></thead>
+      <tbody>
+      <tr class="tot"><td>الرصيد في بداية السنة ١ يناير ${c.yr}</td>${eqCols.map((_,i)=>`<td class="num">${eq.open[i]?fmt(eq.open[i]):''}</td>`).join('')}<td class="num"></td></tr>
+      ${eq.rows.map(r=>`<tr class="sub"><td style="padding-right:16px">${r.l||''}</td>${eqCols.map((_,i)=>`<td class="num">${r.vals[i]?fmt(r.vals[i]):'---'}</td>`).join('')}<td class="num"></td></tr>`).join('')}
+      <tr class="grand"><td>الرصيد في نهاية السنة ٣١ ديسمبر ${c.yr}</td>${eqCols.map((_,i)=>`<td class="num">${eq.close[i]?fmt(eq.close[i]):''}</td>`).join('')}<td class="num"></td></tr>
+      </tbody>
+    </table></div>${pfn}
+  </div>`;
+
+  /* التدفقات النقدية */
+  function cfPRow(r){if(!r||!r.l)return '';return `<tr class="sub"><td colspan="2" style="padding-right:20px">${r.l}</td><td class="num">${r.v1?fmt(r.v1):''}</td><td class="num">${r.v2?fmt(r.v2):''}</td></tr>`;}
+  html+=`<div class="preview-page">
+    <div class="preview-title">قائمة التدفقات النقدية</div>
+    <div class="preview-sub">للسنة المنتهية في ${c.pe}  —  الطريقة غير المباشرة</div>
+    <div class="preview-sect">${c.cur}</div>
+    <table class="pstmt">${pHdr()}<tbody>
+    ${pSecRow('الأنشطة التشغيلية:')}
+    ${S.cf.op.map(r=>cfPRow(r)).join('')}
+    ${pSecRow('تعديلات لتسوية البنود غير النقدية:')}
+    ${S.cf.adj.map(r=>cfPRow(r)).join('')}
+    ${pSecRow('التغيرات في الموجودات والمطلوبات التشغيلية:')}
+    ${S.cf.wc.map(r=>cfPRow(r)).join('')}
+    ${pTotRow('النقد الناتج من / (المستخدم في) العمليات')}
+    ${S.cf.zakat.map(r=>cfPRow(r)).join('')}
+    ${pTotRow('صافي التدفقات النقدية من الأنشطة التشغيلية')}${pSpacer()}
+    ${pSecRow('الأنشطة الاستثمارية:')}
+    ${S.cf.inv.map(r=>cfPRow(r)).join('')}
+    ${pTotRow('صافي التدفقات النقدية (المستخدمة في) الأنشطة الاستثمارية')}${pSpacer()}
+    ${pSecRow('الأنشطة التمويلية:')}
+    ${S.cf.fin.map(r=>cfPRow(r)).join('')}
+    ${pTotRow('صافي التدفقات النقدية من الأنشطة التمويلية')}${pSpacer()}
+    ${pTotRow('صافي التغير في النقد وما في حكمه')}
+    ${S.cf.cashOpen.map(r=>cfPRow(r)).join('')}
+    ${pGrandRow('النقد وما في حكمه في نهاية السنة')}
+    </tbody></table>${pfn}
+  </div>`;
+
+  /* الإيضاحات */
+  html+=`<div class="preview-page">
+    <div class="preview-title">إيضاحات على القوائم المالية</div>
+    <div class="preview-sub">للسنة المنتهية في ${c.pe}</div>
+    ${S.notes.map(n=>`
+      <div style="margin-bottom:16px">
+        <div style="font-size:13px;font-weight:500;border-bottom:1px solid var(--line);padding-bottom:5px;margin-bottom:7px">(${n.id}) ${n.title}</div>
+        ${n.type==='text'
+          ?`<p style="font-size:11.5px;color:var(--ink2);line-height:1.8">${n.text||'—'}</p>`
+          :`<div class="pnote-wrap">
+  <table class="pstmt pnote-table" style="font-size:11px"><thead><tr>${n.cols.map((col,ci)=>{
+  if(col.includes('السنة الحالية')){
+    return `<th>
+      <div class="note-col-head">
+        <span class="yr">${S.co.yr}</span>
+        <span class="cur">${S.co.cur}</span>
+      </div>
+    </th>`;
+  }
+
+  if(col.includes('السنة السابقة')){
+    return `<th>
+      <div class="note-col-head">
+        <span class="yr">${S.co.py}</span>
+        <span class="cur">${S.co.cur}</span>
+      </div>
+    </th>`;
+  }
+
+  return `<th style="${ci===0?'text-align:right':''}">${col}</th>`;
+}).join('')}</tr></thead><tbody>
+            ${n.rows.map(row=>`<tr>${row.map((cell,ci)=>`<td ${ci===0?'style="text-align:right;padding-right:12px"':'class="num"'}>${cell||''}</td>`).join('')}</tr>`).join('')}
+            </tbody></table></div>`}
+      </div>`).join('')}
+  </div>`;
+
+  html+=`<div style="text-align:center;margin:16px 0 30px">
+    <button class="btn btn-dark" onclick="window.print()">طباعة / حفظ PDF</button>
+  </div>`;
+  ct.innerHTML=html;
+}
+function getSafeFileName(name){
+  return (name || 'financial_statements')
+    .toString()
+    .trim()
+    .replace(/[\\/:*?"<>|]/g,'')
+    .replace(/\s+/g,'_');
+}
+function autoSave(){
+  try{
+    localStorage.setItem('financial_app_data', JSON.stringify(S));
+  }catch(e){
+    console.warn('Auto save failed', e);
+  }
+}
+
+function loadAutoSave(){
+  try{
+    const data = localStorage.getItem('financial_app_data');
+    if(data){
+      const parsed = JSON.parse(data);
+      if(parsed && typeof parsed === 'object'){
+        Object.keys(S).forEach(k => delete S[k]);
+        Object.assign(S, parsed);
+      }
+    }
+  }catch(e){
+    console.warn('Load failed', e);
+  }
+}
+function aoaToSheet(aoa){
+  return XLSX.utils.aoa_to_sheet(aoa);
+}
+
+function exportExcel(){
+  try{
+    const wb = XLSX.utils.book_new();
+
+    /* Company */
+    const companyData = [
+      ['البند','القيمة'],
+      ['اسم الشركة', S.co.name],
+      ['نوع الشركة', S.co.type],
+      ['السجل التجاري', S.co.cr],
+      ['الرقم الضريبي', S.co.vat],
+      ['العنوان', S.co.addr],
+      ['أساس الإعداد', S.co.basis],
+      ['عملة العرض', S.co.cur],
+      ['السنة الحالية', S.co.yr],
+      ['السنة السابقة', S.co.py],
+      ['تاريخ نهاية الفترة', S.co.pe]
+    ];
+    XLSX.utils.book_append_sheet(wb, aoaToSheet(companyData), 'Company');
+
+    /* Balance Sheet */
+    const bsData = [
+      ['قائمة المركز المالي','','',S.co.yr,S.co.py],
+      ['البيان','التصنيف','إيضاح','السنة الحالية','السنة السابقة']
+    ];
+
+    function pushSectionRows(arr, sectionName){
+      arr.forEach(r=>{
+        bsData.push([r.l || '', sectionName, r.n || '', r.v1 || '', r.v2 || '']);
+      });
+    }
+
+    pushSectionRows(S.bs.ca,'الموجودات المتداولة');
+    pushSectionRows(S.bs.nca,'الموجودات غير المتداولة');
+    pushSectionRows(S.bs.eq,'حقوق الملكية');
+    pushSectionRows(S.bs.cl,'المطلوبات المتداولة');
+    pushSectionRows(S.bs.ncl,'المطلوبات غير المتداولة');
+
+    XLSX.utils.book_append_sheet(wb, aoaToSheet(bsData), 'BS');
+
+    /* Profit or Loss */
+    const plData = [
+      ['قائمة الربح أو الخسارة والدخل الشامل الآخر','','',S.co.yr,S.co.py],
+      ['البيان','التصنيف','إيضاح','السنة الحالية','السنة السابقة']
+    ];
+
+    function pushPLRows(arr, sectionName){
+      arr.forEach(r=>{
+        plData.push([r.l || '', sectionName, r.n || '', r.v1 || '', r.v2 || '']);
+      });
+    }
+
+    pushPLRows(S.pl.rev,'الإيرادات');
+    pushPLRows(S.pl.cogs,'تكاليف الإيرادات');
+    pushPLRows(S.pl.opex,'المصاريف التشغيلية');
+    pushPLRows(S.pl.other,'بنود أخرى');
+
+    XLSX.utils.book_append_sheet(wb, aoaToSheet(plData), 'PL');
+
+    /* Equity */
+    const eqData = [];
+    eqData.push(['قائمة التغيرات في حقوق الملكية']);
+    eqData.push(['البيان', ...S.eq.cols, 'الإجمالي']);
+    eqData.push([`الرصيد في بداية السنة ${S.co.yr}`, ...S.eq.open, '']);
+    S.eq.rows.forEach(r=>{
+      eqData.push([r.l || '', ...(r.vals || []), '']);
+    });
+    eqData.push([`الرصيد في نهاية السنة ${S.co.yr}`, ...S.eq.close, '']);
+
+    XLSX.utils.book_append_sheet(wb, aoaToSheet(eqData), 'EQ');
+
+    /* Cash Flow */
+    const cfData = [
+      ['قائمة التدفقات النقدية','','',S.co.yr,S.co.py],
+      ['البيان','التصنيف','','السنة الحالية','السنة السابقة']
+    ];
+
+    function pushCFRows(arr, sectionName){
+      arr.forEach(r=>{
+        cfData.push([r.l || '', sectionName, '', r.v1 || '', r.v2 || '']);
+      });
+    }
+
+    pushCFRows(S.cf.op,'الأنشطة التشغيلية');
+    pushCFRows(S.cf.adj,'تعديلات غير نقدية');
+    pushCFRows(S.cf.wc,'التغيرات التشغيلية');
+    pushCFRows(S.cf.zakat,'الزكاة');
+    pushCFRows(S.cf.inv,'الأنشطة الاستثمارية');
+    pushCFRows(S.cf.fin,'الأنشطة التمويلية');
+    pushCFRows(S.cf.cashOpen,'أرصدة نقدية افتتاحية');
+
+    XLSX.utils.book_append_sheet(wb, aoaToSheet(cfData), 'CF');
+
+    /* Notes */
+    const notesData = [['رقم الإيضاح','عنوان الإيضاح','النوع','البيان','السنة الحالية','السنة السابقة','النص']];
+
+    S.notes.forEach(n=>{
+      if(n.type === 'text'){
+        notesData.push([n.id, n.title, 'text', '', '', '', n.text || '']);
+      }else{
+        (n.rows || []).forEach(row=>{
+          notesData.push([
+            n.id,
+            n.title,
+            'table',
+            row[0] || '',
+            row[1] || '',
+            row[2] || '',
+            ''
+          ]);
+        });
+      }
+    });
+
+    XLSX.utils.book_append_sheet(wb, aoaToSheet(notesData), 'Notes');
+
+    XLSX.writeFile(wb, `${getSafeFileName(S.co.name || 'saudi_financial_statements')}.xlsx`);
+  }catch(err){
+    alert('تعذر تصدير ملف Excel');
+    console.error(err);
+  }
+}
+let isResetting = false;
+
+function resetAll(){
+  if(confirm('⚠️ سيتم حذف جميع البيانات نهائياً. هل أنت متأكد؟')){
+    isResetting = true; // 👈 مهم جداً
+    localStorage.removeItem('financial_app_data');
+    location.reload();
+  }
+}
+function autoSave(){
+  try{
+    localStorage.setItem('financial_app_data', JSON.stringify(S));
+
+    const el = document.getElementById('saveIndicator');
+    if(el){
+      el.style.opacity = '1';
+      clearTimeout(el._timer);
+      el._timer = setTimeout(()=>{
+        el.style.opacity = '0';
+      }, 1200);
+    }
+
+  }catch(e){
+    console.warn('Auto save failed', e);
+  }
+}
+
+function loadAutoSave(){
+  try{
+    const data = localStorage.getItem('financial_app_data');
+    if(data){
+      const parsed = JSON.parse(data);
+      if(parsed && typeof parsed === 'object'){
+        Object.keys(S).forEach(k => delete S[k]);
+        Object.assign(S, parsed);
+      }
+    }
+  }catch(e){
+    console.warn('Load failed', e);
+  }
+}
+
+let saveTimer;
+document.addEventListener('input', function(){
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(autoSave, 300);
+  
+});
+// 🔥 حفظ فوري عند إغلاق الصفحة
+window.addEventListener('beforeunload', function(){
+  if(!isResetting){
+    autoSave();
+  }
+});
+loadAutoSave();
+go('company');
+</script>
