@@ -38,11 +38,23 @@
         input[type=number]::-webkit-inner-spin-button, 
         input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
         input[type=number] { -moz-appearance: textfield; }
+
+        @media print {
+            body { background-color: white !important; padding: 0 !important; }
+            .no-print { display: none !important; }
+            .print-only { display: block !important; }
+            .shadow-sm, .border { border: none !important; shadow: none !important; }
+            .bg-slate-50 { background-color: transparent !important; }
+            .max-w-3xl { max-width: 100% !important; }
+            .bg-saudi-800 { background-color: #0F6E56 !important; -webkit-print-color-adjust: exact; }
+        }
+        .print-only { display: none; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen py-8 px-4 sm:px-6 lg:px-8 transition-all duration-300">
 
 <div class="max-w-3xl mx-auto">
+    <!-- Main Card -->
     <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
         
         <!-- Header -->
@@ -58,22 +70,40 @@
                 </p>
             </div>
 
-            <div class="mt-4 sm:mt-0 flex items-center justify-between sm:justify-end w-full sm:w-auto z-10 relative">
+            <!-- Header Controls -->
+            <div class="mt-4 sm:mt-0 flex items-center gap-2 no-print">
                 <button onclick="toggleLang()" class="flex items-center gap-2 px-3 py-1.5 bg-white/10 hover:bg-white/20 border border-white/20 rounded-lg text-white transition-all backdrop-blur-sm">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418" />
-                    </svg>
-                    <span class="en font-arabic text-sm mt-0.5">العربية</span>
+                    <span class="en font-arabic text-sm">العربية</span>
                     <span class="ar text-sm">English</span>
+                </button>
+                <button onclick="window.print()" class="flex items-center gap-2 px-3 py-1.5 bg-saudi-600 hover:bg-saudi-500 border border-white/20 rounded-lg text-white transition-all shadow-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6.72 13.89l-2.207 2.208a2.25 2.25 0 000 3.182l.004.004a2.25 2.25 0 003.182 0l2.209-2.209m0 0l-2.209-2.209a2.25 2.25 0 010-3.182L10.5 8.25m4.5 4.5V4.5m0 0l-4.5 4.5M15 4.5l4.5 4.5M15 11.25l4.5-4.5" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 12h10.5a2.25 2.25 0 012.25 2.25v4.5a2.25 2.25 0 01-2.25 2.25H6.75a2.25 2.25 0 01-2.25-2.25v-4.5a2.25 2.25 0 012.25-2.25z" />
+                    </svg>
+                    <span class="en text-sm">Print</span>
+                    <span class="ar font-arabic text-sm">طباعة</span>
                 </button>
             </div>
         </div>
 
         <div class="p-6 sm:p-8 space-y-8">
-            <section>
+            <!-- Inputs Section (Hidden on Print) -->
+            <section class="no-print">
                 <div class="flex items-center gap-2 mb-4 border-b border-slate-100 pb-2">
                     <h2 class="text-sm font-semibold text-saudi-800 uppercase tracking-wider en">Employee Information</h2>
                     <h2 class="text-sm font-semibold text-saudi-800 font-arabic ar">معلومات الموظف</h2>
+                </div>
+
+                <div class="grid grid-cols-1 gap-5 mb-5">
+                    <div>
+                        <label class="block mb-1.5">
+                            <span class="block text-sm font-medium text-slate-700 en">Employee Name</span>
+                            <span class="block text-sm font-medium text-slate-700 ar font-arabic">اسم الموظف</span>
+                        </label>
+                        <input type="text" id="empName" placeholder="Enter name..." oninput="updatePrintName()"
+                            class="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-saudi-500 focus:border-saudi-500 transition-colors text-slate-900 font-medium">
+                    </div>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
@@ -126,8 +156,21 @@
                 </div>
             </section>
 
+            <!-- Results Section (Visible on Screen & Print) -->
             <section class="pt-4 border-t border-slate-200">
-                <div class="flex items-center gap-2 mb-6 border-b border-slate-100 pb-2">
+                <div class="print-only mb-6 border-b-2 border-slate-800 pb-4">
+                    <h2 class="text-xl font-bold uppercase tracking-widest text-slate-800">Statement of End of Service Benefits</h2>
+                    <div class="flex justify-between mt-4 text-sm font-medium">
+                        <div>
+                            <span class="text-slate-500">Employee:</span> <span id="print-name" class="text-slate-900 font-bold">N/A</span>
+                        </div>
+                        <div>
+                            <span class="text-slate-500">Date Generated:</span> <span class="text-slate-900" id="print-date"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-2 mb-6 border-b border-slate-100 pb-2 no-print">
                     <h2 class="text-sm font-semibold text-saudi-800 uppercase tracking-wider en">Calculation Summary</h2>
                     <h2 class="text-sm font-semibold text-saudi-800 font-arabic ar">ملخص الاحتساب</h2>
                 </div>
@@ -139,7 +182,7 @@
                         <div class="text-xl sm:text-2xl font-bold text-slate-800" id="m-years">—</div>
                     </div>
                     <div class="bg-slate-50 rounded-xl p-4 border border-slate-200">
-                        <div class="text-xs font-medium text-slate-500 mb-1 en">Salary Base</div>
+                        <div class="text-xs font-medium text-slate-500 mb-1 en">Salary Basis</div>
                         <div class="text-sm font-medium text-slate-500 mb-1 ar font-arabic">أساس الراتب</div>
                         <div class="text-xl sm:text-2xl font-bold text-blue-600" id="m-base">—</div>
                     </div>
@@ -150,6 +193,7 @@
                     </div>
                 </div>
 
+                <!-- Detailed Breakdown -->
                 <div class="bg-white border border-slate-200 rounded-xl overflow-hidden mb-6">
                     <div class="bg-slate-50 px-4 py-3 border-b border-slate-200 flex justify-between items-center">
                         <span class="text-sm font-medium text-slate-700 en">Detailed Breakdown</span>
@@ -158,25 +202,31 @@
                     <div class="p-4" id="breakdown"></div>
                 </div>
 
+                <!-- Law Note -->
                 <div class="bg-blue-50/50 rounded-xl p-4 border border-blue-100 flex gap-4 items-start">
-                    <div class="text-blue-500 mt-1 shrink-0">
+                    <div class="text-blue-500 mt-1 shrink-0 no-print">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
                         </svg>
                     </div>
                     <div id="note-text" class="text-sm text-blue-900 leading-relaxed space-y-2 w-full"></div>
                 </div>
+
+                <div class="print-only mt-12 pt-8 border-t border-slate-200">
+                    <div class="flex justify-between items-end">
+                        <div class="text-center w-48 border-t border-slate-400 pt-2">
+                            <p class="text-xs font-bold text-slate-500 uppercase">Employee Signature</p>
+                        </div>
+                        <div class="text-center w-48 border-t border-slate-400 pt-2">
+                            <p class="text-xs font-bold text-slate-500 uppercase">Employer Signature</p>
+                        </div>
+                    </div>
+                </div>
             </section>
         </div>
 
         <!-- Footer Credits -->
-        <div class="px-8 py-6 bg-slate-50 border-t border-slate-200 flex flex-col items-center justify-center space-y-2">
-            <div class="flex items-center gap-2 text-slate-400">
-                <span class="h-px w-8 bg-slate-200"></span>
-                <span class="text-[10px] uppercase tracking-[0.2em] font-semibold en">Official Tool</span>
-                <span class="text-[10px] uppercase tracking-[0.1em] font-semibold font-arabic ar">أداة رسمية</span>
-                <span class="h-px w-8 bg-slate-200"></span>
-            </div>
+        <div class="px-8 py-6 bg-slate-50 border-t border-slate-200 flex flex-col items-center justify-center space-y-2 no-print">
             <div class="flex items-center gap-1 text-slate-600 font-medium text-sm">
                 <span class="en italic">Created by</span>
                 <span class="ar font-arabic italic">أُنشئت بواسطة</span>
@@ -185,13 +235,18 @@
         </div>
     </div>
     
-    <div class="mt-4 text-center">
+    <div class="mt-4 text-center no-print">
         <p class="text-[11px] text-slate-400 font-medium en uppercase tracking-widest">© 2026 Saudi Labor Law Tool</p>
         <p class="text-[11px] text-slate-400 font-medium font-arabic ar tracking-widest">© 2026 أداة نظام العمل السعودي</p>
     </div>
 </div>
 
 <script>
+function updatePrintName() {
+    const name = document.getElementById('empName').value;
+    document.getElementById('print-name').innerText = name || 'N/A';
+}
+
 function toggleLang() {
     const htmlTag = document.documentElement;
     const currentLang = htmlTag.getAttribute('lang');
@@ -215,6 +270,8 @@ function calc() {
     const startVal = document.getElementById('start').value;
     const endVal = document.getElementById('end').value;
 
+    document.getElementById('print-date').innerText = new Date().toLocaleDateString();
+
     if (!startVal || !endVal) return;
 
     const start = new Date(startVal);
@@ -227,7 +284,6 @@ function calc() {
 
     const diffMs = end - start;
     const totalDays = Math.round(diffMs / (1000 * 60 * 60 * 24));
-    
     let totalYears = totalDays / 365;
     
     if (Math.abs(totalYears - Math.round(totalYears)) < 0.01) {
