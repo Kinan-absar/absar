@@ -48,6 +48,7 @@
             .max-w-3xl { max-width: 100% !important; margin: 0 !important; }
             .bg-saudi-800 { background-color: #0F6E56 !important; -webkit-print-color-adjust: exact; }
             .bg-saudi-50 { background-color: #f0fdf4 !important; -webkit-print-color-adjust: exact; }
+            .bg-white { background-color: white !important; }
         }
         .print-only { display: none; }
     </style>
@@ -58,8 +59,8 @@
     <!-- Main Card -->
     <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
         
-        <!-- Header -->
-        <div class="bg-saudi-800 px-6 py-6 sm:py-8 sm:flex sm:items-center sm:justify-between relative">
+        <!-- Header (HIDDEN ON PRINT) -->
+        <div class="bg-saudi-800 px-6 py-6 sm:py-8 sm:flex sm:items-center sm:justify-between relative no-print">
             <div>
                 <h1 class="text-2xl font-bold text-white tracking-tight">
                     <span class="en">End of Service Calculator</span>
@@ -71,8 +72,7 @@
                 </p>
             </div>
 
-            <!-- Header Controls -->
-            <div class="mt-4 sm:mt-0 flex items-center gap-2 no-print">
+            <div class="mt-4 sm:mt-0 flex items-center gap-2">
                 <button onclick="toggleLang()" class="flex items-center gap-2 px-3 py-1.5 bg-white/10 hover:bg-white/20 border border-white/20 rounded-lg text-white transition-all backdrop-blur-sm">
                     <span class="en font-arabic text-sm">العربية</span>
                     <span class="ar text-sm">English</span>
@@ -173,22 +173,42 @@
             </section>
 
             <!-- Results Section -->
-            <section class="pt-4 border-t border-slate-200">
-                <!-- Print Header Info -->
-                <div class="print-only mb-6 border-b-2 border-slate-800 pb-4">
-                    <h2 class="text-xl font-bold uppercase tracking-widest text-slate-800">Statement of End of Service Benefits</h2>
-                    <div class="grid grid-cols-2 gap-4 mt-6 text-sm font-medium">
-                        <div>
-                            <span class="text-slate-500">Employee:</span> <span id="print-name" class="text-slate-900 font-bold">N/A</span>
-                        </div>
+            <section class="pt-4 md:border-t border-slate-200">
+                <!-- Formal Print Header -->
+                <div class="print-only mb-10 border-b-2 border-slate-800 pb-6">
+                    <div class="flex justify-between items-start mb-6">
+                        <h2 class="text-2xl font-bold uppercase tracking-tight text-slate-900">
+                            <span class="en">Statement of End of Service Benefits</span>
+                            <span class="ar font-arabic block text-xl">كشف استحقاق مكافأة نهاية الخدمة</span>
+                        </h2>
                         <div class="text-right">
-                            <span class="text-slate-500">Date Generated:</span> <span class="text-slate-900" id="print-date"></span>
+                            <span class="text-xs text-slate-500 uppercase font-bold en">Document ID</span>
+                            <span class="block text-sm font-mono text-slate-800 uppercase">#EOS-${Date.now().toString().slice(-6)}</span>
                         </div>
-                        <div>
-                            <span class="text-slate-500">Service Period:</span> 
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-y-4 gap-x-12 mt-6 text-sm">
+                        <div class="border-l-2 border-slate-200 pl-4">
+                            <span class="text-xs text-slate-500 uppercase font-bold en block mb-1">Employee Name</span>
+                            <span class="text-xs text-slate-500 font-bold ar block mb-1">اسم الموظف</span>
+                            <span id="print-name" class="text-slate-900 font-bold text-lg">N/A</span>
+                        </div>
+                        <div class="border-l-2 border-slate-200 pl-4">
+                            <span class="text-xs text-slate-500 uppercase font-bold en block mb-1">Report Date</span>
+                            <span class="text-xs text-slate-500 font-bold ar block mb-1">تاريخ التقرير</span>
+                            <span class="text-slate-900 font-bold" id="print-date"></span>
+                        </div>
+                        <div class="border-l-2 border-slate-200 pl-4">
+                            <span class="text-xs text-slate-500 uppercase font-bold en block mb-1">Service Period</span>
+                            <span class="text-xs text-slate-500 font-bold ar block mb-1">فترة الخدمة</span>
                             <span class="text-slate-900 font-bold">
                                 <span id="print-start-date"></span> — <span id="print-end-date"></span>
                             </span>
+                        </div>
+                        <div class="border-l-2 border-slate-200 pl-4">
+                            <span class="text-xs text-slate-500 uppercase font-bold en block mb-1">Reason</span>
+                            <span class="text-xs text-slate-500 font-bold ar block mb-1">السبب</span>
+                            <span id="print-reason" class="text-slate-900 font-bold italic">Termination</span>
                         </div>
                     </div>
                 </div>
@@ -206,7 +226,7 @@
                     </div>
                     <div class="bg-slate-50 rounded-xl p-4 border border-slate-200">
                         <div class="text-[10px] font-bold text-slate-500 uppercase en">Salary</div>
-                        <div class="text-[10px] font-bold text-slate-500 ar font-arabic"> الراتب</div>
+                        <div class="text-[10px] font-bold text-slate-500 ar font-arabic">الراتب</div>
                         <div class="text-lg font-bold text-slate-800 mt-1" id="m-base">—</div>
                     </div>
                     <div class="bg-rose-50 rounded-xl p-4 border border-rose-100">
@@ -241,14 +261,19 @@
                 </div>
 
                 <!-- Print Footer -->
-                <div class="print-only mt-12 pt-8 border-t border-slate-200">
+                <div class="print-only mt-16 pt-8 border-t border-slate-200">
                     <div class="flex justify-between items-end">
                         <div class="text-center w-48 border-t border-slate-400 pt-2">
-                            <p class="text-[10px] font-bold text-slate-500 uppercase">Employee Signature</p>
+                            <p class="text-[10px] font-bold text-slate-500 uppercase en">Employee Signature</p>
+                            <p class="text-[10px] font-bold text-slate-500 ar font-arabic">توقيع الموظف</p>
                         </div>
                         <div class="text-center w-48 border-t border-slate-400 pt-2">
-                            <p class="text-[10px] font-bold text-slate-500 uppercase">Employer Signature</p>
+                            <p class="text-[10px] font-bold text-slate-500 uppercase en">Employer Stamp/Sign</p>
+                            <p class="text-[10px] font-bold text-slate-500 ar font-arabic">ختم وتوقيع صاحب العمل</p>
                         </div>
+                    </div>
+                    <div class="mt-12 text-center text-[9px] text-slate-400 italic">
+                        Generated via KSA Labor Law Calculation Tool. This document serves as a formal calculation summary.
                     </div>
                 </div>
             </section>
@@ -272,15 +297,17 @@
 
 <script>
 function updatePrintInfo() {
-    // Update Name
     const name = document.getElementById('empName').value;
     document.getElementById('print-name').innerText = name || 'N/A';
     
-    // Update Dates
     const start = document.getElementById('start').value;
     const end = document.getElementById('end').value;
     document.getElementById('print-start-date').innerText = start || 'YYYY-MM-DD';
     document.getElementById('print-end-date').innerText = end || 'YYYY-MM-DD';
+
+    const reasonSelect = document.getElementById('reason');
+    const reasonText = reasonSelect.options[reasonSelect.selectedIndex].text;
+    document.getElementById('print-reason').innerText = reasonText;
 }
 
 function toggleLang() {
@@ -298,6 +325,7 @@ function toggleLang() {
         reasonSelect.options[1].text = 'Resignation by employee';
     }
     calc();
+    updatePrintInfo();
 }
 
 function calc() {
@@ -307,7 +335,7 @@ function calc() {
     const startVal = document.getElementById('start').value;
     const endVal = document.getElementById('end').value;
 
-    document.getElementById('print-date').innerText = new Date().toLocaleDateString();
+    document.getElementById('print-date').innerText = new Date().toLocaleDateString('en-GB');
 
     if (!startVal || !endVal) return;
 
@@ -323,6 +351,7 @@ function calc() {
     const totalDays = Math.round(diffMs / (1000 * 60 * 60 * 24));
     let totalYears = totalDays / 365;
     
+    // Exact rounding for full years
     if (Math.abs(totalYears - Math.round(totalYears)) < 0.01) {
         totalYears = Math.round(totalYears);
     }
@@ -439,6 +468,8 @@ function calc() {
 
     document.getElementById('breakdown').innerHTML = html;
     document.getElementById('note-text').innerHTML = `<p class="font-medium en">${noteEn}</p><p class="font-arabic font-medium ar">${noteAr}</p>`;
+    
+    updatePrintInfo();
 }
 
 document.addEventListener("DOMContentLoaded", () => {
