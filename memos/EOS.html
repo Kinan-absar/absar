@@ -3,17 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KSA End of Service Calculator</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
-    <script><!DOCTYPE html>
-<html lang="en" dir="ltr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KSA End of Service Calculator - Bilingual</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -52,11 +41,17 @@
             body { background-color: white !important; padding: 0 !important; }
             .no-print { display: none !important; }
             .print-only { display: block !important; }
+            /* Hide the green header in print as requested */
+            .bg-saudi-800.header-container { display: none !important; }
+            
             .shadow-sm, .border { border: none !important; box-shadow: none !important; }
             .bg-slate-50 { background-color: transparent !important; }
             .max-w-3xl { max-width: 100% !important; margin: 0 !important; }
-            .bg-saudi-800 { background-color: #0F6E56 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
             .bg-saudi-50 { background-color: #f0fdf4 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            
+            /* Ensure text is dark for printing */
+            .text-slate-800 { color: #1e293b !important; }
+            .text-slate-500 { color: #64748b !important; }
         }
         .print-only { display: none; }
     </style>
@@ -67,8 +62,8 @@
     <!-- Main Card -->
     <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
         
-        <!-- Header -->
-        <div class="bg-saudi-800 px-6 py-6 sm:py-8 flex items-center justify-between relative">
+        <!-- Header (Hidden in Print via CSS class header-container) -->
+        <div class="bg-saudi-800 px-6 py-6 sm:py-8 flex items-center justify-between relative header-container">
             <div>
                 <h1 class="text-xl sm:text-2xl font-bold text-white tracking-tight flex flex-col sm:flex-row sm:gap-4 items-start sm:items-center">
                     <span>End of Service Calculator</span>
@@ -182,11 +177,11 @@
 
             <!-- Results Section -->
             <section class="pt-4 md:border-t border-slate-200">
-                <!-- Print Header -->
+                <!-- Print Header (Visible only in print) -->
                 <div class="print-only mb-10 border-b-2 border-slate-800 pb-6">
                     <div class="flex justify-between items-start mb-6">
                         <div>
-                            <h2 class="text-2xl font-bold uppercase tracking-tight text-slate-900">Statement of EOS Benefits</h2>
+                            <h2 class="text-2xl font-bold uppercase tracking-tight text-slate-900">Statement of End of Service</h2>
                             <h2 class="text-xl font-bold font-arabic text-slate-900">كشف استحقاق مكافأة نهاية الخدمة</h2>
                         </div>
                         <div class="text-right">
@@ -237,8 +232,8 @@
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
                     <div class="bg-slate-50 rounded-xl p-4 border border-slate-200">
                         <div class="flex justify-between items-center">
-                            <span class="text-[9px] font-bold text-slate-500 uppercase">Total Service</span>
-                            <span class="text-[9px] font-bold text-slate-400 font-arabic">الخدمة</span>
+                            <span class="text-[9px] font-bold text-slate-500 uppercase">Years of service</span>
+                            <span class="text-[9px] font-bold text-slate-400 font-arabic">سنوات الخدمة</span>
                         </div>
                         <div class="text-lg font-bold text-slate-800 mt-1" id="m-years">—</div>
                     </div>
@@ -315,8 +310,9 @@
 </div>
 
 <script>
-const generatedDocId = "#EOS-" + Date.now().toString().slice(-6);
-document.getElementById('print-doc-id').textContent = generatedDocId;
+// Generate a persistent ID for the session
+const generatedDocId = "EOS-" + Math.random().toString(36).substr(2, 6).toUpperCase();
+document.getElementById('print-doc-id').textContent = "#" + generatedDocId;
 
 function updatePrintInfo() {
     const name = document.getElementById('empName').value;
@@ -357,7 +353,7 @@ function calc() {
     
     document.getElementById('m-years').innerHTML = `
         <span class="font-bold">${totalYears.toFixed(2)}</span>
-        <span class="text-[9px] text-slate-400 uppercase ml-1">Yrs / سنة</span>
+        <span class="text-[9px] text-slate-400 uppercase ml-1">yrs</span>
     `;
     document.getElementById('m-base').innerHTML = `<span>${salary.toLocaleString('en-SA')}</span>`;
     document.getElementById('m-deductions').innerHTML = `<span>-${deductions.toLocaleString('en-SA')}</span>`;
@@ -376,8 +372,8 @@ function calc() {
         const part2 = years2 * salary;
         grossTotal = part1 + part2;
 
-        if (years1 > 0) rows.push({ labelEn: `First ${years1.toFixed(2)} years (50%)`, labelAr: `أول ${years1.toFixed(2)} سنوات (٥٠٪)`, value: part1 });
-        if (years2 > 0) rows.push({ labelEn: `Next ${years2.toFixed(2)} years (100%)`, labelAr: `السنوات التالية (١٠٠٪)`, value: part2 });
+        if (years1 > 0) rows.push({ labelEn: `First ${years1.toFixed(2)} years × ½ salary`, labelAr: `أول ${years1.toFixed(2)} سنوات (نصف راتب)`, value: part1 });
+        if (years2 > 0) rows.push({ labelEn: `Next ${years2.toFixed(2)} years × 1 salary`, labelAr: `السنوات التالية (راتب كامل)`, value: part2 });
 
         noteEn = "Termination: Full benefit (Article 84). Half month salary for first 5 years, full month salary thereafter.";
         noteAr = "إنهاء الخدمة: استحقاق كامل (المادة ٨٤). نصف شهر للخمس سنوات الأولى، وشهر كامل لكل سنة تليها.";
@@ -389,12 +385,12 @@ function calc() {
             noteAr = "استقالة قبل سنتين: لا يوجد استحقاق قانوني.";
         } else if (totalYears < 5) {
             grossTotal = fullBenefit * (1/3);
-            rows.push({ labelEn: "2-5 years service (1/3 Benefit)", labelAr: "خدمة ٢-٥ سنوات (ثلث المكافأة)", value: grossTotal });
+            rows.push({ labelEn: `2-5 years service (⅓ Benefit)`, labelAr: "خدمة ٢-٥ سنوات (ثلث المكافأة)", value: grossTotal });
             noteEn = "Resignation 2-5 yrs: Employee receives 1/3 of the full benefit.";
             noteAr = "استقالة ٢-٥ سنوات: يستحق الموظف ثلث المكافأة.";
         } else if (totalYears < 10) {
             grossTotal = fullBenefit * (2/3);
-            rows.push({ labelEn: "5-10 years service (2/3 Benefit)", labelAr: "خدمة ٥-١٠ سنوات (ثلثي المكافأة)", value: grossTotal });
+            rows.push({ labelEn: `5-10 years service (⅔ Benefit)`, labelAr: "خدمة ٥-١٠ سنوات (ثلثي المكافأة)", value: grossTotal });
             noteEn = "Resignation 5-10 yrs: Employee receives 2/3 of the full benefit.";
             noteAr = "استقالة ٥-١٠ سنوات: يستحق الموظف ثلثي المكافأة.";
         } else {
@@ -417,7 +413,7 @@ function calc() {
                 <div class="text-[10px] font-bold text-slate-400 font-arabic">${r.labelAr}</div>
             </div>
             <div class="text-end shrink-0 text-sm font-bold text-slate-800">
-                <span>${Math.round(r.value).toLocaleString('en-SA')}</span>
+                <span>${Math.round(r.value).toLocaleString('en-SA')} SAR</span>
             </div>
         </div>`;
     });
@@ -472,475 +468,6 @@ window.onload = () => {
     calc();
     updatePrintInfo();
 }
-</script>
-</body>
-</html>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        arabic: ['Cairo', 'sans-serif'],
-                    },
-                    colors: {
-                        saudi: {
-                            50: '#f0fdf4',
-                            100: '#dcfce7',
-                            500: '#22c55e',
-                            600: '#16a34a',
-                            700: '#15803d',
-                            800: '#0F6E56',
-                            900: '#14532d',
-                        }
-                    }
-                }
-            }
-        }
-    </script>
-    <style>
-        html[lang="en"] .ar { display: none !important; }
-        html[lang="ar"] .en { display: none !important; }
-        input[type=number]::-webkit-inner-spin-button, 
-        input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
-        input[type=number] { -moz-appearance: textfield; }
-
-        @media print {
-            body { background-color: white !important; padding: 0 !important; }
-            .no-print { display: none !important; }
-            .print-only { display: block !important; }
-            .shadow-sm, .border { border: none !important; box-shadow: none !important; }
-            .bg-slate-50 { background-color: transparent !important; }
-            .max-w-3xl { max-width: 100% !important; margin: 0 !important; }
-            .bg-saudi-800 { background-color: #0F6E56 !important; -webkit-print-color-adjust: exact; }
-            .bg-saudi-50 { background-color: #f0fdf4 !important; -webkit-print-color-adjust: exact; }
-            .bg-white { background-color: white !important; }
-        }
-        .print-only { display: none; }
-    </style>
-</head>
-<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen py-8 px-4 sm:px-6 lg:px-8 transition-all duration-300">
-
-<div class="max-w-3xl mx-auto">
-    <!-- Main Card -->
-    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-        
-        <!-- Header (HIDDEN ON PRINT) -->
-        <div class="bg-saudi-800 px-6 py-6 sm:py-8 sm:flex sm:items-center sm:justify-between relative no-print">
-            <div>
-                <h1 class="text-2xl font-bold text-white tracking-tight">
-                    <span class="en">End of Service Calculator</span>
-                    <span class="ar font-arabic">حاسبة مكافأة نهاية الخدمة</span>
-                </h1>
-                <p class="text-saudi-100 mt-1">
-                    <span class="en">Official Saudi Labor Law Logic (365 Days Base)</span>
-                    <span class="ar font-arabic text-lg">نظام العمل السعودي (أساس 365 يوم)</span>
-                </p>
-            </div>
-
-            <div class="mt-4 sm:mt-0 flex items-center gap-2">
-                <button onclick="toggleLang()" class="flex items-center gap-2 px-3 py-1.5 bg-white/10 hover:bg-white/20 border border-white/20 rounded-lg text-white transition-all backdrop-blur-sm">
-                    <span class="en font-arabic text-sm">العربية</span>
-                    <span class="ar text-sm">English</span>
-                </button>
-                <button onclick="window.print()" class="flex items-center gap-2 px-3 py-1.5 bg-saudi-600 hover:bg-saudi-500 border border-white/20 rounded-lg text-white transition-all shadow-lg">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M6.72 13.89l-2.207 2.208a2.25 2.25 0 000 3.182l.004.004a2.25 2.25 0 003.182 0l2.209-2.209m0 0l-2.209-2.209a2.25 2.25 0 010-3.182L10.5 8.25m4.5 4.5V4.5m0 0l-4.5 4.5M15 4.5l4.5 4.5M15 11.25l4.5-4.5" />
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 12h10.5a2.25 2.25 0 012.25 2.25v4.5a2.25 2.25 0 01-2.25 2.25H6.75a2.25 2.25 0 01-2.25-2.25v-4.5a2.25 2.25 0 012.25-2.25z" />
-                    </svg>
-                    <span class="en text-sm">Print Report</span>
-                    <span class="ar font-arabic text-sm">طباعة التقرير</span>
-                </button>
-            </div>
-        </div>
-
-        <div class="p-6 sm:p-8 space-y-8">
-            <!-- Inputs Section (Hidden on Print) -->
-            <section class="no-print">
-                <div class="flex items-center gap-2 mb-4 border-b border-slate-100 pb-2">
-                    <h2 class="text-sm font-semibold text-saudi-800 uppercase tracking-wider en">Employee Information</h2>
-                    <h2 class="text-sm font-semibold text-saudi-800 font-arabic ar">معلومات الموظف</h2>
-                </div>
-
-                <div class="grid grid-cols-1 gap-5 mb-5">
-                    <div>
-                        <label class="block mb-1.5">
-                            <span class="block text-sm font-medium text-slate-700 en">Employee Name</span>
-                            <span class="block text-sm font-medium text-slate-700 ar font-arabic">اسم الموظف</span>
-                        </label>
-                        <input type="text" id="empName" placeholder="Enter name..." oninput="updatePrintInfo()"
-                            class="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-saudi-500 focus:border-saudi-500 transition-colors text-slate-900 font-medium">
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
-                    <div>
-                        <label class="block mb-1.5">
-                            <span class="block text-sm font-medium text-slate-700 en">Last Actual Salary</span>
-                            <span class="block text-sm font-medium text-slate-700 ar font-arabic">آخر راتب فعلي</span>
-                        </label>
-                        <div class="relative">
-                            <input type="number" id="salary" value="10000" min="0" oninput="calc()" 
-                                class="w-full ps-4 pe-12 py-2.5 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-saudi-500 focus:border-saudi-500 transition-colors text-slate-900 font-medium">
-                            <div class="absolute inset-y-0 end-0 pe-4 flex items-center pointer-events-none">
-                                <span class="text-slate-400 text-sm font-medium en">SAR</span>
-                                <span class="text-slate-400 text-sm font-medium ar font-arabic">ريال</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div>
-                        <label class="block mb-1.5">
-                            <span class="block text-sm font-medium text-slate-700 en">Deductions (Optional)</span>
-                            <span class="block text-sm font-medium text-slate-700 ar font-arabic">الاستقطاعات (اختياري)</span>
-                        </label>
-                        <div class="relative">
-                            <input type="number" id="deductions" value="0" min="0" oninput="calc()" 
-                                class="w-full ps-4 pe-12 py-2.5 bg-rose-50 border border-rose-200 rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-rose-500 transition-colors text-rose-900 font-medium">
-                            <div class="absolute inset-y-0 end-0 pe-4 flex items-center pointer-events-none">
-                                <span class="text-rose-300 text-sm font-medium en">SAR</span>
-                                <span class="text-rose-300 text-sm font-medium ar font-arabic">ريال</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
-                    <div>
-                        <label class="block mb-1.5">
-                            <span class="block text-sm font-medium text-slate-700 en">Start date</span>
-                            <span class="block text-sm font-medium text-slate-700 ar font-arabic">تاريخ البداية</span>
-                        </label>
-                        <input type="date" id="start" value="2020-01-01" oninput="calc(); updatePrintInfo();" 
-                            class="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-saudi-500 focus:border-saudi-500 transition-colors text-slate-900 font-medium">
-                    </div>
-
-                    <div>
-                        <label class="block mb-1.5">
-                            <span class="block text-sm font-medium text-slate-700 en">End date</span>
-                            <span class="block text-sm font-medium text-slate-700 ar font-arabic">تاريخ النهاية</span>
-                        </label>
-                        <input type="date" id="end" value="2026-01-01" oninput="calc(); updatePrintInfo();" 
-                            class="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-saudi-500 focus:border-saudi-500 transition-colors text-slate-900 font-medium">
-                    </div>
-                </div>
-
-                <div>
-                    <label class="block mb-1.5">
-                        <span class="block text-sm font-medium text-slate-700 en">Reason for Leaving</span>
-                        <span class="block text-sm font-medium text-slate-700 ar font-arabic">سبب ترك العمل</span>
-                    </label>
-                    <select id="reason" onchange="calc()" 
-                        class="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-saudi-500 focus:border-saudi-500 transition-colors text-slate-900 font-medium appearance-none">
-                        <option value="termination">Termination by employer</option>
-                        <option value="resignation">Resignation by employee</option>
-                    </select>
-                </div>
-            </section>
-
-            <!-- Results Section -->
-            <section class="pt-4 md:border-t border-slate-200">
-                <!-- Formal Print Header -->
-                <div class="print-only mb-10 border-b-2 border-slate-800 pb-6">
-                    <div class="flex justify-between items-start mb-6">
-                        <h2 class="text-2xl font-bold uppercase tracking-tight text-slate-900">
-                            <span class="en">Statement of End of Service Benefits</span>
-                            <span class="ar font-arabic block text-xl">كشف استحقاق مكافأة نهاية الخدمة</span>
-                        </h2>
-                        <div class="text-right">
-                            <span class="text-xs text-slate-500 uppercase font-bold en">Document ID</span>
-                            <span class="block text-sm font-mono text-slate-800 uppercase">#EOS-${Date.now().toString().slice(-6)}</span>
-                        </div>
-                    </div>
-                    
-                    <div class="grid grid-cols-2 gap-y-4 gap-x-12 mt-6 text-sm">
-                        <div class="border-l-2 border-slate-200 pl-4">
-                            <span class="text-xs text-slate-500 uppercase font-bold en block mb-1">Employee Name</span>
-                            <span class="text-xs text-slate-500 font-bold ar block mb-1">اسم الموظف</span>
-                            <span id="print-name" class="text-slate-900 font-bold text-lg">N/A</span>
-                        </div>
-                        <div class="border-l-2 border-slate-200 pl-4">
-                            <span class="text-xs text-slate-500 uppercase font-bold en block mb-1">Report Date</span>
-                            <span class="text-xs text-slate-500 font-bold ar block mb-1">تاريخ التقرير</span>
-                            <span class="text-slate-900 font-bold" id="print-date"></span>
-                        </div>
-                        <div class="border-l-2 border-slate-200 pl-4">
-                            <span class="text-xs text-slate-500 uppercase font-bold en block mb-1">Service Period</span>
-                            <span class="text-xs text-slate-500 font-bold ar block mb-1">فترة الخدمة</span>
-                            <span class="text-slate-900 font-bold">
-                                <span id="print-start-date"></span> — <span id="print-end-date"></span>
-                            </span>
-                        </div>
-                        <div class="border-l-2 border-slate-200 pl-4">
-                            <span class="text-xs text-slate-500 uppercase font-bold en block mb-1">Reason</span>
-                            <span class="text-xs text-slate-500 font-bold ar block mb-1">السبب</span>
-                            <span id="print-reason" class="text-slate-900 font-bold italic">Termination</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flex items-center gap-2 mb-6 border-b border-slate-100 pb-2 no-print">
-                    <h2 class="text-sm font-semibold text-saudi-800 uppercase tracking-wider en">Calculation Summary</h2>
-                    <h2 class="text-sm font-semibold text-saudi-800 font-arabic ar">ملخص الاحتساب</h2>
-                </div>
-
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                    <div class="bg-slate-50 rounded-xl p-4 border border-slate-200">
-                        <div class="text-[10px] font-bold text-slate-500 uppercase en">Service</div>
-                        <div class="text-[10px] font-bold text-slate-500 ar font-arabic">مدة الخدمة</div>
-                        <div class="text-lg font-bold text-slate-800 mt-1" id="m-years">—</div>
-                    </div>
-                    <div class="bg-slate-50 rounded-xl p-4 border border-slate-200">
-                        <div class="text-[10px] font-bold text-slate-500 uppercase en">Salary</div>
-                        <div class="text-[10px] font-bold text-slate-500 ar font-arabic">الراتب</div>
-                        <div class="text-lg font-bold text-slate-800 mt-1" id="m-base">—</div>
-                    </div>
-                    <div class="bg-rose-50 rounded-xl p-4 border border-rose-100">
-                        <div class="text-[10px] font-bold text-rose-600 uppercase en">Deductions</div>
-                        <div class="text-[10px] font-bold text-rose-600 ar font-arabic">الاستقطاعات</div>
-                        <div class="text-lg font-bold text-rose-700 mt-1" id="m-deductions">—</div>
-                    </div>
-                    <div class="bg-saudi-50 rounded-xl p-4 border border-saudi-200 shadow-sm">
-                        <div class="text-[10px] font-bold text-saudi-800 uppercase en">Net Payable</div>
-                        <div class="text-[10px] font-bold text-saudi-800 ar font-arabic">صافي المستحق</div>
-                        <div class="text-lg font-bold text-saudi-700 mt-1" id="m-total">—</div>
-                    </div>
-                </div>
-
-                <!-- Detailed Breakdown -->
-                <div class="bg-white border border-slate-200 rounded-xl overflow-hidden mb-6">
-                    <div class="bg-slate-50 px-4 py-3 border-b border-slate-200 flex justify-between items-center">
-                        <span class="text-sm font-medium text-slate-700 en">Detailed Breakdown</span>
-                        <span class="text-sm font-bold text-slate-700 ar font-arabic">التفاصيل</span>
-                    </div>
-                    <div class="p-4 space-y-px" id="breakdown"></div>
-                </div>
-
-                <!-- Law Note -->
-                <div class="bg-blue-50/50 rounded-xl p-4 border border-blue-100 flex gap-4 items-start">
-                    <div class="text-blue-500 mt-1 shrink-0 no-print">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
-                        </svg>
-                    </div>
-                    <div id="note-text" class="text-sm text-blue-900 leading-relaxed space-y-2 w-full"></div>
-                </div>
-
-                <!-- Print Footer -->
-                <div class="print-only mt-16 pt-8 border-t border-slate-200">
-                    <div class="flex justify-between items-end">
-                        <div class="text-center w-48 border-t border-slate-400 pt-2">
-                            <p class="text-[10px] font-bold text-slate-500 uppercase en">Employee Signature</p>
-                            <p class="text-[10px] font-bold text-slate-500 ar font-arabic">توقيع الموظف</p>
-                        </div>
-                        <div class="text-center w-48 border-t border-slate-400 pt-2">
-                            <p class="text-[10px] font-bold text-slate-500 uppercase en">Employer Stamp/Sign</p>
-                            <p class="text-[10px] font-bold text-slate-500 ar font-arabic">ختم وتوقيع صاحب العمل</p>
-                        </div>
-                    </div>
-                    <div class="mt-12 text-center text-[9px] text-slate-400 italic">
-                        Generated via KSA Labor Law Calculation Tool. This document serves as a formal calculation summary.
-                    </div>
-                </div>
-            </section>
-        </div>
-
-        <!-- Footer Credits -->
-        <div class="px-8 py-6 bg-slate-50 border-t border-slate-200 flex flex-col items-center justify-center space-y-2 no-print">
-            <div class="flex items-center gap-1 text-slate-600 font-medium text-sm">
-                <span class="en italic">Created by</span>
-                <span class="ar font-arabic italic">أُنشئت بواسطة</span>
-                <span class="text-saudi-800 font-bold ml-1 tracking-tight">Kinan Ammar</span>
-            </div>
-        </div>
-    </div>
-    
-    <div class="mt-4 text-center no-print">
-        <p class="text-[11px] text-slate-400 font-medium en uppercase tracking-widest">© 2026 Saudi Labor Law Tool</p>
-        <p class="text-[11px] text-slate-400 font-medium font-arabic ar tracking-widest">© 2026 أداة نظام العمل السعودي</p>
-    </div>
-</div>
-
-<script>
-function updatePrintInfo() {
-    const name = document.getElementById('empName').value;
-    document.getElementById('print-name').innerText = name || 'N/A';
-    
-    const start = document.getElementById('start').value;
-    const end = document.getElementById('end').value;
-    document.getElementById('print-start-date').innerText = start || 'YYYY-MM-DD';
-    document.getElementById('print-end-date').innerText = end || 'YYYY-MM-DD';
-
-    const reasonSelect = document.getElementById('reason');
-    const reasonText = reasonSelect.options[reasonSelect.selectedIndex].text;
-    document.getElementById('print-reason').innerText = reasonText;
-}
-
-function toggleLang() {
-    const htmlTag = document.documentElement;
-    const currentLang = htmlTag.getAttribute('lang');
-    const newLang = currentLang === 'en' ? 'ar' : 'en';
-    htmlTag.setAttribute('lang', newLang);
-    htmlTag.setAttribute('dir', newLang === 'ar' ? 'rtl' : 'ltr');
-    const reasonSelect = document.getElementById('reason');
-    if (newLang === 'ar') {
-        reasonSelect.options[0].text = 'إنهاء من صاحب العمل';
-        reasonSelect.options[1].text = 'استقالة من الموظف';
-    } else {
-        reasonSelect.options[0].text = 'Termination by employer';
-        reasonSelect.options[1].text = 'Resignation by employee';
-    }
-    calc();
-    updatePrintInfo();
-}
-
-function calc() {
-    const salary = parseFloat(document.getElementById('salary').value) || 0;
-    const deductions = parseFloat(document.getElementById('deductions').value) || 0;
-    const reason = document.getElementById('reason').value;
-    const startVal = document.getElementById('start').value;
-    const endVal = document.getElementById('end').value;
-
-    document.getElementById('print-date').innerText = new Date().toLocaleDateString('en-GB');
-
-    if (!startVal || !endVal) return;
-
-    const start = new Date(startVal);
-    const end = new Date(endVal);
-
-    if (end <= start) {
-        document.getElementById('m-years').innerHTML = `<span class="text-red-500 text-lg en">Invalid</span><span class="text-red-500 text-lg ar font-arabic">تاريخ غير صالح</span>`;
-        return;
-    }
-
-    const diffMs = end - start;
-    const totalDays = Math.round(diffMs / (1000 * 60 * 60 * 24));
-    let totalYears = totalDays / 365;
-    
-    // Exact rounding for full years
-    if (Math.abs(totalYears - Math.round(totalYears)) < 0.01) {
-        totalYears = Math.round(totalYears);
-    }
-
-    const base = salary;
-
-    document.getElementById('m-years').innerHTML = `
-        <span class="en text-slate-800">${totalYears.toFixed(2)} <span class="text-[10px] text-slate-400">YRS</span></span>
-        <span class="ar font-arabic text-slate-800">${totalYears.toFixed(2)} <span class="text-[10px] text-slate-400">سنة</span></span>
-    `;
-    document.getElementById('m-base').innerHTML = `
-        <span class="en text-slate-800">${base.toLocaleString('en-SA')}</span>
-        <span class="ar font-arabic text-slate-800">${base.toLocaleString('en-SA')}</span>
-    `;
-    document.getElementById('m-deductions').innerHTML = `
-        <span class="en">-${deductions.toLocaleString('en-SA')}</span>
-        <span class="ar font-arabic">-${deductions.toLocaleString('en-SA')}</span>
-    `;
-
-    let rows = [];
-    let grossTotal = 0;
-    let noteEn = '';
-    let noteAr = '';
-
-    if (reason === 'termination') {
-        const years1 = Math.min(totalYears, 5);
-        const years2 = Math.max(totalYears - 5, 0);
-        const part1 = years1 * (base / 2);
-        const part2 = years2 * base;
-        grossTotal = part1 + part2;
-
-        if (years1 > 0) rows.push({ labelEn: `First ${years1.toFixed(2)} years × ½ salary`, labelAr: `أول ${years1.toFixed(2)} سنة × نصف الراتب`, value: part1 });
-        if (years2 > 0) rows.push({ labelEn: `Next ${years2.toFixed(2)} years × 1 full salary`, labelAr: `السنوات التالية ${years2.toFixed(2)} سنة × الراتب الكامل`, value: part2 });
-
-        noteEn = `Termination: Article 84. Full benefit for first 5 years (half month/yr) and subsequent years (full month/yr).`;
-        noteAr = `إنهاء الخدمة: المادة 84. استحقاق كامل (نصف شهر لأول 5 سنوات، وشهر كامل لكل سنة تليها).`;
-    } else {
-        if (totalYears < 2) {
-            grossTotal = 0;
-            rows.push({ labelEn: `Less than 2 years — no entitlement`, labelAr: `أقل من سنتين خدمة — لا يوجد استحقاق`, value: 0 });
-            noteEn = `Resignation with less than 2 years service: no benefit is due.`;
-            noteAr = `الاستقالة قبل إكمال سنتين: لا تستحق المكافأة.`;
-        } else if (totalYears < 5) {
-            const benefit = (totalYears * (base / 2)) * (1/3);
-            grossTotal = benefit;
-            rows.push({ labelEn: `${totalYears.toFixed(2)} years × ½ salary × ⅓ entitlement`, labelAr: `${totalYears.toFixed(2)} سنة × نصف الراتب × ثلث الاستحقاق`, value: benefit });
-            noteEn = `Resignation between 2–5 years: employee receives ⅓ of the full benefit.`;
-            noteAr = `الاستقالة بين سنتين و5 سنوات: يستحق الموظف ثلث المكافأة.`;
-        } else if (totalYears < 10) {
-            const full = (Math.min(totalYears, 5) * (base / 2)) + (Math.max(totalYears - 5, 0) * base);
-            const benefit = full * (2/3);
-            grossTotal = benefit;
-            rows.push({ labelEn: `Full entitlement × ⅔ (5–10 years)`, labelAr: `الاستحقاق الكامل × ثلثين (5–10 سنوات)`, value: benefit });
-            noteEn = `Resignation between 5–10 years: employee receives ⅔ of the full benefit.`;
-            noteAr = `الاستقالة بين 5 و10 سنوات: يستحق الموظف ثلثي المكافأة.`;
-        } else {
-            const part1 = 5 * (base / 2);
-            const part2 = (totalYears - 5) * base;
-            grossTotal = part1 + part2;
-            rows.push({ labelEn: `First 5 years × ½ salary`, labelAr: `أول 5 سنوات × نصف الراتب`, value: part1 });
-            rows.push({ labelEn: `Next ${(totalYears - 5).toFixed(2)} years × 1 full salary`, labelAr: `السنوات التالية ${(totalYears - 5).toFixed(2)} سنة × الراتب الكامل`, value: part2 });
-            noteEn = `Resignation after 10+ years: employee receives full benefit.`;
-            noteAr = `الاستقالة بعد 10 سنوات أو أكثر: يستحق الموظف المكافأة كاملة.`;
-        }
-    }
-
-    const netTotal = grossTotal - deductions;
-    document.getElementById('m-total').textContent = Math.round(netTotal).toLocaleString('en-SA');
-
-    let html = '';
-    rows.forEach(r => {
-        html += `
-        <div class="flex justify-between items-center py-3 border-b border-slate-100">
-            <div class="pe-4 text-sm font-medium text-slate-600">
-                <span class="en">${r.labelEn}</span><span class="ar font-arabic">${r.labelAr}</span>
-            </div>
-            <div class="text-end shrink-0 text-sm font-bold text-slate-800">
-                <span>${Math.round(r.value).toLocaleString('en-SA')}</span>
-            </div>
-        </div>`;
-    });
-
-    html += `
-    <div class="flex justify-between items-center py-3 border-b border-slate-100 bg-slate-50/50 -mx-4 px-4">
-        <div class="text-sm font-bold text-slate-700">
-            <span class="en">Gross EOS Benefit</span><span class="ar font-arabic">إجمالي مكافأة الخدمة</span>
-        </div>
-        <div class="text-sm font-bold text-slate-900">
-            <span>${Math.round(grossTotal).toLocaleString('en-SA')} SAR</span>
-        </div>
-    </div>`;
-
-    if (deductions > 0) {
-        html += `
-        <div class="flex justify-between items-center py-3 border-b border-rose-100 bg-rose-50/30 -mx-4 px-4">
-            <div class="text-sm font-medium text-rose-700">
-                <span class="en">Total Deductions</span><span class="ar font-arabic">إجمالي الاستقطاعات</span>
-            </div>
-            <div class="text-sm font-bold text-rose-700">
-                <span>- ${deductions.toLocaleString('en-SA')} SAR</span>
-            </div>
-        </div>`;
-    }
-
-    html += `
-    <div class="flex justify-between items-center py-4 bg-saudi-800 -mx-4 px-4 -mb-4">
-        <div class="text-sm font-bold text-white uppercase tracking-wider">
-            <span class="en">Net Amount Payable</span><span class="ar font-arabic text-base">صافي المستحق للموظف</span>
-        </div>
-        <div class="text-xl font-black text-white">
-            <span>${Math.round(netTotal).toLocaleString('en-SA')} SAR</span>
-        </div>
-    </div>`;
-
-    document.getElementById('breakdown').innerHTML = html;
-    document.getElementById('note-text').innerHTML = `<p class="font-medium en">${noteEn}</p><p class="font-arabic font-medium ar">${noteAr}</p>`;
-    
-    updatePrintInfo();
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-    calc();
-    updatePrintInfo();
-});
 </script>
 </body>
 </html>
