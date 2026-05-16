@@ -9,13 +9,16 @@
 body{font-family:'Segoe UI',Tahoma,Arial,sans-serif;background:#F9FAFB;direction:rtl;color:#111827;min-height:100vh;padding:32px 16px}
 .page{max-width:720px;margin:0 auto}
 .main-title{font-size:22px;font-weight:600;color:#111827;text-align:center;margin-bottom:6px}
-.main-sub{font-size:13px;color:#6B7280;text-align:center;margin-bottom:32px}
+.main-sub{font-size:13px;color:#6B7280;text-align:center;margin-bottom:24px}
+.legend{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px;justify-content:center}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:12px;color:#4B5563}
+.legend-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
 .flow{display:flex;flex-direction:column;gap:0}
 .step{display:flex;gap:16px;position:relative}
 .left{display:flex;flex-direction:column;align-items:center;width:48px;flex-shrink:0}
 .circle{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;flex-shrink:0;z-index:1}
 .line{width:2px;flex:1;min-height:16px;background:#E5E7EB}
-.card{flex:1;border-radius:12px;border:0.5px solid #E5E7EB;padding:14px 16px;margin-bottom:0;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.card{flex:1;border-radius:12px;border:0.5px solid #E5E7EB;padding:14px 16px;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.04)}
 .step-wrap{flex:1;padding-bottom:12px}
 .step-num{font-size:11px;font-weight:600;margin-bottom:4px;letter-spacing:.3px}
 .step-title{font-size:15px;font-weight:600;color:#111827;margin-bottom:6px}
@@ -27,7 +30,9 @@ body{font-family:'Segoe UI',Tahoma,Arial,sans-serif;background:#F9FAFB;direction
 .branch-card{border-radius:8px;padding:10px 12px;border:0.5px solid #E5E7EB}
 .branch-title{font-size:12px;font-weight:600;margin-bottom:4px}
 .branch-body{font-size:12px;color:#4B5563;line-height:1.5}
-/* colors */
+.highlight-box{border-radius:8px;padding:10px 14px;margin-top:10px}
+.highlight-title{font-size:12px;font-weight:600;margin-bottom:4px}
+.highlight-body{font-size:12px;line-height:1.6}
 .c-blue-bg{background:#EFF6FF}.c-blue-text{color:#1D4ED8}
 .c-blue-badge{background:#DBEAFE;color:#1E40AF}
 .c-green-bg{background:#F0FDF4}.c-green-text{color:#15803D}
@@ -39,12 +44,13 @@ body{font-family:'Segoe UI',Tahoma,Arial,sans-serif;background:#F9FAFB;direction
 .c-red-badge{background:#FEE2E2;color:#991B1B}
 .c-gray-badge{background:#F3F4F6;color:#374151}
 .c-gray-bg{background:#F9FAFB}.c-gray-text{color:#374151}
-/* Summary */
+.c-teal-bg{background:#F0FDFA}.c-teal-text{color:#0F766E}
+.c-teal-badge{background:#CCFBF1;color:#115E59}
 .summary{background:#F3F4F6;border-radius:12px;padding:16px 18px;margin-top:24px;border:0.5px solid #E5E7EB}
 .summary-title{font-size:12px;font-weight:600;color:#6B7280;margin-bottom:10px;letter-spacing:.3px}
 .summary-row{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:0.5px solid #E5E7EB}
 .summary-row:last-child{border-bottom:none}
-.sum-actor{font-size:12px;font-weight:600;min-width:90px;flex-shrink:0;padding-top:1px}
+.sum-actor{font-size:12px;font-weight:600;min-width:110px;flex-shrink:0;padding-top:1px}
 .sum-arrow{color:#9CA3AF;font-size:12px;padding-top:1px}
 .sum-desc{font-size:12px;color:#4B5563;line-height:1.5}
 .footer{text-align:center;margin-top:24px;font-size:11px;color:#9CA3AF}
@@ -55,213 +61,189 @@ body{font-family:'Segoe UI',Tahoma,Arial,sans-serif;background:#F9FAFB;direction
 <div class="page">
 <div class="main-title">سير عمل المشتريات والفواتير</div>
 <div class="main-sub">من إنشاء طلب المواد حتى متابعة المحاسبة</div>
-
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot" style="background:#2563EB"></div>الموظف</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#15803D"></div>فهد — المشتريات</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#0F766E"></div>إيلي — مدير المشروع</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#6D28D9"></div>أنس — المراجعة الداخلية</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#B45309"></div>جيتّو — المشتريات</div>
+</div>
 <div class="flow">
 
-<!-- Step 1 -->
 <div class="step">
-  <div class="left">
-    <div class="circle c-blue-bg c-blue-text">١</div>
-    <div class="line"></div>
-  </div>
-  <div class="step-wrap">
-    <div class="card">
-      <div class="step-num c-blue-text">الخطوة الأولى</div>
-      <div class="step-title">إنشاء طلب المواد</div>
-      <div class="step-body">يقوم الموظف بإنشاء طلب المواد (MR)، ثم يمر الطلب بمراحل الاعتماد حتى يصل إلى مسؤول المشتريات.</div>
-      <div class="badges">
-        <span class="badge c-gray-badge">👤 الموظف</span>
-        <span class="badge c-blue-badge">طلب المواد MR</span>
-        <span class="badge c-gray-badge">مراحل الاعتماد</span>
-      </div>
+  <div class="left"><div class="circle c-blue-bg c-blue-text">١</div><div class="line"></div></div>
+  <div class="step-wrap"><div class="card">
+    <div class="step-num c-blue-text">الخطوة الأولى</div>
+    <div class="step-title">إنشاء طلب المواد</div>
+    <div class="step-body">يقوم الموظف بإنشاء طلب المواد (MR)، ثم يمر الطلب بمراحل الاعتماد حتى يصل إلى مسؤول المشتريات.</div>
+    <div class="badges">
+      <span class="badge c-gray-badge">👤 الموظف</span>
+      <span class="badge c-blue-badge">طلب المواد MR</span>
+      <span class="badge c-gray-badge">مراحل الاعتماد</span>
     </div>
-  </div>
+  </div></div>
 </div>
 
-<!-- Step 2 -->
 <div class="step">
-  <div class="left">
-    <div class="circle c-green-bg c-green-text">٢</div>
-    <div class="line"></div>
-  </div>
-  <div class="step-wrap">
-    <div class="card">
-      <div class="step-num c-green-text">الخطوة الثانية</div>
-      <div class="step-title">مراجعة مسؤول المشتريات</div>
-      <div class="actor c-green-bg c-green-text">فهد — مسؤول المشتريات</div>
-      <div class="step-body">يستطيع فهد من خلال البوابة:</div>
-      <div class="badges">
-        <span class="badge c-green-badge">مراجعة طلبات المواد</span>
-        <span class="badge c-green-badge">رفع عروض الأسعار</span>
-        <span class="badge c-green-badge">متابعة حالة العروض</span>
-        <span class="badge c-green-badge">رفع مستندات الفواتير</span>
-        <span class="badge c-green-badge">إرسال الفواتير للمحاسبة</span>
-      </div>
+  <div class="left"><div class="circle c-green-bg c-green-text">٢</div><div class="line"></div></div>
+  <div class="step-wrap"><div class="card">
+    <div class="step-num c-green-text">الخطوة الثانية</div>
+    <div class="step-title">مراجعة مسؤول المشتريات</div>
+    <div class="actor c-green-bg c-green-text">فهد — مسؤول المشتريات</div>
+    <div class="step-body">يستطيع فهد من خلال البوابة:</div>
+    <div class="badges">
+      <span class="badge c-green-badge">مراجعة طلبات المواد</span>
+      <span class="badge c-green-badge">رفع عروض الأسعار</span>
+      <span class="badge c-green-badge">متابعة حالة العروض</span>
+      <span class="badge c-green-badge">رفع مستندات الفواتير</span>
+      <span class="badge c-green-badge">إرسال الفواتير للمحاسبة</span>
     </div>
-  </div>
+  </div></div>
 </div>
 
-<!-- Step 3 -->
 <div class="step">
-  <div class="left">
-    <div class="circle c-green-bg c-green-text">٣</div>
-    <div class="line"></div>
-  </div>
-  <div class="step-wrap">
-    <div class="card">
-      <div class="step-num c-green-text">الخطوة الثالثة</div>
-      <div class="step-title">جمع عروض الأسعار</div>
-      <div class="actor c-green-bg c-green-text">فهد — Quotation Collection</div>
-      <div class="step-body">النظام يتابع الحالة تلقائياً:</div>
-      <div class="badges">
-        <span class="badge c-amber-badge">١ عرض → متبقي ٢</span>
-        <span class="badge c-amber-badge">٢ عروض → متبقي ١</span>
-        <span class="badge c-green-badge">٣ عروض → مكتمل ✓</span>
-        <span class="badge c-gray-badge">حذف أو استبدال العروض</span>
-      </div>
+  <div class="left"><div class="circle c-green-bg c-green-text">٣</div><div class="line"></div></div>
+  <div class="step-wrap"><div class="card">
+    <div class="step-num c-green-text">الخطوة الثالثة</div>
+    <div class="step-title">جمع عروض الأسعار</div>
+    <div class="actor c-green-bg c-green-text">فهد — Quotation Collection</div>
+    <div class="step-body">النظام يتابع الحالة تلقائياً:</div>
+    <div class="badges">
+      <span class="badge c-amber-badge">١ عرض ← متبقي ٢</span>
+      <span class="badge c-amber-badge">٢ عروض ← متبقي ١</span>
+      <span class="badge c-green-badge">٣ عروض ← مكتمل ✓</span>
+      <span class="badge c-gray-badge">حذف أو استبدال العروض</span>
     </div>
-  </div>
+  </div></div>
 </div>
 
-<!-- Step 4 -->
 <div class="step">
-  <div class="left">
-    <div class="circle c-purple-bg c-purple-text">٤</div>
-    <div class="line"></div>
-  </div>
-  <div class="step-wrap">
-    <div class="card">
-      <div class="step-num c-purple-text">الخطوة الرابعة</div>
-      <div class="step-title">المراجعة الداخلية</div>
-      <div class="actor c-purple-bg c-purple-text">أنس — Backend</div>
-      <div class="step-body">يراجع عروض الأسعار وحالتها ومتطلبات الشراء، ثم يقرر:</div>
-      <div class="branch">
-        <div class="branch-card c-blue-bg" style="border-color:#BFDBFE">
-          <div class="branch-title c-blue-text">PO مطلوب</div>
-          <div class="branch-body">يُحال الطلب لإصدار أمر شراء</div>
-        </div>
-        <div class="branch-card" style="background:#F9FAFB">
-          <div class="branch-title" style="color:#374151">No PO Required</div>
-          <div class="branch-body">فاتورة مورد مباشرة دون أمر شراء</div>
-        </div>
-      </div>
-      <div class="badges" style="margin-top:10px">
-        <span class="badge c-amber-badge">شراء طارئ</span>
-        <span class="badge c-amber-badge">مورد وحيد</span>
-        <span class="badge c-amber-badge">استثناء إداري</span>
-      </div>
+  <div class="left"><div class="circle c-teal-bg c-teal-text">٤</div><div class="line"></div></div>
+  <div class="step-wrap"><div class="card">
+    <div class="step-num c-teal-text">الخطوة الرابعة</div>
+    <div class="step-title">اعتماد مدير المشروع</div>
+    <div class="actor c-teal-bg c-teal-text">إيلي — مدير المشروع</div>
+    <div class="step-body">يراجع إيلي جميع عروض الأسعار المقدمة ويتخذ قرارين رئيسيين:</div>
+    <div class="highlight-box" style="background:#EFF6FF;border:0.5px solid #BFDBFE">
+      <div class="highlight-title" style="color:#1D4ED8">💳 تحديد حساب المصروفات</div>
+      <div class="highlight-body" style="color:#1E40AF">يقرر إيلي على أي حساب مصروفات سيتم تحميل عملية الشراء قبل أي معالجة لاحقة.</div>
     </div>
-  </div>
+    <div class="highlight-box" style="background:#F0FDFA;border:0.5px solid #99F6E4;margin-top:8px">
+      <div class="highlight-title" style="color:#0F766E">📋 اختيار عرض السعر</div>
+      <div class="highlight-body" style="color:#115E59">يراجع إيلي العروض ويختار العرض المناسب للمضي قدماً بناءً على السعر وموثوقية المورد واحتياجات المشروع.</div>
+    </div>
+    <div class="badges" style="margin-top:10px">
+      <span class="badge c-teal-badge">تحديد حساب المصروفات</span>
+      <span class="badge c-teal-badge">اعتماد عرض السعر</span>
+      <span class="badge c-teal-badge">اختيار المورد</span>
+    </div>
+  </div></div>
 </div>
 
-<!-- Step 5 -->
 <div class="step">
-  <div class="left">
-    <div class="circle c-amber-bg c-amber-text">٥</div>
-    <div class="line"></div>
-  </div>
-  <div class="step-wrap">
-    <div class="card">
-      <div class="step-num c-amber-text">الخطوة الخامسة</div>
-      <div class="step-title">أمر الشراء أو فاتورة المورد</div>
-      <div class="actor c-amber-bg c-amber-text">جيتو — إصدار الوثائق</div>
-      <div class="branch">
-        <div class="branch-card c-blue-bg" style="border-color:#BFDBFE">
-          <div class="branch-title c-blue-text">إذا كان PO مطلوب</div>
-          <div class="branch-body">يُصدر أمر شراء واحد أو عدة أوامر<br><strong style="color:#1D4ED8">→ Open PO</strong></div>
-        </div>
-        <div class="branch-card" style="background:#F9FAFB">
-          <div class="branch-title" style="color:#374151">إذا لم يكن PO مطلوب</div>
-          <div class="branch-body">ينشئ فاتورة مورد مباشرة<br><strong style="color:#374151">→ Open Bill</strong></div>
-        </div>
+  <div class="left"><div class="circle c-purple-bg c-purple-text">٥</div><div class="line"></div></div>
+  <div class="step-wrap"><div class="card">
+    <div class="step-num c-purple-text">الخطوة الخامسة</div>
+    <div class="step-title">المراجعة الداخلية</div>
+    <div class="actor c-purple-bg c-purple-text">أنس — Backend</div>
+    <div class="step-body">يراجع أنس عروض الأسعار وحالتها ومتطلبات الشراء، ثم يقرر:</div>
+    <div class="branch">
+      <div class="branch-card c-blue-bg" style="border-color:#BFDBFE">
+        <div class="branch-title c-blue-text">PO مطلوب</div>
+        <div class="branch-body">يُحال الطلب لإصدار أمر شراء</div>
+      </div>
+      <div class="branch-card" style="background:#F9FAFB">
+        <div class="branch-title" style="color:#374151">No PO Required</div>
+        <div class="branch-body">فاتورة مورد مباشرة دون أمر شراء</div>
       </div>
     </div>
-  </div>
+    <div class="step-body" style="margin-top:10px">كما يستطيع تعديل حالة عروض الأسعار يدوياً في حالات:</div>
+    <div class="badges">
+      <span class="badge c-amber-badge">الشراء الطارئ</span>
+      <span class="badge c-amber-badge">المورد الوحيد</span>
+      <span class="badge c-amber-badge">الاستثناء الإداري</span>
+    </div>
+  </div></div>
 </div>
 
-<!-- Step 6 -->
 <div class="step">
-  <div class="left">
-    <div class="circle c-green-bg c-green-text">٦</div>
-    <div class="line"></div>
-  </div>
-  <div class="step-wrap">
-    <div class="card">
-      <div class="step-num c-green-text">الخطوة السادسة</div>
-      <div class="step-title">رفع الفواتير</div>
-      <div class="actor c-green-bg c-green-text">فهد — Invoice Submission to Accounting</div>
-      <div class="step-body">بعد استلام الفاتورة أو توريد المواد يرفع:</div>
-      <div class="badges">
-        <span class="badge c-green-badge">فاتورة المورد</span>
-        <span class="badge c-green-badge">سند التسليم</span>
-        <span class="badge c-green-badge">المستندات الداعمة</span>
+  <div class="left"><div class="circle c-amber-bg c-amber-text">٦</div><div class="line"></div></div>
+  <div class="step-wrap"><div class="card">
+    <div class="step-num c-amber-text">الخطوة السادسة</div>
+    <div class="step-title">أمر الشراء أو فاتورة المورد</div>
+    <div class="actor c-amber-bg c-amber-text">جيتّو — إصدار الوثائق</div>
+    <div class="branch">
+      <div class="branch-card c-blue-bg" style="border-color:#BFDBFE">
+        <div class="branch-title c-blue-text">إذا كان PO مطلوب</div>
+        <div class="branch-body">يُصدر أمر شراء واحد أو عدة أوامر<br><strong style="color:#1D4ED8">← Open PO</strong></div>
+      </div>
+      <div class="branch-card" style="background:#F9FAFB">
+        <div class="branch-title" style="color:#374151">إذا لم يكن PO مطلوب</div>
+        <div class="branch-body">ينشئ فاتورة مورد مباشرة<br><strong style="color:#374151">← Open Bill</strong></div>
       </div>
     </div>
-  </div>
+  </div></div>
 </div>
 
-<!-- Step 7 -->
 <div class="step">
-  <div class="left">
-    <div class="circle c-blue-bg c-blue-text">٧</div>
-    <div class="line"></div>
-  </div>
-  <div class="step-wrap">
-    <div class="card">
-      <div class="step-num c-blue-text">الخطوة السابعة</div>
-      <div class="step-title">الإرسال للمحاسبة</div>
-      <div class="actor c-green-bg c-green-text">فهد — Submit to Accounting</div>
-      <div class="step-body">النظام يقوم بتحديث حالة الفاتورة وإنشاء سجل في Chatter ومتابعة الإرسال. زر الإرسال يختفي بعد التنفيذ ولا يظهر إلا عند رفع ملفات جديدة.</div>
+  <div class="left"><div class="circle c-green-bg c-green-text">٧</div><div class="line"></div></div>
+  <div class="step-wrap"><div class="card">
+    <div class="step-num c-green-text">الخطوة السابعة</div>
+    <div class="step-title">رفع الفواتير</div>
+    <div class="actor c-green-bg c-green-text">فهد — Invoice Submission to Accounting</div>
+    <div class="step-body">بعد استلام الفاتورة أو توريد المواد يرفع:</div>
+    <div class="badges">
+      <span class="badge c-green-badge">فاتورة المورد</span>
+      <span class="badge c-green-badge">سند التسليم</span>
+      <span class="badge c-green-badge">المستندات الداعمة</span>
     </div>
-  </div>
+  </div></div>
 </div>
 
-<!-- Step 8 -->
 <div class="step">
-  <div class="left">
-    <div class="circle c-purple-bg c-purple-text">٨</div>
-    <div class="line"></div>
-  </div>
-  <div class="step-wrap">
-    <div class="card">
-      <div class="step-num c-purple-text">الخطوة الثامنة</div>
-      <div class="step-title">متابعة المحاسبة</div>
-      <div class="actor c-purple-bg c-purple-text">أنس / قسم المحاسبة</div>
-      <div class="step-body">تحديث حالة الفاتورة عبر الحالات التالية:</div>
-      <div class="badges">
-        <span class="badge c-gray-badge">Pending Invoice</span>
-        <span class="badge c-blue-badge">Submitted to Accounting</span>
-        <span class="badge c-green-badge">Received by Accounting</span>
-        <span class="badge c-amber-badge">Need More Invoice Docs</span>
-        <span class="badge c-green-badge">Processed ✓</span>
-        <span class="badge c-red-badge">Rejected ✗</span>
-      </div>
-    </div>
-  </div>
+  <div class="left"><div class="circle c-blue-bg c-blue-text">٨</div><div class="line"></div></div>
+  <div class="step-wrap"><div class="card">
+    <div class="step-num c-blue-text">الخطوة الثامنة</div>
+    <div class="step-title">الإرسال للمحاسبة</div>
+    <div class="actor c-green-bg c-green-text">فهد — Submit to Accounting</div>
+    <div class="step-body">يقوم فهد بالضغط على Submit to Accounting. النظام يحدّث حالة الفاتورة وينشئ سجلاً في Chatter ويتابع عملية الإرسال. يختفي زر الإرسال بعد التنفيذ ولا يظهر إلا عند رفع ملفات جديدة.</div>
+  </div></div>
 </div>
 
-<!-- Step 9 -->
 <div class="step">
-  <div class="left">
-    <div class="circle c-gray-bg c-gray-text">٩</div>
-  </div>
-  <div class="step-wrap">
-    <div class="card">
-      <div class="step-num c-gray-text">الخطوة التاسعة</div>
-      <div class="step-title">فصل أنواع المرفقات</div>
-      <div class="step-body">يفصل النظام المرفقات لمنع الاختلاط والأخطاء وضمان دقة العد:</div>
-      <div class="badges">
-        <span class="badge c-gray-badge">مرفقات عامة</span>
-        <span class="badge c-blue-badge">مرفقات عروض الأسعار</span>
-        <span class="badge c-green-badge">مرفقات الفواتير</span>
-      </div>
+  <div class="left"><div class="circle c-purple-bg c-purple-text">٩</div><div class="line"></div></div>
+  <div class="step-wrap"><div class="card">
+    <div class="step-num c-purple-text">الخطوة التاسعة</div>
+    <div class="step-title">متابعة المحاسبة</div>
+    <div class="actor c-purple-bg c-purple-text">أنس / قسم المحاسبة</div>
+    <div class="step-body">تحديث حالة الفاتورة عبر الحالات التالية:</div>
+    <div class="badges">
+      <span class="badge c-gray-badge">Pending Invoice</span>
+      <span class="badge c-blue-badge">Submitted to Accounting</span>
+      <span class="badge c-green-badge">Received by Accounting</span>
+      <span class="badge c-amber-badge">Need More Invoice Docs</span>
+      <span class="badge c-green-badge">Processed ✓</span>
+      <span class="badge c-red-badge">Rejected ✗</span>
     </div>
-  </div>
+  </div></div>
 </div>
 
-</div><!-- end flow -->
+<div class="step">
+  <div class="left"><div class="circle c-gray-bg c-gray-text" style="font-size:13px">١٠</div></div>
+  <div class="step-wrap"><div class="card">
+    <div class="step-num c-gray-text">الخطوة العاشرة</div>
+    <div class="step-title">فصل أنواع المرفقات</div>
+    <div class="step-body">يفصل النظام المرفقات لمنع اختلاط الملفات وأخطاء عدد عروض الأسعار والتكرار في الإرسال:</div>
+    <div class="badges">
+      <span class="badge c-gray-badge">مرفقات عامة</span>
+      <span class="badge c-blue-badge">مرفقات عروض الأسعار</span>
+      <span class="badge c-green-badge">مرفقات الفواتير</span>
+    </div>
+  </div></div>
+</div>
 
-<!-- Summary -->
+</div>
+
 <div class="summary">
   <div class="summary-title">ملخص سير العمل</div>
   <div class="summary-row">
@@ -275,12 +257,17 @@ body{font-family:'Segoe UI',Tahoma,Arial,sans-serif;background:#F9FAFB;direction
     <span class="sum-desc">يرفع عروض الأسعار ويتابع حالتها</span>
   </div>
   <div class="summary-row">
-    <span class="sum-actor c-purple-text">أنس</span>
+    <span class="sum-actor c-teal-text">إيلي</span>
     <span class="sum-arrow">←</span>
-    <span class="sum-desc">يراجع العروض ويحدد PO Required أو No PO Required</span>
+    <span class="sum-desc">يختار عرض السعر المناسب ويحدد حساب المصروفات</span>
   </div>
   <div class="summary-row">
-    <span class="sum-actor c-amber-text">جيتو</span>
+    <span class="sum-actor c-purple-text">أنس</span>
+    <span class="sum-arrow">←</span>
+    <span class="sum-desc">يراجع داخلياً ويحدد PO Required أو No PO Required</span>
+  </div>
+  <div class="summary-row">
+    <span class="sum-actor c-amber-text">جيتّو</span>
     <span class="sum-arrow">←</span>
     <span class="sum-desc">يُصدر أمر الشراء أو فاتورة المورد</span>
   </div>
@@ -295,7 +282,6 @@ body{font-family:'Segoe UI',Tahoma,Arial,sans-serif;background:#F9FAFB;direction
     <span class="sum-desc">تتابع حالة الفاتورة حتى الإغلاق</span>
   </div>
 </div>
-
 <div class="footer">سير عمل المشتريات والفواتير · تم الإنشاء تلقائياً</div>
 </div>
 </body>
