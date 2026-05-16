@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Procurement & Invoicing Workflow</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Tahoma,Arial,sans-serif;background:#F9FAFB;direction:ltr;color:#111827;min-height:100vh;padding:32px 16px}
+.page{max-width:720px;margin:0 auto}
+.main-title{font-size:22px;font-weight:600;color:#111827;text-align:center;margin-bottom:6px}
+.main-sub{font-size:13px;color:#6B7280;text-align:center;margin-bottom:32px}
+.flow{display:flex;flex-direction:column;gap:0}
+.step{display:flex;gap:16px;position:relative}
+.left{display:flex;flex-direction:column;align-items:center;width:48px;flex-shrink:0}
+.circle{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;flex-shrink:0;z-index:1}
+.line{width:2px;flex:1;min-height:16px;background:#E5E7EB}
+.card{flex:1;border-radius:12px;border:0.5px solid #E5E7EB;padding:14px 16px;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.step-wrap{flex:1;padding-bottom:12px}
+.step-num{font-size:11px;font-weight:600;margin-bottom:4px;letter-spacing:.4px;text-transform:uppercase}
+.step-title{font-size:15px;font-weight:600;color:#111827;margin-bottom:6px}
+.step-body{font-size:13px;color:#4B5563;line-height:1.7}
+.badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:500;padding:3px 10px;border-radius:20px;margin:3px 3px 3px 0}
+.badges{margin-top:8px;display:flex;flex-wrap:wrap}
+.actor{display:inline-flex;align-items:center;gap:4px;font-size:12px;padding:3px 10px;border-radius:20px;margin-bottom:8px;font-weight:600}
+.branch{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.branch-card{border-radius:8px;padding:10px 12px;border:0.5px solid #E5E7EB}
+.branch-title{font-size:12px;font-weight:600;margin-bottom:4px}
+.branch-body{font-size:12px;color:#4B5563;line-height:1.5}
+.highlight-box{border-radius:8px;padding:10px 14px;margin-top:10px;border:0.5px solid #BFDBFE;background:#EFF6FF}
+.highlight-title{font-size:12px;font-weight:600;color:#1D4ED8;margin-bottom:4px}
+.highlight-body{font-size:12px;color:#1E40AF;line-height:1.6}
+/* colors */
+.c-blue-bg{background:#EFF6FF}.c-blue-text{color:#1D4ED8}
+.c-blue-badge{background:#DBEAFE;color:#1E40AF}
+.c-green-bg{background:#F0FDF4}.c-green-text{color:#15803D}
+.c-green-badge{background:#DCFCE7;color:#166534}
+.c-purple-bg{background:#F5F3FF}.c-purple-text{color:#6D28D9}
+.c-purple-badge{background:#EDE9FE;color:#5B21B6}
+.c-amber-bg{background:#FFFBEB}.c-amber-text{color:#B45309}
+.c-amber-badge{background:#FEF3C7;color:#92400E}
+.c-red-badge{background:#FEE2E2;color:#991B1B}
+.c-gray-badge{background:#F3F4F6;color:#374151}
+.c-gray-bg{background:#F9FAFB}.c-gray-text{color:#374151}
+.c-orange-bg{background:#FFF7ED}.c-orange-text{color:#C2410C}
+.c-orange-badge{background:#FFEDD5;color:#9A3412}
+/* Elie special color - teal */
+.c-teal-bg{background:#F0FDFA}.c-teal-text{color:#0F766E}
+.c-teal-badge{background:#CCFBF1;color:#115E59}
+/* Summary */
+.summary{background:#F3F4F6;border-radius:12px;padding:16px 18px;margin-top:24px;border:0.5px solid #E5E7EB}
+.summary-title{font-size:12px;font-weight:600;color:#6B7280;margin-bottom:10px;letter-spacing:.3px;text-transform:uppercase}
+.summary-row{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:0.5px solid #E5E7EB}
+.summary-row:last-child{border-bottom:none}
+.sum-actor{font-size:12px;font-weight:600;min-width:110px;flex-shrink:0;padding-top:1px}
+.sum-arrow{color:#9CA3AF;font-size:12px;padding-top:1px}
+.sum-desc{font-size:12px;color:#4B5563;line-height:1.5}
+.legend{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px;justify-content:center}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:12px;color:#4B5563}
+.legend-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.footer{text-align:center;margin-top:24px;font-size:11px;color:#9CA3AF}
+@media(max-width:500px){.branch{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="page">
+
+<div class="main-title">Procurement &amp; Invoicing Workflow</div>
+<div class="main-sub">From material request creation to accounting follow-up</div>
+
+<!-- Legend -->
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot" style="background:#2563EB"></div>Employee</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#15803D"></div>Fahad — Procurement</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#0F766E"></div>Elie — Project Director</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#6D28D9"></div>Anas — Internal Review</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#B45309"></div>Jittu — Purchasing</div>
+</div>
+
+<div class="flow">
+
+<!-- Step 1 -->
+<div class="step">
+  <div class="left">
+    <div class="circle c-blue-bg c-blue-text">1</div>
+    <div class="line"></div>
+  </div>
+  <div class="step-wrap">
+    <div class="card">
+      <div class="step-num c-blue-text">Step 1</div>
+      <div class="step-title">Material Request Creation</div>
+      <div class="step-body">The employee creates a Material Request (MR). It then passes through approval stages until it reaches the procurement officer.</div>
+      <div class="badges">
+        <span class="badge c-gray-badge">👤 Employee</span>
+        <span class="badge c-blue-badge">Material Request (MR)</span>
+        <span class="badge c-gray-badge">Approval Stages</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Step 2 -->
+<div class="step">
+  <div class="left">
+    <div class="circle c-green-bg c-green-text">2</div>
+    <div class="line"></div>
+  </div>
+  <div class="step-wrap">
+    <div class="card">
+      <div class="step-num c-green-text">Step 2</div>
+      <div class="step-title">Procurement Officer Review</div>
+      <div class="actor c-green-bg c-green-text">Fahad — Procurement Officer</div>
+      <div class="step-body">Through the portal, Fahad can:</div>
+      <div class="badges">
+        <span class="badge c-green-badge">Review material requests</span>
+        <span class="badge c-green-badge">Upload quotations</span>
+        <span class="badge c-green-badge">Track quotation status</span>
+        <span class="badge c-green-badge">Upload invoice documents</span>
+        <span class="badge c-green-badge">Submit invoices to accounting</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Step 3 -->
+<div class="step">
+  <div class="left">
+    <div class="circle c-green-bg c-green-text">3</div>
+    <div class="line"></div>
+  </div>
+  <div class="step-wrap">
+    <div class="card">
+      <div class="step-num c-green-text">Step 3</div>
+      <div class="step-title">Quotation Collection</div>
+      <div class="actor c-green-bg c-green-text">Fahad — Quotation Collection</div>
+      <div class="step-body">The system automatically tracks the status:</div>
+      <div class="badges">
+        <span class="badge c-amber-badge">1 quote → 2 remaining</span>
+        <span class="badge c-amber-badge">2 quotes → 1 remaining</span>
+        <span class="badge c-green-badge">3 quotes → Complete ✓</span>
+        <span class="badge c-gray-badge">Delete or replace quotes</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Step 4 — ELIE -->
+<div class="step">
+  <div class="left">
+    <div class="circle c-teal-bg c-teal-text">4</div>
+    <div class="line"></div>
+  </div>
+  <div class="step-wrap">
+    <div class="card">
+      <div class="step-num c-teal-text">Step 4</div>
+      <div class="step-title">Project Director Approval</div>
+      <div class="actor c-teal-bg c-teal-text">Elie — Project Director</div>
+      <div class="step-body">Elie reviews all submitted quotations and makes two key decisions:</div>
+      <div class="highlight-box">
+        <div class="highlight-title">💳 Expense Account Assignment</div>
+        <div class="highlight-body">Elie decides which expense account the purchase will be charged to before any further processing.</div>
+      </div>
+      <div class="highlight-box" style="background:#F0FDFA;border-color:#99F6E4">
+        <div class="highlight-title" style="color:#0F766E">📋 Quotation Selection</div>
+        <div class="highlight-body" style="color:#115E59">Elie reviews and selects which quotation to proceed with based on price, vendor reliability, and project needs.</div>
+      </div>
+      <div class="badges" style="margin-top:10px">
+        <span class="badge c-teal-badge">Expense account decision</span>
+        <span class="badge c-teal-badge">Quotation approval</span>
+        <span class="badge c-teal-badge">Vendor selection</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Step 5 -->
+<div class="step">
+  <div class="left">
+    <div class="circle c-purple-bg c-purple-text">5</div>
+    <div class="line"></div>
+  </div>
+  <div class="step-wrap">
+    <div class="card">
+      <div class="step-num c-purple-text">Step 5</div>
+      <div class="step-title">Internal Review</div>
+      <div class="actor c-purple-bg c-purple-text">Anas — Backend</div>
+      <div class="step-body">Anas reviews quotations, their status, and purchasing requirements, then decides:</div>
+      <div class="branch">
+        <div class="branch-card c-blue-bg" style="border-color:#BFDBFE">
+          <div class="branch-title c-blue-text">PO Required</div>
+          <div class="branch-body">Request is routed to issue a purchase order</div>
+        </div>
+        <div class="branch-card" style="background:#F9FAFB">
+          <div class="branch-title" style="color:#374151">No PO Required</div>
+          <div class="branch-body">Vendor invoice created directly without a PO</div>
+        </div>
+      </div>
+      <div class="step-body" style="margin-top:10px">Anas can also manually override the quotation status for:</div>
+      <div class="badges">
+        <span class="badge c-amber-badge">Emergency purchase</span>
+        <span class="badge c-amber-badge">Sole supplier</span>
+        <span class="badge c-amber-badge">Administrative exception</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Step 6 -->
+<div class="step">
+  <div class="left">
+    <div class="circle c-amber-bg c-amber-text">6</div>
+    <div class="line"></div>
+  </div>
+  <div class="step-wrap">
+    <div class="card">
+      <div class="step-num c-amber-text">Step 6</div>
+      <div class="step-title">Purchase Order or Vendor Invoice</div>
+      <div class="actor c-amber-bg c-amber-text">Jittu — Purchasing</div>
+      <div class="branch">
+        <div class="branch-card c-blue-bg" style="border-color:#BFDBFE">
+          <div class="branch-title c-blue-text">If PO is required</div>
+          <div class="branch-body">Issues one or multiple POs for the same request<br><strong style="color:#1D4ED8">→ Open PO</strong></div>
+        </div>
+        <div class="branch-card" style="background:#F9FAFB">
+          <div class="branch-title" style="color:#374151">If no PO required</div>
+          <div class="branch-body">Creates a vendor invoice directly from the request<br><strong style="color:#374151">→ Open Bill</strong></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Step 7 -->
+<div class="step">
+  <div class="left">
+    <div class="circle c-green-bg c-green-text">7</div>
+    <div class="line"></div>
+  </div>
+  <div class="step-wrap">
+    <div class="card">
+      <div class="step-num c-green-text">Step 7</div>
+      <div class="step-title">Invoice Upload</div>
+      <div class="actor c-green-bg c-green-text">Fahad — Invoice Submission to Accounting</div>
+      <div class="step-body">After receiving the invoice or delivery of materials, Fahad uploads:</div>
+      <div class="badges">
+        <span class="badge c-green-badge">Vendor invoice</span>
+        <span class="badge c-green-badge">Delivery note</span>
+        <span class="badge c-green-badge">Supporting documents</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Step 8 -->
+<div class="step">
+  <div class="left">
+    <div class="circle c-blue-bg c-blue-text">8</div>
+    <div class="line"></div>
+  </div>
+  <div class="step-wrap">
+    <div class="card">
+      <div class="step-num c-blue-text">Step 8</div>
+      <div class="step-title">Submit to Accounting</div>
+      <div class="actor c-green-bg c-green-text">Fahad — Submit to Accounting</div>
+      <div class="step-body">Fahad clicks Submit to Accounting. The system updates the invoice status, creates a Chatter log, and tracks the submission. The submit button disappears after execution and only reappears when new files are uploaded.</div>
+    </div>
+  </div>
+</div>
+
+<!-- Step 9 -->
+<div class="step">
+  <div class="left">
+    <div class="circle c-purple-bg c-purple-text">9</div>
+    <div class="line"></div>
+  </div>
+  <div class="step-wrap">
+    <div class="card">
+      <div class="step-num c-purple-text">Step 9</div>
+      <div class="step-title">Accounting Follow-up</div>
+      <div class="actor c-purple-bg c-purple-text">Anas / Accounting Department</div>
+      <div class="step-body">Updates the invoice status through the following stages:</div>
+      <div class="badges">
+        <span class="badge c-gray-badge">Pending Invoice</span>
+        <span class="badge c-blue-badge">Submitted to Accounting</span>
+        <span class="badge c-green-badge">Received by Accounting</span>
+        <span class="badge c-amber-badge">Need More Invoice Docs</span>
+        <span class="badge c-green-badge">Processed ✓</span>
+        <span class="badge c-red-badge">Rejected ✗</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Step 10 -->
+<div class="step">
+  <div class="left">
+    <div class="circle c-gray-bg c-gray-text">10</div>
+  </div>
+  <div class="step-wrap">
+    <div class="card">
+      <div class="step-num c-gray-text">Step 10</div>
+      <div class="step-title">Attachment Separation</div>
+      <div class="step-body">The system separates attachments into distinct categories to prevent file mixing, quotation count errors, and duplicate submissions:</div>
+      <div class="badges">
+        <span class="badge c-gray-badge">General attachments</span>
+        <span class="badge c-blue-badge">Quotation attachments</span>
+        <span class="badge c-green-badge">Invoice attachments</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- end flow -->
+
+<!-- Summary -->
+<div class="summary">
+  <div class="summary-title">Workflow Summary</div>
+  <div class="summary-row">
+    <span class="sum-actor c-blue-text">Employee</span>
+    <span class="sum-arrow">→</span>
+    <span class="sum-desc">Creates the material request and routes it for approval</span>
+  </div>
+  <div class="summary-row">
+    <span class="sum-actor c-green-text">Fahad</span>
+    <span class="sum-arrow">→</span>
+    <span class="sum-desc">Uploads and tracks quotations via the portal</span>
+  </div>
+  <div class="summary-row">
+    <span class="sum-actor c-teal-text">Elie</span>
+    <span class="sum-arrow">→</span>
+    <span class="sum-desc">Selects the winning quotation and assigns the expense account</span>
+  </div>
+  <div class="summary-row">
+    <span class="sum-actor c-purple-text">Anas</span>
+    <span class="sum-arrow">→</span>
+    <span class="sum-desc">Reviews internally and decides PO Required or No PO Required</span>
+  </div>
+  <div class="summary-row">
+    <span class="sum-actor c-amber-text">Jittu</span>
+    <span class="sum-arrow">→</span>
+    <span class="sum-desc">Issues the purchase order or vendor invoice</span>
+  </div>
+  <div class="summary-row">
+    <span class="sum-actor c-green-text">Fahad</span>
+    <span class="sum-arrow">→</span>
+    <span class="sum-desc">Uploads invoices and submits them to accounting</span>
+  </div>
+  <div class="summary-row">
+    <span class="sum-actor c-purple-text">Anas / Accounting</span>
+    <span class="sum-arrow">→</span>
+    <span class="sum-desc">Tracks invoice status through to final processing</span>
+  </div>
+</div>
+
+<div class="footer">Procurement &amp; Invoicing Workflow · Auto-generated</div>
+</div>
+</body>
+</html>
