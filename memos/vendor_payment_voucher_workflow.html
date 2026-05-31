@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vendor Payment Voucher Allocation Workflow</title>
+<style>
+body{font-family:Arial,sans-serif;background:#f5f6f8;margin:0;padding:20px}
+.container{max-width:1400px;margin:auto;background:#fff;padding:25px;border-radius:12px}
+h1{text-align:center;color:#4b2354}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.panel{border:1px solid #ddd;border-radius:10px;padding:20px}
+.en{direction:ltr}
+.ar{direction:rtl;text-align:right}
+h2{color:#4b2354;border-bottom:2px solid #eee;padding-bottom:8px}
+.role{background:#7c3f72;color:#fff;padding:6px 12px;border-radius:20px;display:inline-block}
+table{width:100%;border-collapse:collapse;margin-top:10px}
+th,td{border:1px solid #ddd;padding:8px}
+th{background:#f3edf5}
+.badge{padding:4px 8px;border-radius:12px;color:white;font-size:12px}
+.red{background:#dc2626}.yellow{background:#d97706}.green{background:#16a34a}.blue{background:#2563eb}
+.note{margin-top:15px;padding:12px;background:#fff8e1;border-left:4px solid #f59e0b}
+.ar .note{border-left:none;border-right:4px solid #f59e0b}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>Vendor Payment Voucher Allocation Workflow | آلية عمل سندات دفع الموردين وتخصيصها على الفواتير</h1>
+
+<div class="grid">
+<div class="panel en">
+<h2>English</h2>
+
+<p><strong>Scope:</strong> This process applies only to Vendor Payment Vouchers (Accounts Payable).</p>
+
+<h3><span class="role">Jittu - Recording the Payment Voucher</span></h3>
+<ol>
+<li>Create a Vendor Payment Voucher.</li>
+<li>Select vendor, payment method, journal, payable account, amount and description.</li>
+<li>Review and post the voucher.</li>
+<li>The system creates:
+<ul>
+<li>Debit: Accounts Payable</li>
+<li>Credit: Bank/Cash</li>
+</ul>
+</li>
+<li>The voucher is posted but not yet allocated to vendor bills.</li>
+</ol>
+
+<h3><span class="role">Anas - Allocating the Payment</span></h3>
+<ol>
+<li>Open the posted voucher.</li>
+<li>Review the remaining amount available for allocation.</li>
+<li>Click <strong>Find Bills</strong>.</li>
+<li>Select unpaid or partially paid vendor bills.</li>
+<li>Click <strong>Allocate/Reconcile Bills</strong>.</li>
+<li>The system reconciles the payable lines.</li>
+<li>The Allocation Status updates automatically.</li>
+</ol>
+
+<table>
+<tr><th>Status</th><th>Meaning</th></tr>
+<tr><td><span class="badge red">Not Allocated</span></td><td>No amount allocated.</td></tr>
+<tr><td><span class="badge yellow">Partially Allocated</span></td><td>Partially used with remaining balance.</td></tr>
+<tr><td><span class="badge green">Fully Allocated</span></td><td>Entire voucher amount allocated.</td></tr>
+<tr><td><span class="badge blue">Ready to Allocate</span></td><td>Bills selected and ready.</td></tr>
+</table>
+
+<div class="note">
+If any amount is allocated, the voucher cannot be reset to draft until it is unreconciled.
+</div>
+</div>
+
+<div class="panel ar">
+<h2>العربية</h2>
+
+<p><strong>النطاق:</strong> تنطبق هذه العملية فقط على سندات دفع الموردين (الذمم الدائنة).</p>
+
+<h3><span class="role">جيتو - تسجيل سند الدفع</span></h3>
+<ol>
+<li>إنشاء سند دفع مورد جديد.</li>
+<li>اختيار المورد وطريقة الدفع واليومية وحساب الذمم الدائنة والمبلغ والوصف.</li>
+<li>مراجعة البيانات وترحيل السند.</li>
+<li>يقوم النظام بإنشاء القيد:
+<ul>
+<li>مدين: الذمم الدائنة</li>
+<li>دائن: البنك أو الصندوق</li>
+</ul>
+</li>
+<li>يكون السند مرحلاً لكنه غير مخصص على الفواتير بعد.</li>
+</ol>
+
+<h3><span class="role">أنس - تخصيص الدفعة</span></h3>
+<ol>
+<li>فتح سند الدفع المرحل.</li>
+<li>مراجعة المبلغ المتبقي للتخصيص.</li>
+<li>الضغط على زر البحث عن الفواتير.</li>
+<li>اختيار الفواتير غير المدفوعة أو المدفوعة جزئياً.</li>
+<li>الضغط على زر تخصيص/تسوية الفواتير.</li>
+<li>يقوم النظام بتسوية بنود الذمم الدائنة.</li>
+<li>يتم تحديث حالة التخصيص تلقائياً.</li>
+</ol>
+
+<table>
+<tr><th>الحالة</th><th>المعنى</th></tr>
+<tr><td><span class="badge red">غير مخصص</span></td><td>لم يتم تخصيص أي مبلغ.</td></tr>
+<tr><td><span class="badge yellow">مخصص جزئياً</span></td><td>تم استخدام جزء من المبلغ ويتبقى رصيد.</td></tr>
+<tr><td><span class="badge green">مخصص بالكامل</span></td><td>تم تخصيص كامل مبلغ السند.</td></tr>
+<tr><td><span class="badge blue">جاهز للتخصيص</span></td><td>تم اختيار الفواتير وجاهز للتنفيذ.</td></tr>
+</table>
+
+<div class="note">
+إذا تم تخصيص أي مبلغ فلا يمكن إعادة السند إلى مسودة حتى يتم إلغاء التسوية أولاً.
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>
