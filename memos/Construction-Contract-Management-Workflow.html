@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Construction Contract Management Workflow</title>
+
+  <style>
+    @page { size: A4 landscape; margin: 10mm; }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      padding: 22px;
+      background: #f4f7fb;
+      color: #1f2937;
+      font-family: Arial, Tahoma, sans-serif;
+      line-height: 1.45;
+    }
+
+    .page {
+      max-width: 1450px;
+      margin: auto;
+      background: #fff;
+      border-radius: 18px;
+      padding: 26px;
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 4px solid #1f4e79;
+      padding-bottom: 14px;
+      margin-bottom: 22px;
+    }
+
+    .badge {
+      display: inline-block;
+      background: #e8f1fa;
+      color: #1f4e79;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-weight: bold;
+      font-size: 13px;
+      margin-bottom: 7px;
+    }
+
+    h1 {
+      margin: 0;
+      color: #1f4e79;
+      font-size: 27px;
+    }
+
+    h2.ar-title {
+      margin: 5px 0 0;
+      color: #374151;
+      font-size: 23px;
+      direction: rtl;
+    }
+
+    .meta {
+      text-align: right;
+      font-size: 13px;
+      color: #6b7280;
+    }
+
+    .section-title {
+      color: #1f4e79;
+      font-size: 19px;
+      margin: 24px 0 13px;
+      border-left: 5px solid #1f4e79;
+      padding-left: 10px;
+    }
+
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 10px;
+      margin-bottom: 22px;
+    }
+
+    .step {
+      background: linear-gradient(180deg, #f8fbff, #eef5fb);
+      border: 1px solid #d9e7f5;
+      border-radius: 15px;
+      padding: 13px 10px;
+      text-align: center;
+      position: relative;
+      min-height: 120px;
+    }
+
+    .step:not(:last-child)::after {
+      content: "→";
+      position: absolute;
+      right: -12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: #1f4e79;
+      color: #fff;
+      width: 23px;
+      height: 23px;
+      border-radius: 50%;
+      line-height: 23px;
+      font-weight: bold;
+      z-index: 2;
+    }
+
+    .icon {
+      width: 38px;
+      height: 38px;
+      margin: 0 auto 7px;
+      border-radius: 50%;
+      background: #1f4e79;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 17px;
+    }
+
+    .step h3 {
+      margin: 5px 0;
+      font-size: 14px;
+      color: #111827;
+    }
+
+    .step p {
+      margin: 0;
+      font-size: 12.5px;
+      color: #4b5563;
+      direction: rtl;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 17px;
+    }
+
+    .card {
+      border: 1px solid #e5e7eb;
+      border-radius: 14px;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    .card-title {
+      background: #1f4e79;
+      color: #fff;
+      padding: 9px 14px;
+      font-weight: bold;
+      font-size: 15px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13.5px;
+    }
+
+    th, td {
+      padding: 10px 11px;
+      border-bottom: 1px solid #e5e7eb;
+      vertical-align: top;
+    }
+
+    th {
+      background: #f3f7fb;
+      color: #1f4e79;
+      text-align: left;
+    }
+
+    .ar {
+      direction: rtl;
+      text-align: right;
+      font-family: Tahoma, Arial, sans-serif;
+    }
+
+    .status {
+      display: inline-block;
+      padding: 4px 9px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: bold;
+      white-space: nowrap;
+    }
+
+    .contract { background: #e0f2fe; color: #075985; }
+    .boq { background: #f3f4f6; color: #374151; }
+    .measure { background: #dcfce7; color: #166534; }
+    .ipc { background: #ede9fe; color: #5b21b6; }
+    .variation { background: #fef3c7; color: #92400e; }
+    .access { background: #fee2e2; color: #991b1b; }
+    .report { background: #ecfeff; color: #155e75; }
+
+    .note-box {
+      margin-top: 17px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .note {
+      background: #fff8e5;
+      border-left: 5px solid #f59e0b;
+      padding: 13px;
+      border-radius: 12px;
+      font-size: 13.5px;
+    }
+
+    .note.ar {
+      border-left: none;
+      border-right: 5px solid #f59e0b;
+    }
+
+    footer {
+      margin-top: 22px;
+      padding-top: 13px;
+      border-top: 1px solid #e5e7eb;
+      display: flex;
+      justify-content: space-between;
+      color: #6b7280;
+      font-size: 13px;
+    }
+
+    @media print {
+      body { background: #fff; padding: 0; }
+      .page { box-shadow: none; border-radius: 0; }
+      .step { break-inside: avoid; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page">
+
+    <header>
+      <div>
+        <span class="badge">Odoo Construction Workflow</span>
+        <h1>Construction Contract Management Workflow</h1>
+        <h2 class="ar-title">سير عمل إدارة عقود الإنشاءات</h2>
+      </div>
+
+      <div class="meta">
+        <strong>ABSAR AL OMRAN</strong><br />
+        Module: Construction Contract Management<br />
+        Users: Internal Users & Portal Users<br />
+        Version: 1.0
+      </div>
+    </header>
+
+    <h2 class="section-title">Workflow Overview / نظرة عامة على سير العمل</h2>
+
+    <div class="flow">
+      <div class="step">
+        <div class="icon">1</div>
+        <h3>Contract Setup</h3>
+        <p>إنشاء العقد وإعداد بياناته</p>
+      </div>
+
+      <div class="step">
+        <div class="icon">2</div>
+        <h3>BOQ Lines</h3>
+        <p>إدخال بنود جدول الكميات</p>
+      </div>
+
+      <div class="step">
+        <div class="icon">3</div>
+        <h3>Measurements</h3>
+        <p>إنشاء القياسات ومراجعتها</p>
+      </div>
+
+      <div class="step">
+        <div class="icon">4</div>
+        <h3>Validation</h3>
+        <p>التحقق من الكميات المسموحة</p>
+      </div>
+
+      <div class="step">
+        <div class="icon">5</div>
+        <h3>IPC</h3>
+        <p>إصدار شهادة الدفع المرحلي</p>
+      </div>
+
+      <div class="step">
+        <div class="icon">6</div>
+        <h3>Variations</h3>
+        <p>إدارة الأوامر التغييرية</p>
+      </div>
+
+      <div class="step">
+        <div class="icon">7</div>
+        <h3>Reports</h3>
+        <p>طباعة التقارير</p>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <div class="card-title">Main Functions - English</div>
+        <table>
+          <thead>
+            <tr>
+              <th>Function</th>
+              <th>Purpose</th>
+              <th>Main Users</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="status contract">Contracts</span></td>
+              <td>Create and manage client contracts or subcontracts, including project, partner, dates, contract value, retention, advance, VAT, and accounting setup.</td>
+              <td>Internal Users</td>
+            </tr>
+            <tr>
+              <td><span class="status boq">BOQ</span></td>
+              <td>Enter BOQ lines with item code, description, unit of measure, contract quantity, unit rate, and original amount.</td>
+              <td>Internal Users</td>
+            </tr>
+            <tr>
+              <td><span class="status measure">Measurements</span></td>
+              <td>Create measurements from BOQ lines, enter current work by quantity or percentage, attach files, and submit for review.</td>
+              <td>Internal Users / Portal Users</td>
+            </tr>
+            <tr>
+              <td><span class="status ipc">IPCs</span></td>
+              <td>Create and review IPCs from approved measurements, calculate certified value, retention, advance recovery, VAT, deductions, and net amount.</td>
+              <td>Internal Users / Authorized Viewers</td>
+            </tr>
+            <tr>
+              <td><span class="status variation">Variations</span></td>
+              <td>Create variation requests for quantity increase, quantity decrease, new items, omitted items, or rate changes.</td>
+              <td>Internal Users / Portal Users</td>
+            </tr>
+            <tr>
+              <td><span class="status access">Access Control</span></td>
+              <td>Limit visibility for portal users and internal users by assigning allowed employees on each contract.</td>
+              <td>Internal Users / System</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card ar">
+        <div class="card-title">الوظائف الرئيسية - العربية</div>
+        <table>
+          <thead>
+            <tr>
+              <th class="ar">الوظيفة</th>
+              <th class="ar">الغرض</th>
+              <th class="ar">المستخدمون</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="status contract">العقود</span></td>
+              <td>إنشاء وإدارة عقود العملاء أو عقود المقاولين من الباطن، بما يشمل المشروع، الشريك، التواريخ، قيمة العقد، الاستبقاء، الدفعة المقدمة، الضريبة، والإعدادات المحاسبية.</td>
+              <td>المستخدمون الداخليون</td>
+            </tr>
+            <tr>
+              <td><span class="status boq">جدول الكميات</span></td>
+              <td>إدخال بنود جدول الكميات مع كود البند، الوصف، وحدة القياس، كمية العقد، سعر الوحدة، والقيمة الأصلية.</td>
+              <td>المستخدمون الداخليون</td>
+            </tr>
+            <tr>
+              <td><span class="status measure">القياسات</span></td>
+              <td>إنشاء القياسات من بنود جدول الكميات، وإدخال الأعمال الحالية بالكمية أو النسبة، وإرفاق الملفات، ثم الإرسال للمراجعة.</td>
+              <td>المستخدمون الداخليون / مستخدمو البوابة</td>
+            </tr>
+            <tr>
+              <td><span class="status ipc">شهادات الدفع</span></td>
+              <td>إنشاء ومراجعة شهادات الدفع المرحلي من القياسات المعتمدة، واحتساب القيمة المعتمدة، الاستبقاء، استرداد الدفعة المقدمة، الضريبة، الاستقطاعات، وصافي المبلغ.</td>
+              <td>المستخدمون الداخليون / المستخدمون المصرح لهم</td>
+            </tr>
+            <tr>
+              <td><span class="status variation">الأوامر التغييرية</span></td>
+              <td>إنشاء طلبات الأوامر التغييرية لزيادة الكمية أو تخفيضها أو إضافة بند جديد أو حذف بند أو تعديل السعر.</td>
+              <td>المستخدمون الداخليون / مستخدمو البوابة</td>
+            </tr>
+            <tr>
+              <td><span class="status access">صلاحيات الوصول</span></td>
+              <td>تقييد ظهور العقود والسجلات لمستخدمي البوابة أو المستخدمين الداخليين من خلال تحديد الموظفين المصرح لهم على كل عقد.</td>
+              <td>المستخدمون الداخليون / النظام</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <h2 class="section-title">Process Steps / خطوات العملية</h2>
+
+    <div class="grid">
+      <div class="card">
+        <div class="card-title">Internal User Workflow</div>
+        <table>
+          <thead>
+            <tr>
+              <th>Step</th>
+              <th>Action</th>
+              <th>Responsible</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>Create the construction contract and select whether it is a client contract or subcontract.</td>
+              <td>Internal User</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>Fill project, partner, company, scope, start/end dates, original amount, retention %, advance %, VAT %, and payment terms.</td>
+              <td>Internal User</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>Add BOQ lines with item code, description, UOM, contract quantity, and unit rate.</td>
+              <td>Internal User</td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td>Assign portal employees and/or internal employees if visibility restriction is required.</td>
+              <td>Internal User</td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td>Move the contract through review, approval, activation, completion, closure, or cancellation as required.</td>
+              <td>Internal User / Approver</td>
+            </tr>
+            <tr>
+              <td>6</td>
+              <td>Create measurements, check submitted measurements, approve or reject them, and print reports.</td>
+              <td>Internal User / Approver</td>
+            </tr>
+            <tr>
+              <td>7</td>
+              <td>Create IPCs from approved measurements, approve IPCs, and create invoice or bill when applicable.</td>
+              <td>Internal User / Accounting</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card ar">
+        <div class="card-title">سير عمل المستخدم الداخلي</div>
+        <table>
+          <thead>
+            <tr>
+              <th class="ar">الخطوة</th>
+              <th class="ar">الإجراء</th>
+              <th class="ar">المسؤول</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>إنشاء عقد الإنشاءات وتحديد ما إذا كان عقد عميل أو عقد مقاول من الباطن.</td>
+              <td>المستخدم الداخلي</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>تعبئة المشروع، الشريك، الشركة، نطاق العمل، تواريخ البداية والنهاية، القيمة الأصلية، نسبة الاستبقاء، نسبة الدفعة المقدمة، الضريبة، وشروط الدفع.</td>
+              <td>المستخدم الداخلي</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>إضافة بنود جدول الكميات مع كود البند، الوصف، وحدة القياس، كمية العقد، وسعر الوحدة.</td>
+              <td>المستخدم الداخلي</td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td>تحديد موظفي البوابة و/أو الموظفين الداخليين إذا كان تقييد الظهور مطلوباً.</td>
+              <td>المستخدم الداخلي</td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td>نقل العقد بين حالات المراجعة والاعتماد والتفعيل والإكمال والإغلاق أو الإلغاء حسب الحاجة.</td>
+              <td>المستخدم الداخلي / المعتمد</td>
+            </tr>
+            <tr>
+              <td>6</td>
+              <td>إنشاء القياسات، فحص القياسات المقدمة، اعتمادها أو رفضها، وطباعة التقارير.</td>
+              <td>المستخدم الداخلي / المعتمد</td>
+            </tr>
+            <tr>
+              <td>7</td>
+              <td>إنشاء شهادات الدفع من القياسات المعتمدة، اعتماد الشهادات، وإنشاء فاتورة عميل أو فاتورة مورد عند الحاجة.</td>
+              <td>المستخدم الداخلي / المحاسبة</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Portal User Workflow</div>
+        <table>
+          <thead>
+            <tr>
+              <th>Step</th>
+              <th>Action</th>
+              <th>Responsible</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>Portal user logs in and opens the Construction section from the portal.</td>
+              <td>Portal User</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>User views only assigned contracts and related records.</td>
+              <td>System</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>User opens contract details, financial summary, BOQ progress, IPCs, measurements, and variations.</td>
+              <td>Portal User</td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td>User creates measurements, selects contract and period, enters quantity or percentage, attaches files, and submits for approval.</td>
+              <td>Portal User</td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td>User creates variation requests when contract changes are needed and submits them for approval.</td>
+              <td>Portal User</td>
+            </tr>
+            <tr>
+              <td>6</td>
+              <td>User prints or downloads available contract, measurement, IPC, and variation reports.</td>
+              <td>Portal User</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card ar">
+        <div class="card-title">سير عمل مستخدم البوابة</div>
+        <table>
+          <thead>
+            <tr>
+              <th class="ar">الخطوة</th>
+              <th class="ar">الإجراء</th>
+              <th class="ar">المسؤول</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>يقوم مستخدم البوابة بتسجيل الدخول وفتح قسم الإنشاءات من البوابة.</td>
+              <td>مستخدم البوابة</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>يشاهد المستخدم فقط العقود والسجلات المرتبطة المخصصة له.</td>
+              <td>النظام</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>يفتح المستخدم تفاصيل العقد والملخص المالي وتقدم بنود جدول الكميات والقياسات وشهادات الدفع والأوامر التغييرية.</td>
+              <td>مستخدم البوابة</td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td>ينشئ المستخدم القياسات، ويحدد العقد والفترة، ويدخل الكمية أو النسبة، ويرفق الملفات، ثم يرسلها للاعتماد.</td>
+              <td>مستخدم البوابة</td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td>ينشئ المستخدم طلب أمر تغييري عند الحاجة إلى تعديل في العقد، ثم يرسله للاعتماد.</td>
+              <td>مستخدم البوابة</td>
+            </tr>
+            <tr>
+              <td>6</td>
+              <td>يطبع أو ينزل المستخدم تقارير العقود والقياسات وشهادات الدفع والأوامر التغييرية المتاحة.</td>
+              <td>مستخدم البوابة</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <h2 class="section-title">Important Fields / الحقول المهمة</h2>
+
+    <div class="grid">
+      <div class="card">
+        <div class="card-title">Contract & BOQ Fields</div>
+        <table>
+          <thead>
+            <tr>
+              <th>Field</th>
+              <th>Purpose</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Contract Direction</td><td>Defines whether the contract is a Client Contract or Subcontract.</td></tr>
+            <tr><td>Project / Partner / Company</td><td>Main contract identification fields.</td></tr>
+            <tr><td>Original Amount / Revised Amount</td><td>Original contract value and revised value after approved variations.</td></tr>
+            <tr><td>Retention %, Advance %, VAT %</td><td>Used in IPC calculation.</td></tr>
+            <tr><td>Journal / Work Account / Advance Account / Retention Account / Tax</td><td>Required before creating invoice or bill from IPC.</td></tr>
+            <tr><td>Portal Employees / Internal Employees</td><td>Controls visibility when access restriction is enabled.</td></tr>
+            <tr><td>BOQ Lines</td><td>Item code, description, UOM, contract quantity, unit rate, and amount.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card ar">
+        <div class="card-title">حقول العقد وجدول الكميات</div>
+        <table>
+          <thead>
+            <tr>
+              <th class="ar">الحقل</th>
+              <th class="ar">الغرض</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>اتجاه العقد</td><td>يحدد ما إذا كان العقد عقد عميل أو عقد مقاول من الباطن.</td></tr>
+            <tr><td>المشروع / الشريك / الشركة</td><td>حقول التعريف الرئيسية للعقد.</td></tr>
+            <tr><td>القيمة الأصلية / القيمة المعدلة</td><td>قيمة العقد الأصلية والقيمة بعد الأوامر التغييرية المعتمدة.</td></tr>
+            <tr><td>نسبة الاستبقاء / الدفعة المقدمة / الضريبة</td><td>تستخدم في احتساب شهادة الدفع المرحلي.</td></tr>
+            <tr><td>اليومية / حساب الأعمال / حساب الدفعة المقدمة / حساب الاستبقاء / الضريبة</td><td>مطلوبة قبل إنشاء فاتورة عميل أو فاتورة مورد من شهادة الدفع.</td></tr>
+            <tr><td>موظفو البوابة / الموظفون الداخليون</td><td>تتحكم في الظهور عند تفعيل تقييد الوصول.</td></tr>
+            <tr><td>بنود جدول الكميات</td><td>كود البند، الوصف، وحدة القياس، كمية العقد، سعر الوحدة، والقيمة.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Measurement, IPC & Variation Fields</div>
+        <table>
+          <thead>
+            <tr>
+              <th>Area</th>
+              <th>Important Fields</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Measurement</td>
+              <td>Contract, date, period from/to, BOQ line, previous quantity, current quantity, cumulative quantity, allowed quantity, remaining quantity, percentage, remarks, attachments.</td>
+            </tr>
+            <tr>
+              <td>IPC</td>
+              <td>Contract, measurement, IPC date, period, current work value, previous certified value, cumulative certified value, retention, advance recovery, deductions, VAT, net amount, invoice/bill.</td>
+            </tr>
+            <tr>
+              <td>Variation</td>
+              <td>Contract, date, description, variation type, BOQ line, item code, UOM, unit rate, original quantity, variation quantity, revised quantity, impact amount.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card ar">
+        <div class="card-title">حقول القياسات وشهادات الدفع والأوامر التغييرية</div>
+        <table>
+          <thead>
+            <tr>
+              <th class="ar">القسم</th>
+              <th class="ar">الحقول المهمة</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>القياس</td>
+              <td>العقد، التاريخ، الفترة من/إلى، بند جدول الكميات، الكمية السابقة، الكمية الحالية، الكمية التراكمية، الكمية المسموحة، الكمية المتبقية، النسبة، الملاحظات، المرفقات.</td>
+            </tr>
+            <tr>
+              <td>شهادة الدفع</td>
+              <td>العقد، القياس، تاريخ الشهادة، الفترة، قيمة العمل الحالية، القيمة المعتمدة السابقة، القيمة التراكمية، الاستبقاء، استرداد الدفعة المقدمة، الاستقطاعات، الضريبة، صافي المبلغ، الفاتورة.</td>
+            </tr>
+            <tr>
+              <td>الأمر التغييري</td>
+              <td>العقد، التاريخ، الوصف، نوع التغيير، بند جدول الكميات، كود البند، وحدة القياس، سعر الوحدة، الكمية الأصلية، كمية التغيير، الكمية المعدلة، الأثر المالي.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <h2 class="section-title">Statuses & Reports / الحالات والتقارير</h2>
+
+    <div class="grid">
+      <div class="card">
+        <table>
+          <thead>
+            <tr>
+              <th>Document</th>
+              <th>Statuses / Result</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Contract</td>
+              <td>Draft → Under Review → Approved → Active → Completed → Closed / Cancelled.</td>
+            </tr>
+            <tr>
+              <td>Measurement</td>
+              <td>Draft → Submitted → Checked → Approved / Rejected. Approved measurements update contract progress.</td>
+            </tr>
+            <tr>
+              <td>IPC</td>
+              <td>Draft → Under Review → Approved → Done / Cancelled. Approved IPCs can create invoice or bill.</td>
+            </tr>
+            <tr>
+              <td>Variation</td>
+              <td>Draft → Submitted → Approved / Rejected. Approved variations update revised BOQ quantities and amounts.</td>
+            </tr>
+            <tr>
+              <td>Reports</td>
+              <td>Contract, Measurement, IPC, Variation, Advance, and Retention Release reports can be printed.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card ar">
+        <table>
+          <thead>
+            <tr>
+              <th class="ar">المستند</th>
+              <th class="ar">الحالات / النتيجة</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>العقد</td>
+              <td>مسودة ← قيد المراجعة ← معتمد ← نشط ← مكتمل ← مغلق / ملغي.</td>
+            </tr>
+            <tr>
+              <td>القياس</td>
+              <td>مسودة ← مقدم ← تم التحقق ← معتمد / مرفوض. القياسات المعتمدة تحدث تقدم العقد.</td>
+            </tr>
+            <tr>
+              <td>شهادة الدفع</td>
+              <td>مسودة ← قيد المراجعة ← معتمد ← منتهي / ملغي. شهادات الدفع المعتمدة يمكن إنشاء فاتورة منها.</td>
+            </tr>
+            <tr>
+              <td>الأمر التغييري</td>
+              <td>مسودة ← مقدم ← معتمد / مرفوض. الأوامر التغييرية المعتمدة تحدث كميات وقيم جدول الكميات.</td>
+            </tr>
+            <tr>
+              <td>التقارير</td>
+              <td>يمكن طباعة تقارير العقد والقياس وشهادة الدفع والأمر التغييري والدفعات المقدمة وإفراج الاستبقاء.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="note-box">
+      <div class="note">
+        <strong>Important:</strong>
+        The workflow supports both internal Odoo users and portal users. Portal users only see assigned contracts, while internal visibility can also be restricted to selected employees when required.
+      </div>
+
+      <div class="note ar">
+        <strong>مهم:</strong>
+        يدعم سير العمل المستخدمين الداخليين في أودو ومستخدمي البوابة. مستخدمو البوابة يشاهدون فقط العقود المخصصة لهم، ويمكن أيضاً تقييد ظهور العقود داخلياً لموظفين محددين عند الحاجة.
+      </div>
+    </div>
+
+    <h2 class="section-title">Business Rules / قواعد العمل</h2>
+
+    <div class="grid">
+      <div class="card">
+        <table>
+          <tbody>
+            <tr><td>Measurements can be entered by quantity or percentage.</td></tr>
+            <tr><td>The system prevents measured cumulative quantity from exceeding the allowed BOQ quantity.</td></tr>
+            <tr><td>Only approved measurements can be loaded into IPCs.</td></tr>
+            <tr><td>IPC quantities cannot exceed measured or allowed quantities.</td></tr>
+            <tr><td>Approved variations update revised BOQ quantities, rates, and contract revised amount.</td></tr>
+            <tr><td>Accounting setup must be completed before creating invoice or bill from IPC.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card ar">
+        <table>
+          <tbody>
+            <tr><td>يمكن إدخال القياسات بالكمية أو بالنسبة المئوية.</td></tr>
+            <tr><td>يمنع النظام تجاوز الكمية التراكمية المقاسة للكمية المسموحة في جدول الكميات.</td></tr>
+            <tr><td>يمكن تحميل القياسات المعتمدة فقط في شهادات الدفع المرحلي.</td></tr>
+            <tr><td>لا يمكن أن تتجاوز كميات شهادة الدفع الكميات المقاسة أو المسموحة.</td></tr>
+            <tr><td>الأوامر التغييرية المعتمدة تحدث كميات وأسعار جدول الكميات والقيمة المعدلة للعقد.</td></tr>
+            <tr><td>يجب استكمال الإعدادات المحاسبية قبل إنشاء فاتورة من شهادة الدفع.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <footer>
+      <div>
+        <strong>Document Owner:</strong> Projects / Construction Department
+      </div>
+      <div class="ar">
+        <strong>مالك المستند:</strong> إدارة المشاريع / الإنشاءات
+      </div>
+    </footer>
+
+  </div>
+</body>
+</html>
