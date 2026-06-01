@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vendor Invoice Submission & Review Workflow</title>
+
+  <style>
+    @page {
+      size: A4 landscape;
+      margin: 12mm;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, "Tahoma", sans-serif;
+      margin: 0;
+      padding: 24px;
+      background: #f4f7fb;
+      color: #1f2937;
+      line-height: 1.5;
+    }
+
+    .page {
+      max-width: 1400px;
+      margin: auto;
+      background: #ffffff;
+      border-radius: 18px;
+      padding: 28px;
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 4px solid #1f4e79;
+      padding-bottom: 16px;
+      margin-bottom: 24px;
+    }
+
+    .title h1 {
+      margin: 0;
+      color: #1f4e79;
+      font-size: 28px;
+    }
+
+    .title h2 {
+      margin: 6px 0 0;
+      color: #374151;
+      font-size: 23px;
+      direction: rtl;
+    }
+
+    .meta {
+      text-align: right;
+      font-size: 13px;
+      color: #6b7280;
+    }
+
+    .badge {
+      display: inline-block;
+      background: #e8f1fa;
+      color: #1f4e79;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-weight: bold;
+      margin-bottom: 6px;
+    }
+
+    .section-title {
+      color: #1f4e79;
+      font-size: 20px;
+      margin: 26px 0 14px;
+      border-left: 5px solid #1f4e79;
+      padding-left: 10px;
+    }
+
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 14px;
+      margin: 18px 0 26px;
+    }
+
+    .step {
+      background: linear-gradient(180deg, #f8fbff, #eef5fb);
+      border: 1px solid #d9e7f5;
+      border-radius: 16px;
+      padding: 16px;
+      text-align: center;
+      position: relative;
+      min-height: 145px;
+    }
+
+    .step:not(:last-child)::after {
+      content: "→";
+      position: absolute;
+      right: -13px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: #1f4e79;
+      color: #fff;
+      width: 25px;
+      height: 25px;
+      border-radius: 50%;
+      line-height: 25px;
+      font-weight: bold;
+      z-index: 2;
+    }
+
+    .icon {
+      width: 42px;
+      height: 42px;
+      margin: 0 auto 8px;
+      border-radius: 50%;
+      background: #1f4e79;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+
+    .step h3 {
+      margin: 5px 0;
+      font-size: 16px;
+      color: #111827;
+    }
+
+    .step p {
+      margin: 0;
+      font-size: 14px;
+      color: #4b5563;
+      direction: rtl;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .card {
+      border: 1px solid #e5e7eb;
+      border-radius: 14px;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    .card-title {
+      background: #1f4e79;
+      color: #fff;
+      padding: 10px 14px;
+      font-weight: bold;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    th, td {
+      padding: 11px 12px;
+      border-bottom: 1px solid #e5e7eb;
+      vertical-align: top;
+    }
+
+    th {
+      background: #f3f7fb;
+      color: #1f4e79;
+      text-align: left;
+    }
+
+    .ar {
+      direction: rtl;
+      text-align: right;
+      font-family: "Tahoma", Arial, sans-serif;
+    }
+
+    .status {
+      display: inline-block;
+      padding: 4px 9px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .submitted { background: #e0f2fe; color: #075985; }
+    .review { background: #fef3c7; color: #92400e; }
+    .approved { background: #dcfce7; color: #166534; }
+    .rejected { background: #fee2e2; color: #991b1b; }
+
+    .note-box {
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .note {
+      background: #fff8e5;
+      border-left: 5px solid #f59e0b;
+      padding: 14px;
+      border-radius: 12px;
+      font-size: 14px;
+    }
+
+    .note.ar {
+      border-left: none;
+      border-right: 5px solid #f59e0b;
+    }
+
+    footer {
+      margin-top: 24px;
+      padding-top: 14px;
+      border-top: 1px solid #e5e7eb;
+      display: flex;
+      justify-content: space-between;
+      color: #6b7280;
+      font-size: 13px;
+    }
+
+    @media print {
+      body {
+        background: #fff;
+        padding: 0;
+      }
+
+      .page {
+        box-shadow: none;
+        border-radius: 0;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page">
+
+    <header>
+      <div class="title">
+        <span class="badge">Odoo Workflow</span>
+        <h1>Vendor Invoice Submission & Review Workflow</h1>
+        <h2>سير عمل تقديم ومراجعة فواتير الموردين</h2>
+      </div>
+
+      <div class="meta">
+        <strong>ABSAR AL OMRAN</strong><br />
+        System: Odoo 18<br />
+        Department: Procurement<br />
+        Version: 1.0
+      </div>
+    </header>
+
+    <h2 class="section-title">Workflow Overview / نظرة عامة على سير العمل</h2>
+
+    <div class="flow">
+      <div class="step">
+        <div class="icon">1</div>
+        <h3>Vendor Submits Invoice</h3>
+        <p>يقوم المورد بتقديم الفاتورة من البوابة</p>
+      </div>
+
+      <div class="step">
+        <div class="icon">2</div>
+        <h3>Reviewer Notification</h3>
+        <p>يصل إشعار إلى المراجع بوجود فاتورة جديدة</p>
+      </div>
+
+      <div class="step">
+        <div class="icon">3</div>
+        <h3>Open Vendor Invoice</h3>
+        <p>يفتح المراجع الفاتورة من المشتريات</p>
+      </div>
+
+      <div class="step">
+        <div class="icon">4</div>
+        <h3>Under Review</h3>
+        <p>يتم تحويل الحالة إلى قيد المراجعة</p>
+      </div>
+
+      <div class="step">
+        <div class="icon">5</div>
+        <h3>Approve / Reject</h3>
+        <p>يتم اعتماد الفاتورة أو رفضها مع التعليق</p>
+      </div>
+    </div>
+
+    <div class="grid">
+
+      <div class="card">
+        <div class="card-title">Process Steps - English</div>
+        <table>
+          <thead>
+            <tr>
+              <th>Step</th>
+              <th>Action</th>
+              <th>Responsible</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>Vendor submits invoice from the Vendor Portal.</td>
+              <td>Vendor</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>Reviewer receives notification that a bill was submitted.</td>
+              <td>Reviewer</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>Reviewer goes to <strong>Purchase → Vendor Invoices</strong>.</td>
+              <td>Reviewer</td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td>Reviewer opens the invoice and changes status to <strong>Under Review</strong>.</td>
+              <td>Reviewer</td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td>Reviewer downloads/checks the invoice and creates the bill if everything is correct.</td>
+              <td>Reviewer / Finance</td>
+            </tr>
+            <tr>
+              <td>6</td>
+              <td>Reviewer approves the invoice or rejects it with a vendor comment.</td>
+              <td>Reviewer</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card ar">
+        <div class="card-title">خطوات العملية - العربية</div>
+        <table>
+          <thead>
+            <tr>
+              <th class="ar">الخطوة</th>
+              <th class="ar">الإجراء</th>
+              <th class="ar">المسؤول</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>يقوم المورد بتقديم الفاتورة من بوابة الموردين.</td>
+              <td>المورد</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>يصل إشعار إلى المراجع بوجود فاتورة مقدمة.</td>
+              <td>المراجع</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>ينتقل المراجع إلى <strong>المشتريات ← فواتير الموردين</strong>.</td>
+              <td>المراجع</td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td>يفتح المراجع الفاتورة ويغير الحالة إلى <strong>قيد المراجعة</strong>.</td>
+              <td>المراجع</td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td>يقوم المراجع بتحميل الفاتورة ومراجعتها وإنشاء الفاتورة النظامية إذا كانت صحيحة.</td>
+              <td>المراجع / المالية</td>
+            </tr>
+            <tr>
+              <td>6</td>
+              <td>يقوم المراجع باعتماد الفاتورة أو رفضها مع كتابة تعليق للمورد.</td>
+              <td>المراجع</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+    <h2 class="section-title">Status Definitions / تعريف الحالات</h2>
+
+    <div class="grid">
+      <div class="card">
+        <table>
+          <thead>
+            <tr>
+              <th>Status</th>
+              <th>Meaning</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="status submitted">Submitted</span></td>
+              <td>Invoice submitted by vendor and waiting for review.</td>
+            </tr>
+            <tr>
+              <td><span class="status review">Under Review</span></td>
+              <td>Reviewer is checking the invoice details and attachment.</td>
+            </tr>
+            <tr>
+              <td><span class="status approved">Approved</span></td>
+              <td>Invoice is accepted and can continue to billing/payment process.</td>
+            </tr>
+            <tr>
+              <td><span class="status rejected">Rejected</span></td>
+              <td>Invoice is not accepted and vendor must check the comment.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card ar">
+        <table>
+          <thead>
+            <tr>
+              <th class="ar">الحالة</th>
+              <th class="ar">المعنى</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="status submitted">مقدمة</span></td>
+              <td>تم تقديم الفاتورة من المورد وهي بانتظار المراجعة.</td>
+            </tr>
+            <tr>
+              <td><span class="status review">قيد المراجعة</span></td>
+              <td>يقوم المراجع بالتأكد من بيانات الفاتورة والمرفق.</td>
+            </tr>
+            <tr>
+              <td><span class="status approved">معتمدة</span></td>
+              <td>تم قبول الفاتورة ويمكن متابعة إجراءات الفوترة أو الدفع.</td>
+            </tr>
+            <tr>
+              <td><span class="status rejected">مرفوضة</span></td>
+              <td>تم رفض الفاتورة ويجب على المورد مراجعة التعليق.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="note-box">
+      <div class="note">
+        <strong>Vendor Comment:</strong>
+        The reviewer should use the vendor comment field to explain rejection reasons,
+        request additional documents, or ask for invoice correction. This comment is visible to the vendor.
+      </div>
+
+      <div class="note ar">
+        <strong>تعليق المورد:</strong>
+        يجب على المراجع استخدام خانة التعليق للمورد لتوضيح سبب الرفض،
+        أو طلب مستندات إضافية، أو طلب تعديل الفاتورة. هذا التعليق يظهر للمورد في البوابة.
+      </div>
+    </div>
+
+    <h2 class="section-title">Business Rules / قواعد العمل</h2>
+
+    <div class="grid">
+      <div class="card">
+        <table>
+          <tbody>
+            <tr>
+              <td>Every submitted invoice creates a reviewer notification.</td>
+            </tr>
+            <tr>
+              <td>Reviewer must check the invoice before approval or rejection.</td>
+            </tr>
+            <tr>
+              <td>Reviewer may download the uploaded invoice attachment.</td>
+            </tr>
+            <tr>
+              <td>Rejected invoices must include a clear vendor comment.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card ar">
+        <table>
+          <tbody>
+            <tr>
+              <td>كل فاتورة مقدمة تنشئ إشعاراً للمراجع.</td>
+            </tr>
+            <tr>
+              <td>يجب مراجعة الفاتورة قبل الاعتماد أو الرفض.</td>
+            </tr>
+            <tr>
+              <td>يمكن للمراجع تحميل مرفق الفاتورة المرفوع من المورد.</td>
+            </tr>
+            <tr>
+              <td>يجب توضيح سبب الرفض في تعليق ظاهر للمورد.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <footer>
+      <div>
+        <strong>Document Owner:</strong> Procurement Department
+      </div>
+      <div class="ar">
+        <strong>مالك المستند:</strong> إدارة المشتريات
+      </div>
+    </footer>
+
+  </div>
+</body>
+</html>
