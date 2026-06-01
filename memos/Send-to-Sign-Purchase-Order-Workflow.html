@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Send to Sign Purchase Order Workflow</title>
+
+  <style>
+    @page {
+      size: A4 landscape;
+      margin: 10mm;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 22px;
+      background: #f4f7fb;
+      color: #1f2937;
+      font-family: Arial, Tahoma, sans-serif;
+      line-height: 1.45;
+    }
+
+    .page {
+      max-width: 1450px;
+      margin: auto;
+      background: #fff;
+      border-radius: 18px;
+      padding: 26px;
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 4px solid #1f4e79;
+      padding-bottom: 14px;
+      margin-bottom: 22px;
+    }
+
+    .badge {
+      display: inline-block;
+      background: #e8f1fa;
+      color: #1f4e79;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-weight: bold;
+      font-size: 13px;
+      margin-bottom: 7px;
+    }
+
+    h1 {
+      margin: 0;
+      color: #1f4e79;
+      font-size: 27px;
+    }
+
+    h2.ar-title {
+      margin: 5px 0 0;
+      color: #374151;
+      font-size: 23px;
+      direction: rtl;
+    }
+
+    .meta {
+      text-align: right;
+      font-size: 13px;
+      color: #6b7280;
+    }
+
+    .section-title {
+      color: #1f4e79;
+      font-size: 19px;
+      margin: 24px 0 13px;
+      border-left: 5px solid #1f4e79;
+      padding-left: 10px;
+    }
+
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 10px;
+      margin-bottom: 22px;
+    }
+
+    .step {
+      background: linear-gradient(180deg, #f8fbff, #eef5fb);
+      border: 1px solid #d9e7f5;
+      border-radius: 15px;
+      padding: 13px 10px;
+      text-align: center;
+      position: relative;
+      min-height: 125px;
+    }
+
+    .step:not(:last-child)::after {
+      content: "→";
+      position: absolute;
+      right: -12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: #1f4e79;
+      color: #fff;
+      width: 23px;
+      height: 23px;
+      border-radius: 50%;
+      line-height: 23px;
+      font-weight: bold;
+      z-index: 2;
+    }
+
+    .icon {
+      width: 38px;
+      height: 38px;
+      margin: 0 auto 7px;
+      border-radius: 50%;
+      background: #1f4e79;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 17px;
+    }
+
+    .step h3 {
+      margin: 5px 0;
+      font-size: 14px;
+      color: #111827;
+    }
+
+    .step p {
+      margin: 0;
+      font-size: 12.5px;
+      color: #4b5563;
+      direction: rtl;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 17px;
+    }
+
+    .card {
+      border: 1px solid #e5e7eb;
+      border-radius: 14px;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    .card-title {
+      background: #1f4e79;
+      color: #fff;
+      padding: 9px 14px;
+      font-weight: bold;
+      font-size: 15px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13.5px;
+    }
+
+    th, td {
+      padding: 10px 11px;
+      border-bottom: 1px solid #e5e7eb;
+      vertical-align: top;
+    }
+
+    th {
+      background: #f3f7fb;
+      color: #1f4e79;
+      text-align: left;
+    }
+
+    .ar {
+      direction: rtl;
+      text-align: right;
+      font-family: Tahoma, Arial, sans-serif;
+    }
+
+    .status {
+      display: inline-block;
+      padding: 4px 9px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: bold;
+      white-space: nowrap;
+    }
+
+    .draft { background: #e0f2fe; color: #075985; }
+    .director { background: #fef3c7; color: #92400e; }
+    .ceo { background: #ede9fe; color: #5b21b6; }
+    .signed { background: #dcfce7; color: #166534; }
+    .rejected { background: #fee2e2; color: #991b1b; }
+    .revision { background: #f3f4f6; color: #374151; }
+
+    .note-box {
+      margin-top: 17px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .note {
+      background: #fff8e5;
+      border-left: 5px solid #f59e0b;
+      padding: 13px;
+      border-radius: 12px;
+      font-size: 13.5px;
+    }
+
+    .note.ar {
+      border-left: none;
+      border-right: 5px solid #f59e0b;
+    }
+
+    footer {
+      margin-top: 22px;
+      padding-top: 13px;
+      border-top: 1px solid #e5e7eb;
+      display: flex;
+      justify-content: space-between;
+      color: #6b7280;
+      font-size: 13px;
+    }
+
+    @media print {
+      body {
+        background: #fff;
+        padding: 0;
+      }
+
+      .page {
+        box-shadow: none;
+        border-radius: 0;
+      }
+
+      .step {
+        break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page">
+
+    <header>
+      <div>
+        <span class="badge">Odoo Purchase Workflow</span>
+        <h1>Send to Sign Purchase Order Workflow</h1>
+        <h2 class="ar-title">سير عمل إرسال أمر الشراء للتوقيع</h2>
+      </div>
+
+      <div class="meta">
+        <strong>ABSAR AL OMRAN</strong><br />
+        Module: Send to Sign for Purchase Orders<br />
+        System: Odoo 18<br />
+        Version: 1.0
+      </div>
+    </header>
+
+    <h2 class="section-title">Workflow Overview / نظرة عامة على سير العمل</h2>
+
+    <div class="flow">
+      <div class="step">
+        <div class="icon">1</div>
+        <h3>Create PO</h3>
+        <p>إنشاء أمر الشراء</p>
+      </div>
+
+      <div class="step">
+        <div class="icon">2</div>
+        <h3>Attach Quotation</h3>
+        <p>إرفاق عرض السعر في المحادثة</p>
+      </div>
+
+      <div class="step">
+        <div class="icon">3</div>
+        <h3>Manager Approval</h3>
+        <p>اعتماد المدير بعد المراجعة</p>
+      </div>
+
+      <div class="step">
+        <div class="icon">4</div>
+        <h3>Send to Sign</h3>
+        <p>ظهور زر الإرسال للتوقيع</p>
+      </div>
+
+      <div class="step">
+        <div class="icon">5</div>
+        <h3>Director Signs</h3>
+        <p>توقيع مدير المشاريع</p>
+      </div>
+
+      <div class="step">
+        <div class="icon">6</div>
+        <h3>CEO Signs</h3>
+        <p>توقيع الرئيس التنفيذي</p>
+      </div>
+
+      <div class="step">
+        <div class="icon">7</div>
+        <h3>Fully Signed</h3>
+        <p>إشعار المشتريات بعد اكتمال التوقيع</p>
+      </div>
+    </div>
+
+    <div class="grid">
+
+      <div class="card">
+        <div class="card-title">Process Steps - English</div>
+        <table>
+          <thead>
+            <tr>
+              <th>Step</th>
+              <th>Action</th>
+              <th>Responsible</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>Create the Purchase Order from an approved MR, or from an email request when applicable.</td>
+              <td>Purchase Employee</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>The system automatically generates the Purchase Order name based on company naming conventions.</td>
+               <td>Purchase Employee</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>Attach the vendor quotation in the PO chatter before sending for approval.</td>
+              <td>Purchase Employee</td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td>The PO is reviewed and approved by the manager after checking vendor, lines, prices, quotation, and project.</td>
+              <td>Manager</td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td>After approval, the PO becomes confirmed and the <strong>Send to Sign</strong> smart button appears.</td>
+              <td>System</td>
+            </tr>
+            <tr>
+              <td>6</td>
+              <td>Click <strong>Send to Sign</strong>. Odoo generates the PO PDF and opens Odoo Sign.</td>
+              <td>Purchase Employee</td>
+            </tr>
+            <tr>
+              <td>7</td>
+              <td>Place signature and date fields for the Project Director and CEO, then select the tag <strong>Purchase Order</strong>.</td>
+              <td>Purchase Employee</td>
+            </tr>
+            <tr>
+              <td>8</td>
+              <td>Send the signing request in sequence: 1- Project Director, 2- CEO. Enable priority and CC the purchase representative.</td>
+              <td>Purchase Employee</td>
+            </tr>
+            <tr>
+              <td>9</td>
+              <td>After sending, the smart button disappears and signature status is tracked automatically.</td>
+              <td>System</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card ar">
+        <div class="card-title">خطوات العملية - العربية</div>
+        <table>
+          <thead>
+            <tr>
+              <th class="ar">الخطوة</th>
+              <th class="ar">الإجراء</th>
+              <th class="ar">المسؤول</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>يتم إنشاء أمر الشراء من طلب مواد معتمد، أو من طلب وارد بالإيميل عند الحاجة.</td>
+              <td>موظف المشتريات</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <<td>يقوم النظام تلقائياً بإنشاء اسم أمر الشراء وفقاً لسياسة التسمية المعتمدة في الشركة.</td>
+              <td>موظف المشتريات</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>يتم إرفاق عرض السعر في المحادثة الخاصة بأمر الشراء قبل إرساله للاعتماد.</td>
+              <td>موظف المشتريات</td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td>يقوم المدير بمراجعة أمر الشراء واعتماده بعد التأكد من المورد والبنود والأسعار والعرض والمشروع.</td>
+              <td>المدير</td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td>بعد الاعتماد والتأكيد، يظهر زر <strong>Send to Sign</strong> في أمر الشراء.</td>
+              <td>النظام</td>
+            </tr>
+            <tr>
+              <td>6</td>
+              <td>يتم الضغط على زر <strong>Send to Sign</strong> ليقوم النظام بإنشاء ملف PDF وفتح Odoo Sign.</td>
+              <td>موظف المشتريات</td>
+            </tr>
+            <tr>
+              <td>7</td>
+              <td>يتم وضع حقول التوقيع والتاريخ لمدير المشاريع والرئيس التنفيذي، ثم اختيار الوسم <strong>Purchase Order</strong>.</td>
+              <td>موظف المشتريات</td>
+            </tr>
+            <tr>
+              <td>8</td>
+              <td>يتم إرسال طلب التوقيع بالتسلسل: 1- مدير المشاريع، 2- الرئيس التنفيذي. مع تفعيل الأولوية ووضع ممثل المشتريات في نسخة CC.</td>
+              <td>موظف المشتريات</td>
+            </tr>
+            <tr>
+              <td>9</td>
+              <td>بعد الإرسال يختفي زر الإرسال للتوقيع، ويتم تتبع حالة التوقيع تلقائياً.</td>
+              <td>النظام</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+    <h2 class="section-title">Signature Status / حالات التوقيع</h2>
+
+    <div class="grid">
+      <div class="card">
+        <table>
+          <thead>
+            <tr>
+              <th>Status</th>
+              <th>Meaning</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="status draft">Not Sent</span></td>
+              <td>The PO has not been sent to Odoo Sign yet, or it was reset due to a revision.</td>
+            </tr>
+            <tr>
+              <td><span class="status director">Pending Director Signature</span></td>
+              <td>The signing request was sent and is waiting for the Project Director.</td>
+            </tr>
+            <tr>
+              <td><span class="status ceo">Pending CEO Signature</span></td>
+              <td>The Project Director signed, and the request is waiting for the CEO.</td>
+            </tr>
+            <tr>
+              <td><span class="status signed">Fully Signed</span></td>
+              <td>All required signatures are completed.</td>
+            </tr>
+            <tr>
+              <td><span class="status rejected">Rejected</span></td>
+              <td>The signing request was cancelled or rejected.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card ar">
+        <table>
+          <thead>
+            <tr>
+              <th class="ar">الحالة</th>
+              <th class="ar">المعنى</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="status draft">لم يتم الإرسال</span></td>
+              <td>لم يتم إرسال أمر الشراء إلى التوقيع بعد، أو تم إرجاعه بسبب تعديل جديد.</td>
+            </tr>
+            <tr>
+              <td><span class="status director">بانتظار توقيع مدير المشاريع</span></td>
+              <td>تم إرسال طلب التوقيع وهو بانتظار توقيع مدير المشاريع.</td>
+            </tr>
+            <tr>
+              <td><span class="status ceo">بانتظار توقيع الرئيس التنفيذي</span></td>
+              <td>تم توقيع مدير المشاريع والطلب الآن بانتظار توقيع الرئيس التنفيذي.</td>
+            </tr>
+            <tr>
+              <td><span class="status signed">موقّع بالكامل</span></td>
+              <td>تم اكتمال جميع التواقيع المطلوبة.</td>
+            </tr>
+            <tr>
+              <td><span class="status rejected">مرفوض</span></td>
+              <td>تم إلغاء أو رفض طلب التوقيع.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <h2 class="section-title">Revision Rules / قواعد التعديل والإصدار</h2>
+
+    <div class="grid">
+      <div class="card">
+        <table>
+          <thead>
+            <tr>
+              <th>Allowed / Restricted Changes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>After PO confirmation, some fields may still be changed depending on Odoo restrictions: expected arrival date, vendor reference, order deadline, purchase representative, analytic distribution, notes, incoterms, and tags.</td>
+            </tr>
+            <tr>
+              <td>PO lines may allow adding new lines or adjusting quantities if receipts and bills do not restrict the change.</td>
+            </tr>
+            <tr>
+              <td>Restricted changes usually include changing vendor/company, deleting lines linked to stock moves, reducing quantity below received quantity, or changing a product already linked to receipts.</td>
+            </tr>
+            <tr>
+              <td>If a signed or sent PO is modified in meaningful fields, the system resets signature status to <strong>Not Sent</strong>, increases revision number, and shows <strong>Send to Sign</strong> again.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card ar">
+        <table>
+          <thead>
+            <tr>
+              <th class="ar">التعديلات المسموحة والمقيدة</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>بعد تأكيد أمر الشراء، قد يسمح أودو بتعديل بعض الحقول حسب القيود، مثل تاريخ الوصول المتوقع، مرجع المورد، آخر موعد للطلب، ممثل المشتريات، التوزيع التحليلي، الملاحظات، شروط التسليم، والوسوم.</td>
+            </tr>
+            <tr>
+              <td>في بنود أمر الشراء قد يسمح النظام بإضافة بنود جديدة أو تعديل الكميات إذا لم تكن الاستلامات والفواتير تمنع ذلك.</td>
+            </tr>
+            <tr>
+              <td>عادةً تكون التعديلات المقيدة هي تغيير المورد أو الشركة، حذف بنود مرتبطة بحركات مخزون، تخفيض الكمية لأقل من الكمية المستلمة، أو تغيير منتج مرتبط باستلامات.</td>
+            </tr>
+            <tr>
+              <td>إذا تم تعديل أمر شراء تم توقيعه أو إرساله للتوقيع في حقول مؤثرة، يقوم النظام بإرجاع حالة التوقيع إلى <strong>لم يتم الإرسال</strong>، وزيادة رقم الإصدار، وإظهار زر <strong>Send to Sign</strong> مرة أخرى.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="note-box">
+      <div class="note">
+        <strong>Important:</strong>
+        The generated PO PDF filename includes the PO number, vendor name, MR if available, and project.
+        If revision exists, the revision number is added to the PO PDF and document title.
+      </div>
+
+      <div class="note ar">
+        <strong>مهم:</strong>
+        اسم ملف أمر الشراء الناتج يحتوي على رقم أمر الشراء، اسم المورد، رقم طلب المواد إن وجد، والمشروع.
+        وإذا وجد إصدار جديد، يظهر رقم الإصدار في ملف PDF وعنوان أمر الشراء.
+      </div>
+    </div>
+
+    <h2 class="section-title">Business Rules / قواعد العمل</h2>
+
+    <div class="grid">
+      <div class="card">
+        <table>
+          <tbody>
+            <tr>
+              <td>The quotation must be attached in the PO chatter before approval/signature.</td>
+            </tr>
+            <tr>
+              <td>The Send to Sign button appears only after the PO is confirmed and signature status is Not Sent.</td>
+            </tr>
+            <tr>
+              <td>The signing sequence must be: Project Director first, then CEO.</td>
+            </tr>
+            <tr>
+              <td>The purchase representative must be copied in CC to receive the final signed notification.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card ar">
+        <table>
+          <tbody>
+            <tr>
+              <td>يجب إرفاق عرض السعر في محادثة أمر الشراء قبل الاعتماد والتوقيع.</td>
+            </tr>
+            <tr>
+              <td>يظهر زر Send to Sign فقط بعد تأكيد أمر الشراء وعندما تكون حالة التوقيع لم يتم الإرسال.</td>
+            </tr>
+            <tr>
+              <td>يجب أن يكون ترتيب التوقيع: مدير المشاريع أولاً، ثم الرئيس التنفيذي.</td>
+            </tr>
+            <tr>
+              <td>يجب وضع ممثل المشتريات في نسخة CC ليصله إشعار عند اكتمال التوقيع.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <footer>
+      <div>
+        <strong>Document Owner:</strong> Procurement Department
+      </div>
+      <div class="ar">
+        <strong>مالك المستند:</strong> إدارة المشتريات
+      </div>
+    </footer>
+
+  </div>
+</body>
+</html>
