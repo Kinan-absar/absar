@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Payment Voucher & Journal Transfer Workflow</title>
+
+  <style>
+    @page {
+      size: A4 landscape;
+      margin: 10mm;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 22px;
+      background: #f4f7fb;
+      color: #1f2937;
+      font-family: Arial, Tahoma, sans-serif;
+      line-height: 1.45;
+    }
+
+    .page {
+      max-width: 1450px;
+      margin: auto;
+      background: #fff;
+      border-radius: 18px;
+      padding: 26px;
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 4px solid #1f4e79;
+      padding-bottom: 14px;
+      margin-bottom: 22px;
+    }
+
+    .badge {
+      display: inline-block;
+      background: #e8f1fa;
+      color: #1f4e79;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-weight: bold;
+      font-size: 13px;
+      margin-bottom: 7px;
+    }
+
+    h1 {
+      margin: 0;
+      color: #1f4e79;
+      font-size: 27px;
+    }
+
+    h2.ar-title {
+      margin: 5px 0 0;
+      color: #374151;
+      font-size: 23px;
+      direction: rtl;
+    }
+
+    .meta {
+      text-align: right;
+      font-size: 13px;
+      color: #6b7280;
+    }
+
+    .section-title {
+      color: #1f4e79;
+      font-size: 19px;
+      margin: 24px 0 13px;
+      border-left: 5px solid #1f4e79;
+      padding-left: 10px;
+    }
+
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 10px;
+      margin-bottom: 22px;
+    }
+
+    .step {
+      background: linear-gradient(180deg, #f8fbff, #eef5fb);
+      border: 1px solid #d9e7f5;
+      border-radius: 15px;
+      padding: 13px 10px;
+      text-align: center;
+      position: relative;
+      min-height: 120px;
+    }
+
+    .step:not(:last-child)::after {
+      content: "→";
+      position: absolute;
+      right: -12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: #1f4e79;
+      color: #fff;
+      width: 23px;
+      height: 23px;
+      border-radius: 50%;
+      line-height: 23px;
+      font-weight: bold;
+      z-index: 2;
+    }
+
+    .icon {
+      width: 38px;
+      height: 38px;
+      margin: 0 auto 7px;
+      border-radius: 50%;
+      background: #1f4e79;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 17px;
+    }
+
+    .step h3 {
+      margin: 5px 0;
+      font-size: 14px;
+      color: #111827;
+    }
+
+    .step p {
+      margin: 0;
+      font-size: 12.5px;
+      color: #4b5563;
+      direction: rtl;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 17px;
+    }
+
+    .card {
+      border: 1px solid #e5e7eb;
+      border-radius: 14px;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    .card-title {
+      background: #1f4e79;
+      color: #fff;
+      padding: 9px 14px;
+      font-weight: bold;
+      font-size: 15px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13.5px;
+    }
+
+    th, td {
+      padding: 10px 11px;
+      border-bottom: 1px solid #e5e7eb;
+      vertical-align: top;
+    }
+
+    th {
+      background: #f3f7fb;
+      color: #1f4e79;
+      text-align: left;
+    }
+
+    .ar {
+      direction: rtl;
+      text-align: right;
+      font-family: Tahoma, Arial, sans-serif;
+    }
+
+    .status {
+      display: inline-block;
+      padding: 4px 9px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: bold;
+      white-space: nowrap;
+    }
+
+    .payable { background: #e0f2fe; color: #075985; }
+    .transfer { background: #ede9fe; color: #5b21b6; }
+    .fee { background: #fef3c7; color: #92400e; }
+    .expense { background: #dcfce7; color: #166534; }
+    .cash { background: #f3f4f6; color: #374151; }
+    .cheque { background: #fee2e2; color: #991b1b; }
+
+    .note-box {
+      margin-top: 17px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .note {
+      background: #fff8e5;
+      border-left: 5px solid #f59e0b;
+      padding: 13px;
+      border-radius: 12px;
+      font-size: 13.5px;
+    }
+
+    .note.ar {
+      border-left: none;
+      border-right: 5px solid #f59e0b;
+    }
+
+    footer {
+      margin-top: 22px;
+      padding-top: 13px;
+      border-top: 1px solid #e5e7eb;
+      display: flex;
+      justify-content: space-between;
+      color: #6b7280;
+      font-size: 13px;
+    }
+
+    @media print {
+      body {
+        background: #fff;
+        padding: 0;
+      }
+
+      .page {
+        box-shadow: none;
+        border-radius: 0;
+      }
+
+      .step {
+        break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page">
+
+    <header>
+      <div>
+        <span class="badge">Odoo Accounting Workflow</span>
+        <h1>Payment Voucher & Journal Transfer Workflow</h1>
+        <h2 class="ar-title">سير عمل سندات الدفع والتحويل بين اليوميات</h2>
+      </div>
+
+      <div class="meta">
+        <strong>ABSAR AL OMRAN</strong><br />
+        System: Odoo 18<br />
+        Department: Finance / Accounting<br />
+        Version: 1.0
+      </div>
+    </header>
+
+    <h2 class="section-title">Workflow Scope / نطاق سير العمل</h2>
+
+    <div class="flow">
+      <div class="step">
+        <div class="icon">1</div>
+        <h3>Vendor Payables</h3>
+        <p>سداد مستحقات الموردين</p>
+      </div>
+
+      <div class="step">
+        <div class="icon">2</div>
+        <h3>Journal Transfer</h3>
+        <p>تحويل من يومية إلى يومية</p>
+      </div>
+
+      <div class="step">
+        <div class="icon">3</div>
+        <h3>Bank Fee</h3>
+        <p>رسوم تحويل بنكي</p>
+      </div>
+
+      <div class="step">
+        <div class="icon">4</div>
+        <h3>Expense Account</h3>
+        <p>الدفع على حساب مصروف</p>
+      </div>
+
+      <div class="step">
+        <div class="icon">5</div>
+        <h3>Cash Payment</h3>
+        <p>الدفع النقدي</p>
+      </div>
+
+      <div class="step">
+        <div class="icon">6</div>
+        <h3>Cheque Payment</h3>
+        <p>الدفع بالشيك</p>
+      </div>
+    </div>
+
+    <div class="grid">
+
+      <div class="card">
+        <div class="card-title">Transaction Types - English</div>
+        <table>
+          <thead>
+            <tr>
+              <th>Type</th>
+              <th>Usage</th>
+              <th>Main Requirements</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="status payable">Vendor Payables</span></td>
+              <td>Used when paying vendor bills or supplier balances.</td>
+              <td>Select vendor, payable account, payment journal, amount, and related bill/reference.</td>
+            </tr>
+            <tr>
+              <td><span class="status transfer">Journal Transfer</span></td>
+              <td>Used to transfer money from one journal to another.</td>
+              <td>Select source journal, destination journal, amount, date, and reference.</td>
+            </tr>
+            <tr>
+              <td><span class="status fee">Bank Fee</span></td>
+              <td>Used when the bank deducts a transfer fee.</td>
+              <td>Enable bank fee checkbox, select bank fee account, Purchase VAT, and analytic distribution as G&amp;A.</td>
+            </tr>
+            <tr>
+              <td><span class="status expense">Expense Account</span></td>
+              <td>Used when payment is posted directly to an expense account.</td>
+              <td>Select the correct expense account and analytic distribution under that expense account.</td>
+            </tr>
+            <tr>
+              <td><span class="status cash">Cash Payment</span></td>
+              <td>Used when payment is made from a cash journal.</td>
+              <td>Select cash journal, account, amount, and attach supporting documents if available.</td>
+            </tr>
+            <tr>
+              <td><span class="status cheque">Cheque Payment</span></td>
+              <td>Used when payment is made by cheque.</td>
+              <td>Select cheque journal/payment method, cheque details, account, amount, and reference.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card ar">
+        <div class="card-title">أنواع العمليات - العربية</div>
+        <table>
+          <thead>
+            <tr>
+              <th class="ar">النوع</th>
+              <th class="ar">الاستخدام</th>
+              <th class="ar">المتطلبات الأساسية</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="status payable">مستحقات الموردين</span></td>
+              <td>يستخدم عند سداد فواتير الموردين أو أرصدة الموردين.</td>
+              <td>اختيار المورد، حساب الدائنين، يومية الدفع، المبلغ، والفاتورة أو المرجع المرتبط.</td>
+            </tr>
+            <tr>
+              <td><span class="status transfer">تحويل بين اليوميات</span></td>
+              <td>يستخدم لتحويل مبلغ من يومية إلى يومية أخرى.</td>
+              <td>اختيار يومية المصدر، يومية الوجهة، المبلغ، التاريخ، والمرجع.</td>
+            </tr>
+            <tr>
+              <td><span class="status fee">رسوم بنكية</span></td>
+              <td>يستخدم عند وجود رسوم تحويل مخصومة من البنك.</td>
+              <td>تفعيل خيار الرسوم البنكية، اختيار حساب رسوم التحويل البنكي، ضريبة مشتريات، والتوزيع التحليلي G&amp;A.</td>
+            </tr>
+            <tr>
+              <td><span class="status expense">حساب مصروف</span></td>
+              <td>يستخدم عندما يتم تسجيل الدفعة مباشرة على حساب مصروف.</td>
+              <td>اختيار حساب المصروف الصحيح والتوزيع التحليلي المناسب تحت حساب المصروف.</td>
+            </tr>
+            <tr>
+              <td><span class="status cash">دفع نقدي</span></td>
+              <td>يستخدم عندما يتم الدفع من يومية نقدية.</td>
+              <td>اختيار يومية النقد، الحساب، المبلغ، وإرفاق المستندات الداعمة إن وجدت.</td>
+            </tr>
+            <tr>
+              <td><span class="status cheque">دفع بشيك</span></td>
+              <td>يستخدم عندما يتم الدفع بواسطة شيك.</td>
+              <td>اختيار يومية أو طريقة دفع الشيك، بيانات الشيك، الحساب، المبلغ، والمرجع.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+    <h2 class="section-title">Main Process / الخطوات الرئيسية</h2>
+
+    <div class="grid">
+      <div class="card">
+        <div class="card-title">Process Steps - English</div>
+        <table>
+          <thead>
+            <tr>
+              <th>Step</th>
+              <th>Action</th>
+              <th>Responsible</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>Create a new payment voucher and select the correct transaction type.</td>
+              <td>Accountant</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>Select the payment journal, account, partner if applicable, amount, and date.</td>
+              <td>Accountant</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>If it is a journal transfer, select both the source journal and destination journal.</td>
+              <td>Accountant</td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td>If bank fee applies, enable the bank fee checkbox and complete the fee account, VAT, and analytic distribution.</td>
+              <td>Accountant</td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td>If payment is posted to an expense account, select the expense account and the related analytic distribution.</td>
+              <td>Accountant</td>
+            </tr>
+            <tr>
+              <td>6</td>
+              <td>Attach supporting documents, review all details, then confirm/post the voucher.</td>
+              <td>Accountant / Approver</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card ar">
+        <div class="card-title">خطوات العملية - العربية</div>
+        <table>
+          <thead>
+            <tr>
+              <th class="ar">الخطوة</th>
+              <th class="ar">الإجراء</th>
+              <th class="ar">المسؤول</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>إنشاء سند دفع جديد واختيار نوع العملية الصحيح.</td>
+              <td>المحاسب</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>اختيار يومية الدفع، الحساب، الشريك إن وجد، المبلغ، والتاريخ.</td>
+              <td>المحاسب</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>إذا كانت العملية تحويل بين اليوميات، يتم اختيار يومية المصدر ويومية الوجهة.</td>
+              <td>المحاسب</td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td>إذا وجدت رسوم بنكية، يتم تفعيل خيار الرسوم البنكية واستكمال حساب الرسوم والضريبة والتوزيع التحليلي.</td>
+              <td>المحاسب</td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td>إذا كان الدفع على حساب مصروف، يتم اختيار حساب المصروف والتوزيع التحليلي المرتبط به.</td>
+              <td>المحاسب</td>
+            </tr>
+            <tr>
+              <td>6</td>
+              <td>إرفاق المستندات الداعمة، مراجعة جميع البيانات، ثم تأكيد أو ترحيل السند.</td>
+              <td>المحاسب / المعتمد</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="note-box">
+      <div class="note">
+        <strong>Important:</strong>
+        Payment Voucher is not limited to vendor bills. It is also used for journal transfers,
+        cash payments, cheque payments, bank transfer fees, and direct payments to expense accounts.
+      </div>
+
+      <div class="note ar">
+        <strong>مهم:</strong>
+        سند الدفع لا يقتصر على سداد فواتير الموردين فقط، بل يستخدم أيضاً للتحويل بين اليوميات،
+        والمدفوعات النقدية، والشيكات، ورسوم التحويل البنكي، والمدفوعات المباشرة على حسابات المصروفات.
+      </div>
+    </div>
+
+    <h2 class="section-title">Business Rules / قواعد العمل</h2>
+
+    <div class="grid">
+      <div class="card">
+        <table>
+          <tbody>
+            <tr>
+              <td>For bank fee transactions, the bank fee account, Purchase VAT, and G&amp;A analytic distribution must be completed.</td>
+            </tr>
+            <tr>
+              <td>For expense account payments, the analytic distribution must match the nature of the expense account.</td>
+            </tr>
+            <tr>
+              <td>For journal transfers, both source and destination journals must be selected correctly.</td>
+            </tr>
+            <tr>
+              <td>Supporting documents should be attached whenever available.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card ar">
+        <table>
+          <tbody>
+            <tr>
+              <td>في عمليات الرسوم البنكية، يجب استكمال حساب رسوم البنك، ضريبة المشتريات، والتوزيع التحليلي G&amp;A.</td>
+            </tr>
+            <tr>
+              <td>في المدفوعات على حسابات المصروفات، يجب أن يتوافق التوزيع التحليلي مع طبيعة حساب المصروف.</td>
+            </tr>
+            <tr>
+              <td>في التحويل بين اليوميات، يجب اختيار يومية المصدر ويومية الوجهة بشكل صحيح.</td>
+            </tr>
+            <tr>
+              <td>يجب إرفاق المستندات الداعمة متى ما كانت متوفرة.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <footer>
+      <div>
+        <strong>Document Owner:</strong> Finance / Accounting Department
+      </div>
+      <div class="ar">
+        <strong>مالك المستند:</strong> الإدارة المالية / المحاسبة
+      </div>
+    </footer>
+
+  </div>
+</body>
+</html>
