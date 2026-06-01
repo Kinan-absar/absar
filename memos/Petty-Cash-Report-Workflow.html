@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Petty Cash Report Workflow</title>
+
+  <style>
+    @page {
+      size: A4 landscape;
+      margin: 10mm;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 22px;
+      background: #f4f7fb;
+      color: #1f2937;
+      font-family: Arial, Tahoma, sans-serif;
+      line-height: 1.45;
+    }
+
+    .page {
+      max-width: 1450px;
+      margin: auto;
+      background: #fff;
+      border-radius: 18px;
+      padding: 26px;
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 4px solid #1f4e79;
+      padding-bottom: 14px;
+      margin-bottom: 22px;
+    }
+
+    .badge {
+      display: inline-block;
+      background: #e8f1fa;
+      color: #1f4e79;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-weight: bold;
+      font-size: 13px;
+      margin-bottom: 7px;
+    }
+
+    h1 {
+      margin: 0;
+      color: #1f4e79;
+      font-size: 27px;
+    }
+
+    h2.ar-title {
+      margin: 5px 0 0;
+      color: #374151;
+      font-size: 23px;
+      direction: rtl;
+    }
+
+    .meta {
+      text-align: right;
+      font-size: 13px;
+      color: #6b7280;
+    }
+
+    .section-title {
+      color: #1f4e79;
+      font-size: 19px;
+      margin: 24px 0 13px;
+      border-left: 5px solid #1f4e79;
+      padding-left: 10px;
+    }
+
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 10px;
+      margin-bottom: 22px;
+    }
+
+    .step {
+      background: linear-gradient(180deg, #f8fbff, #eef5fb);
+      border: 1px solid #d9e7f5;
+      border-radius: 15px;
+      padding: 13px 10px;
+      text-align: center;
+      position: relative;
+      min-height: 120px;
+    }
+
+    .step:not(:last-child)::after {
+      content: "→";
+      position: absolute;
+      right: -12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: #1f4e79;
+      color: #fff;
+      width: 23px;
+      height: 23px;
+      border-radius: 50%;
+      line-height: 23px;
+      font-weight: bold;
+      z-index: 2;
+    }
+
+    .icon {
+      width: 38px;
+      height: 38px;
+      margin: 0 auto 7px;
+      border-radius: 50%;
+      background: #1f4e79;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 17px;
+    }
+
+    .step h3 {
+      margin: 5px 0;
+      font-size: 14px;
+      color: #111827;
+    }
+
+    .step p {
+      margin: 0;
+      font-size: 12.5px;
+      color: #4b5563;
+      direction: rtl;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 17px;
+    }
+
+    .card {
+      border: 1px solid #e5e7eb;
+      border-radius: 14px;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    .card-title {
+      background: #1f4e79;
+      color: #fff;
+      padding: 9px 14px;
+      font-weight: bold;
+      font-size: 15px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13.5px;
+    }
+
+    th, td {
+      padding: 10px 11px;
+      border-bottom: 1px solid #e5e7eb;
+      vertical-align: top;
+    }
+
+    th {
+      background: #f3f7fb;
+      color: #1f4e79;
+      text-align: left;
+    }
+
+    .ar {
+      direction: rtl;
+      text-align: right;
+      font-family: Tahoma, Arial, sans-serif;
+    }
+
+    .status {
+      display: inline-block;
+      padding: 4px 9px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: bold;
+      white-space: nowrap;
+    }
+
+    .draft { background: #f3f4f6; color: #374151; }
+    .submitted { background: #fef3c7; color: #92400e; }
+    .approved { background: #dcfce7; color: #166534; }
+    .refused { background: #fee2e2; color: #991b1b; }
+    .journal { background: #ede9fe; color: #5b21b6; }
+    .portal { background: #e0f2fe; color: #075985; }
+
+    .note-box {
+      margin-top: 17px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .note {
+      background: #fff8e5;
+      border-left: 5px solid #f59e0b;
+      padding: 13px;
+      border-radius: 12px;
+      font-size: 13.5px;
+    }
+
+    .note.ar {
+      border-left: none;
+      border-right: 5px solid #f59e0b;
+    }
+
+    footer {
+      margin-top: 22px;
+      padding-top: 13px;
+      border-top: 1px solid #e5e7eb;
+      display: flex;
+      justify-content: space-between;
+      color: #6b7280;
+      font-size: 13px;
+    }
+
+    @media print {
+      body {
+        background: #fff;
+        padding: 0;
+      }
+
+      .page {
+        box-shadow: none;
+        border-radius: 0;
+      }
+
+      .step {
+        break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page">
+
+    <header>
+      <div>
+        <span class="badge">Odoo Petty Cash Workflow</span>
+        <h1>Petty Cash Report Submission & Accounting Workflow</h1>
+        <h2 class="ar-title">سير عمل تقديم تقرير المصروفات النثرية ومراجعته محاسبياً</h2>
+      </div>
+
+      <div class="meta">
+        <strong>ABSAR AL OMRAN</strong><br />
+        Module: Petty Cash Management<br />
+        System: Odoo 18<br />
+        Version: 1.0
+      </div>
+    </header>
+
+    <h2 class="section-title">Workflow Overview / نظرة عامة على سير العمل</h2>
+
+    <div class="flow">
+      <div class="step">
+        <div class="icon">1</div>
+        <h3>Create Report</h3>
+        <p>إنشاء تقرير مصروفات نثرية</p>
+      </div>
+
+      <div class="step">
+        <div class="icon">2</div>
+        <h3>Add Expense Lines</h3>
+        <p>إضافة بنود المصروفات</p>
+      </div>
+
+      <div class="step">
+        <div class="icon">3</div>
+        <h3>Upload Attachments</h3>
+        <p>إرفاق الفواتير والمستندات</p>
+      </div>
+
+      <div class="step">
+        <div class="icon">4</div>
+        <h3>Submit Report</h3>
+        <p>إرسال التقرير للمراجعة</p>
+      </div>
+
+      <div class="step">
+        <div class="icon">5</div>
+        <h3>Accounting Review</h3>
+        <p>مراجعة واعتماد المحاسبة</p>
+      </div>
+
+      <div class="step">
+        <div class="icon">6</div>
+        <h3>Journal Entry</h3>
+        <p>إنشاء قيد محاسبي مسودة</p>
+      </div>
+    </div>
+
+    <div class="grid">
+
+      <div class="card">
+        <div class="card-title">Process Steps - English</div>
+        <table>
+          <thead>
+            <tr>
+              <th>Step</th>
+              <th>Action</th>
+              <th>Responsible</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>Internal user or authorized portal user opens <strong>My Petty Cash Reports</strong> and creates a new report.</td>
+              <td>User / Portal User</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>The system creates a report reference and loads the configured petty cash account, input VAT account, and journal.</td>
+              <td>System</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>User adds expense lines manually from the portal or imports lines from Excel when using the internal Odoo screen.</td>
+              <td>User</td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td>User uploads invoices, receipts, and supporting documents before submission.</td>
+              <td>User</td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td>User submits the report. The report moves from <strong>Draft</strong> to <strong>Submitted</strong> and can no longer be edited.</td>
+              <td>User</td>
+            </tr>
+            <tr>
+              <td>6</td>
+              <td>Accounting reviews the report, validates the expense lines and attachments, then approves or rejects it.</td>
+              <td>Accountant</td>
+            </tr>
+            <tr>
+              <td>7</td>
+              <td>After approval, accounting creates a draft journal entry from the petty cash report.</td>
+              <td>Accountant</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card ar">
+        <div class="card-title">خطوات العملية - العربية</div>
+        <table>
+          <thead>
+            <tr>
+              <th class="ar">الخطوة</th>
+              <th class="ar">الإجراء</th>
+              <th class="ar">المسؤول</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>يقوم المستخدم الداخلي أو مستخدم البوابة المصرح له بالدخول إلى <strong>تقارير المصروفات النثرية</strong> وإنشاء تقرير جديد.</td>
+              <td>المستخدم / مستخدم البوابة</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>يقوم النظام بإنشاء رقم مرجعي للتقرير وتحميل حساب العهدة النثرية، حساب ضريبة المدخلات، واليومية حسب إعدادات المستخدم.</td>
+              <td>النظام</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>يقوم المستخدم بإضافة بنود المصروفات يدوياً من البوابة أو استيرادها من ملف Excel من شاشة أودو الداخلية.</td>
+              <td>المستخدم</td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td>يقوم المستخدم بإرفاق الفواتير والإيصالات والمستندات الداعمة قبل إرسال التقرير.</td>
+              <td>المستخدم</td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td>يقوم المستخدم بإرسال التقرير، فتتغير حالته من <strong>مسودة</strong> إلى <strong>مقدم</strong> ولا يمكن تعديله بعد ذلك.</td>
+              <td>المستخدم</td>
+            </tr>
+            <tr>
+              <td>6</td>
+              <td>تقوم المحاسبة بمراجعة التقرير والتحقق من البنود والمرفقات ثم اعتماده أو رفضه.</td>
+              <td>المحاسب</td>
+            </tr>
+            <tr>
+              <td>7</td>
+              <td>بعد الاعتماد، تقوم المحاسبة بإنشاء قيد محاسبي مسودة من تقرير المصروفات النثرية.</td>
+              <td>المحاسب</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+    <h2 class="section-title">Required Fields / الحقول المطلوبة</h2>
+
+    <div class="grid">
+      <div class="card">
+        <div class="card-title">Report Header</div>
+        <table>
+          <thead>
+            <tr>
+              <th>Field</th>
+              <th>Purpose</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Reference</td>
+              <td>Generated automatically by the system.</td>
+            </tr>
+            <tr>
+              <td>Submitted By</td>
+              <td>The user who owns and submits the petty cash report.</td>
+            </tr>
+            <tr>
+              <td>Date</td>
+              <td>The report date.</td>
+            </tr>
+            <tr>
+              <td>Petty Cash Account</td>
+              <td>The account credited when the journal entry is created.</td>
+            </tr>
+            <tr>
+              <td>Input VAT Account</td>
+              <td>The VAT account configured for petty cash reporting.</td>
+            </tr>
+            <tr>
+              <td>Journal</td>
+              <td>The general journal used to create the draft journal entry.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card ar">
+        <div class="card-title">بيانات رأس التقرير</div>
+        <table>
+          <thead>
+            <tr>
+              <th class="ar">الحقل</th>
+              <th class="ar">الغرض</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>المرجع</td>
+              <td>يتم إنشاؤه تلقائياً من النظام.</td>
+            </tr>
+            <tr>
+              <td>مقدم التقرير</td>
+              <td>المستخدم المالك لتقرير المصروفات النثرية.</td>
+            </tr>
+            <tr>
+              <td>التاريخ</td>
+              <td>تاريخ التقرير.</td>
+            </tr>
+            <tr>
+              <td>حساب العهدة النثرية</td>
+              <td>الحساب الذي يتم إقفاله دائناً عند إنشاء القيد المحاسبي.</td>
+            </tr>
+            <tr>
+              <td>حساب ضريبة المدخلات</td>
+              <td>حساب الضريبة المعتمد لتقارير المصروفات النثرية.</td>
+            </tr>
+            <tr>
+              <td>اليومية</td>
+              <td>اليومية العامة المستخدمة لإنشاء القيد المحاسبي المسودة.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Expense Line Fields</div>
+        <table>
+          <thead>
+            <tr>
+              <th>Field</th>
+              <th>Purpose</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Expense Date</td>
+              <td>Date of the receipt or expense.</td>
+            </tr>
+            <tr>
+              <td>Description</td>
+              <td>Clear explanation of the expense.</td>
+            </tr>
+            <tr>
+              <td>Supplier</td>
+              <td>Supplier, shop, or service provider name, if available.</td>
+            </tr>
+            <tr>
+              <td>Invoice / Receipt No.</td>
+              <td>Invoice or receipt reference.</td>
+            </tr>
+            <tr>
+              <td>PO No. / MR No.</td>
+              <td>Related Purchase Order or Material Request number, if applicable.</td>
+            </tr>
+            <tr>
+              <td>Zone</td>
+              <td>Project area, site zone, or work location.</td>
+            </tr>
+            <tr>
+              <td>Category</td>
+              <td>Expense category; it controls the expense account, VAT, and analytic account.</td>
+            </tr>
+            <tr>
+              <td>Amount Before VAT</td>
+              <td>Base amount before VAT.</td>
+            </tr>
+            <tr>
+              <td>VAT 15%</td>
+              <td>Enabled when VAT applies to the expense line.</td>
+            </tr>
+            <tr>
+              <td>Attachments</td>
+              <td>Invoice, receipt, or supporting document for the expense.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card ar">
+        <div class="card-title">حقول بنود المصروفات</div>
+        <table>
+          <thead>
+            <tr>
+              <th class="ar">الحقل</th>
+              <th class="ar">الغرض</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>تاريخ المصروف</td>
+              <td>تاريخ الفاتورة أو الإيصال أو المصروف.</td>
+            </tr>
+            <tr>
+              <td>الوصف</td>
+              <td>شرح واضح لطبيعة المصروف.</td>
+            </tr>
+            <tr>
+              <td>المورد</td>
+              <td>اسم المورد أو المحل أو مقدم الخدمة إن وجد.</td>
+            </tr>
+            <tr>
+              <td>رقم الفاتورة / الإيصال</td>
+              <td>مرجع الفاتورة أو الإيصال.</td>
+            </tr>
+            <tr>
+              <td>رقم أمر الشراء / رقم طلب المواد</td>
+              <td>رقم أمر الشراء أو طلب المواد المرتبط إن وجد.</td>
+            </tr>
+            <tr>
+              <td>المنطقة</td>
+              <td>منطقة المشروع أو الموقع أو مكان العمل.</td>
+            </tr>
+            <tr>
+              <td>الفئة</td>
+              <td>فئة المصروف، وهي التي تحدد حساب المصروف والضريبة والحساب التحليلي.</td>
+            </tr>
+            <tr>
+              <td>المبلغ قبل الضريبة</td>
+              <td>قيمة المصروف قبل احتساب الضريبة.</td>
+            </tr>
+            <tr>
+              <td>ضريبة 15%</td>
+              <td>يتم تفعيلها إذا كانت الضريبة تنطبق على بند المصروف.</td>
+            </tr>
+            <tr>
+              <td>المرفقات</td>
+              <td>الفاتورة أو الإيصال أو المستند الداعم للمصروف.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <h2 class="section-title">Statuses & Accounting Result / الحالات والنتيجة المحاسبية</h2>
+
+    <div class="grid">
+      <div class="card">
+        <table>
+          <thead>
+            <tr>
+              <th>Status</th>
+              <th>Meaning</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="status draft">Draft</span></td>
+              <td>The report is being prepared. The user can add lines, upload attachments, or delete attachments.</td>
+            </tr>
+            <tr>
+              <td><span class="status submitted">Submitted</span></td>
+              <td>The report was submitted to accounting and is waiting for review.</td>
+            </tr>
+            <tr>
+              <td><span class="status approved">Approved</span></td>
+              <td>Accounting accepted the report. A draft journal entry can be created.</td>
+            </tr>
+            <tr>
+              <td><span class="status refused">Refused</span></td>
+              <td>Accounting rejected the report. It may be reset to draft by accounting if correction is needed.</td>
+            </tr>
+            <tr>
+              <td><span class="status journal">Journal Entry</span></td>
+              <td>The system creates one debit line per expense category line and one credit line to the petty cash account.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card ar">
+        <table>
+          <thead>
+            <tr>
+              <th class="ar">الحالة</th>
+              <th class="ar">المعنى</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="status draft">مسودة</span></td>
+              <td>التقرير قيد التجهيز، ويمكن للمستخدم إضافة البنود ورفع أو حذف المرفقات.</td>
+            </tr>
+            <tr>
+              <td><span class="status submitted">مقدم</span></td>
+              <td>تم إرسال التقرير إلى المحاسبة وهو بانتظار المراجعة.</td>
+            </tr>
+            <tr>
+              <td><span class="status approved">معتمد</span></td>
+              <td>تم قبول التقرير من المحاسبة ويمكن إنشاء قيد محاسبي مسودة.</td>
+            </tr>
+            <tr>
+              <td><span class="status refused">مرفوض</span></td>
+              <td>تم رفض التقرير من المحاسبة، ويمكن للمحاسبة إعادته إلى مسودة إذا كان يحتاج إلى تصحيح.</td>
+            </tr>
+            <tr>
+              <td><span class="status journal">قيد محاسبي</span></td>
+              <td>ينشئ النظام بند مدين لكل سطر مصروف حسب الفئة، وبند دائن على حساب العهدة النثرية.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="note-box">
+      <div class="note">
+        <strong>Important:</strong>
+        A petty cash report cannot be submitted without expense lines. After submission, the report cannot be modified unless accounting resets it to Draft.
+      </div>
+
+      <div class="note ar">
+        <strong>مهم:</strong>
+        لا يمكن إرسال تقرير المصروفات النثرية بدون بنود مصروفات. وبعد الإرسال لا يمكن تعديل التقرير إلا إذا قامت المحاسبة بإعادته إلى حالة مسودة.
+      </div>
+    </div>
+
+    <h2 class="section-title">Business Rules / قواعد العمل</h2>
+
+    <div class="grid">
+      <div class="card">
+        <table>
+          <tbody>
+            <tr>
+              <td>Only authorized internal users and portal petty cash users can submit petty cash reports.</td>
+            </tr>
+            <tr>
+              <td>Users can only see and manage their own portal petty cash reports.</td>
+            </tr>
+            <tr>
+              <td>Each expense line must have a category; the category defines the expense account, tax, and analytic account.</td>
+            </tr>
+            <tr>
+              <td>VAT is calculated only when VAT is applicable and the selected category has a tax configured.</td>
+            </tr>
+            <tr>
+              <td>Attachments are copied from the petty cash report to the generated journal entry.</td>
+            </tr>
+            <tr>
+              <td>Only accountants can approve, reject, reset to draft, or create the journal entry.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card ar">
+        <table>
+          <tbody>
+            <tr>
+              <td>يمكن فقط للمستخدمين الداخليين المصرح لهم ومستخدمي البوابة المصرح لهم تقديم تقارير المصروفات النثرية.</td>
+            </tr>
+            <tr>
+              <td>يمكن لمستخدم البوابة عرض وإدارة تقارير المصروفات النثرية الخاصة به فقط.</td>
+            </tr>
+            <tr>
+              <td>يجب أن يحتوي كل بند مصروف على فئة، حيث تحدد الفئة حساب المصروف والضريبة والحساب التحليلي.</td>
+            </tr>
+            <tr>
+              <td>يتم احتساب الضريبة فقط عند تفعيل خيار الضريبة ووجود ضريبة معرفة على الفئة المختارة.</td>
+            </tr>
+            <tr>
+              <td>يتم نسخ المرفقات من تقرير المصروفات النثرية إلى القيد المحاسبي الناتج.</td>
+            </tr>
+            <tr>
+              <td>يمكن للمحاسبين فقط اعتماد التقرير أو رفضه أو إعادته إلى مسودة أو إنشاء القيد المحاسبي.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <footer>
+      <div>
+        <strong>Document Owner:</strong> Finance / Accounting Department
+      </div>
+      <div class="ar">
+        <strong>مالك المستند:</strong> الإدارة المالية / المحاسبة
+      </div>
+    </footer>
+
+  </div>
+</body>
+</html>
