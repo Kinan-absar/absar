@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Employee Portal Workflow</title>
+
+  <style>
+    @page {
+      size: A4 landscape;
+      margin: 10mm;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 22px;
+      background: #f4f7fb;
+      color: #1f2937;
+      font-family: Arial, Tahoma, sans-serif;
+      line-height: 1.45;
+    }
+
+    .page {
+      max-width: 1450px;
+      margin: auto;
+      background: #fff;
+      border-radius: 18px;
+      padding: 26px;
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 4px solid #1f4e79;
+      padding-bottom: 14px;
+      margin-bottom: 22px;
+    }
+
+    .badge {
+      display: inline-block;
+      background: #e8f1fa;
+      color: #1f4e79;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-weight: bold;
+      font-size: 13px;
+      margin-bottom: 7px;
+    }
+
+    h1 {
+      margin: 0;
+      color: #1f4e79;
+      font-size: 27px;
+    }
+
+    h2.ar-title {
+      margin: 5px 0 0;
+      color: #374151;
+      font-size: 23px;
+      direction: rtl;
+    }
+
+    .meta {
+      text-align: right;
+      font-size: 13px;
+      color: #6b7280;
+    }
+
+    .section-title {
+      color: #1f4e79;
+      font-size: 19px;
+      margin: 24px 0 13px;
+      border-left: 5px solid #1f4e79;
+      padding-left: 10px;
+    }
+
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 10px;
+      margin-bottom: 22px;
+    }
+
+    .step {
+      background: linear-gradient(180deg, #f8fbff, #eef5fb);
+      border: 1px solid #d9e7f5;
+      border-radius: 15px;
+      padding: 13px 10px;
+      text-align: center;
+      position: relative;
+      min-height: 120px;
+    }
+
+    .step:not(:last-child)::after {
+      content: "→";
+      position: absolute;
+      right: -12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: #1f4e79;
+      color: #fff;
+      width: 23px;
+      height: 23px;
+      border-radius: 50%;
+      line-height: 23px;
+      font-weight: bold;
+      z-index: 2;
+    }
+
+    .icon {
+      width: 38px;
+      height: 38px;
+      margin: 0 auto 7px;
+      border-radius: 50%;
+      background: #1f4e79;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 17px;
+    }
+
+    .step h3 {
+      margin: 5px 0;
+      font-size: 14px;
+      color: #111827;
+    }
+
+    .step p {
+      margin: 0;
+      font-size: 12.5px;
+      color: #4b5563;
+      direction: rtl;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 17px;
+    }
+
+    .card {
+      border: 1px solid #e5e7eb;
+      border-radius: 14px;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    .card-title {
+      background: #1f4e79;
+      color: #fff;
+      padding: 9px 14px;
+      font-weight: bold;
+      font-size: 15px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13.5px;
+    }
+
+    th, td {
+      padding: 10px 11px;
+      border-bottom: 1px solid #e5e7eb;
+      vertical-align: top;
+    }
+
+    th {
+      background: #f3f7fb;
+      color: #1f4e79;
+      text-align: left;
+    }
+
+    .ar {
+      direction: rtl;
+      text-align: right;
+      font-family: Tahoma, Arial, sans-serif;
+    }
+
+    .status {
+      display: inline-block;
+      padding: 4px 9px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: bold;
+      white-space: nowrap;
+    }
+
+    .employee { background: #e0f2fe; color: #075985; }
+    .material { background: #dcfce7; color: #166534; }
+    .approval { background: #fef3c7; color: #92400e; }
+    .signing { background: #ede9fe; color: #5b21b6; }
+    .rejected { background: #fee2e2; color: #991b1b; }
+
+    .note-box {
+      margin-top: 17px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .note {
+      background: #fff8e5;
+      border-left: 5px solid #f59e0b;
+      padding: 13px;
+      border-radius: 12px;
+      font-size: 13.5px;
+    }
+
+    .note.ar {
+      border-left: none;
+      border-right: 5px solid #f59e0b;
+    }
+
+    footer {
+      margin-top: 22px;
+      padding-top: 13px;
+      border-top: 1px solid #e5e7eb;
+      display: flex;
+      justify-content: space-between;
+      color: #6b7280;
+      font-size: 13px;
+    }
+
+    @media print {
+      body {
+        background: #fff;
+        padding: 0;
+      }
+
+      .page {
+        box-shadow: none;
+        border-radius: 0;
+      }
+
+      .step {
+        break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page">
+
+    <header>
+      <div>
+        <span class="badge">Odoo Employee Portal Workflow</span>
+        <h1>Employee Portal Workflow</h1>
+        <h2 class="ar-title">سير عمل بوابة الموظفين</h2>
+      </div>
+
+      <div class="meta">
+        <strong>ABSAR AL OMRAN</strong><br />
+        Module: Employee Portal Suite<br />
+        System: Odoo 18<br />
+        Version: 1.0
+      </div>
+    </header>
+
+    <h2 class="section-title">Workflow Overview / نظرة عامة على سير العمل</h2>
+
+    <div class="flow">
+      <div class="step">
+        <div class="icon">1</div>
+        <h3>Login</h3>
+        <p>تسجيل الدخول إلى بوابة الموظفين</p>
+      </div>
+
+      <div class="step">
+        <div class="icon">2</div>
+        <h3>Submit Request</h3>
+        <p>تقديم طلب موظف أو طلب مواد</p>
+      </div>
+
+      <div class="step">
+        <div class="icon">3</div>
+        <h3>Upload Documents</h3>
+        <p>إرفاق المستندات المطلوبة</p>
+      </div>
+
+      <div class="step">
+        <div class="icon">4</div>
+        <h3>Approval Flow</h3>
+        <p>مرور الطلب على مراحل الاعتماد</p>
+      </div>
+
+      <div class="step">
+        <div class="icon">5</div>
+        <h3>Track Status</h3>
+        <p>متابعة حالة الطلب والتعليقات</p>
+      </div>
+
+      <div class="step">
+        <div class="icon">6</div>
+        <h3>Sign Documents</h3>
+        <p>توقيع المستندات عند الحاجة</p>
+      </div>
+    </div>
+
+    <div class="grid">
+
+      <div class="card">
+        <div class="card-title">Main Portal Functions - English</div>
+        <table>
+          <thead>
+            <tr>
+              <th>Function</th>
+              <th>Purpose</th>
+              <th>Main Users</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="status employee">Employee Requests</span></td>
+              <td>Submit official internal requests such as leave, allowance, letter, travel, training, bank account change, clearance, or other requests.</td>
+              <td>Employees</td>
+            </tr>
+            <tr>
+              <td><span class="status material">Material Requests</span></td>
+              <td>Request materials needed for project sites, operations, maintenance, or worksite requirements.</td>
+              <td>Employees / Site Teams</td>
+            </tr>
+            <tr>
+              <td><span class="status approval">Approvals</span></td>
+              <td>Review, approve, reject, and comment on requests according to the assigned approval role.</td>
+              <td>Managers / HR / Finance / Directors / CEO</td>
+            </tr>
+            <tr>
+              <td><span class="status signing">Sign Documents</span></td>
+              <td>View documents assigned for signature, sign electronically, and track signing status.</td>
+              <td>Assigned Signers</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card ar">
+        <div class="card-title">وظائف البوابة الرئيسية - العربية</div>
+        <table>
+          <thead>
+            <tr>
+              <th class="ar">الوظيفة</th>
+              <th class="ar">الغرض</th>
+              <th class="ar">المستخدمون</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="status employee">طلبات الموظفين</span></td>
+              <td>تقديم الطلبات الداخلية الرسمية مثل الإجازات، البدلات، الخطابات، السفر، التدريب، تغيير الحساب البنكي، إخلاء الطرف، أو أي طلب آخر.</td>
+              <td>الموظفون</td>
+            </tr>
+            <tr>
+              <td><span class="status material">طلبات المواد</span></td>
+              <td>طلب المواد المطلوبة للمشاريع أو المواقع أو التشغيل أو الصيانة أو احتياجات العمل.</td>
+              <td>الموظفون / فرق المواقع</td>
+            </tr>
+            <tr>
+              <td><span class="status approval">الاعتمادات</span></td>
+              <td>مراجعة الطلبات واعتمادها أو رفضها مع إضافة التعليقات حسب صلاحية الاعتماد.</td>
+              <td>المدراء / الموارد البشرية / المالية / المدراء التنفيذيون / الرئيس التنفيذي</td>
+            </tr>
+            <tr>
+              <td><span class="status signing">توقيع المستندات</span></td>
+              <td>عرض المستندات المطلوب توقيعها، توقيعها إلكترونياً، ومتابعة حالة التوقيع.</td>
+              <td>الموقعون المعينون</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+    <h2 class="section-title">Process Steps / خطوات العملية</h2>
+
+    <div class="grid">
+      <div class="card">
+        <div class="card-title">Employee Portal Steps - English</div>
+        <table>
+          <thead>
+            <tr>
+              <th>Step</th>
+              <th>Action</th>
+              <th>Responsible</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>Employee logs in to the Employee Portal using company credentials.</td>
+              <td>Employee</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>Employee selects the required service: Employee Request, Material Request, Approvals, or Sign Documents.</td>
+              <td>Employee</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>Employee fills in the required details and uploads supporting documents if needed.</td>
+              <td>Employee</td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td>After submission, the request enters the approval workflow and cannot be edited.</td>
+              <td>System</td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td>Approvers review the request in sequence and either approve or reject it with comments.</td>
+              <td>Approvers</td>
+            </tr>
+            <tr>
+              <td>6</td>
+              <td>Employee tracks status, approval progress, comments, rejection reasons, and related documents from the portal.</td>
+              <td>Employee</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card ar">
+        <div class="card-title">خطوات بوابة الموظفين - العربية</div>
+        <table>
+          <thead>
+            <tr>
+              <th class="ar">الخطوة</th>
+              <th class="ar">الإجراء</th>
+              <th class="ar">المسؤول</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>يقوم الموظف بتسجيل الدخول إلى بوابة الموظفين باستخدام بيانات الدخول المعتمدة من الشركة.</td>
+              <td>الموظف</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>يختار الموظف الخدمة المطلوبة: طلب موظف، طلب مواد، الاعتمادات، أو توقيع المستندات.</td>
+              <td>الموظف</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>يقوم الموظف بتعبئة البيانات المطلوبة وإرفاق المستندات الداعمة عند الحاجة.</td>
+              <td>الموظف</td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td>بعد الإرسال يدخل الطلب في مسار الاعتماد ولا يمكن تعديله.</td>
+              <td>النظام</td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td>يقوم المعتمدون بمراجعة الطلب بالتسلسل ثم اعتماده أو رفضه مع إضافة التعليقات.</td>
+              <td>المعتمدون</td>
+            </tr>
+            <tr>
+              <td>6</td>
+              <td>يمكن للموظف متابعة الحالة ومراحل الاعتماد والتعليقات وأسباب الرفض والمستندات المرتبطة من خلال البوابة.</td>
+              <td>الموظف</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <h2 class="section-title">Approval Flows / مسارات الاعتماد</h2>
+
+    <div class="grid">
+      <div class="card">
+        <div class="card-title">Employee Requests</div>
+        <table>
+          <tbody>
+            <tr>
+              <td><strong>Approval Sequence:</strong> Direct Manager → HR → Finance → CEO → Approved / Rejected</td>
+            </tr>
+            <tr>
+              <td><strong>Common Statuses:</strong> Pending Manager, Pending HR, Pending Finance, Pending CEO, Fully Approved, Rejected</td>
+            </tr>
+            <tr>
+              <td><strong>Examples:</strong> leave, housing allowance, salary advance, travel, training, reimbursement, letters, bank account change, transfer, clearance, and other requests.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card ar">
+        <div class="card-title">طلبات الموظفين</div>
+        <table>
+          <tbody>
+            <tr>
+              <td><strong>تسلسل الاعتماد:</strong> المدير المباشر ← الموارد البشرية ← المالية ← الرئيس التنفيذي ← معتمد / مرفوض</td>
+            </tr>
+            <tr>
+              <td><strong>الحالات الشائعة:</strong> بانتظار المدير، بانتظار الموارد البشرية، بانتظار المالية، بانتظار الرئيس التنفيذي، معتمد بالكامل، مرفوض</td>
+            </tr>
+            <tr>
+              <td><strong>أمثلة:</strong> الإجازات، بدل السكن، السلف، السفر، التدريب، التعويضات، الخطابات، تغيير الحساب البنكي، النقل، إخلاء الطرف، وطلبات أخرى.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Material Requests</div>
+        <table>
+          <tbody>
+            <tr>
+              <td><strong>Approval Sequence:</strong> Purchase Representative → Store Manager → Project Manager → Projects Director → CEO → Approved / Rejected</td>
+            </tr>
+            <tr>
+              <td><strong>Common Statuses:</strong> Pending Purchase Representative, Pending Store Manager, Pending Project Manager, Pending Director, Pending CEO, Fully Approved, Rejected</td>
+            </tr>
+            <tr>
+              <td><strong>Purchase Orders:</strong> Once approved, the purchase team may create linked Purchase Orders. The employee can view the PO number and status from the request.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card ar">
+        <div class="card-title">طلبات المواد</div>
+        <table>
+          <tbody>
+            <tr>
+              <td><strong>تسلسل الاعتماد:</strong> ممثل المشتريات ← أمين المستودع ← مدير المشروع ← مدير المشاريع ← الرئيس التنفيذي ← معتمد / مرفوض</td>
+            </tr>
+            <tr>
+              <td><strong>الحالات الشائعة:</strong> بانتظار ممثل المشتريات، بانتظار أمين المستودع، بانتظار مدير المشروع، بانتظار مدير المشاريع، بانتظار الرئيس التنفيذي، معتمد بالكامل، مرفوض</td>
+            </tr>
+            <tr>
+              <td><strong>أوامر الشراء:</strong> بعد الاعتماد يمكن لفريق المشتريات إنشاء أوامر شراء مرتبطة بالطلب، ويمكن للموظف عرض رقم أمر الشراء وحالته من تفاصيل الطلب.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="note-box">
+      <div class="note">
+        <strong>Important:</strong>
+        Employees should always submit requests through the portal, provide accurate information, upload required documents, monitor request status, and avoid duplicate submissions.
+      </div>
+
+      <div class="note ar">
+        <strong>مهم:</strong>
+        يجب على الموظفين تقديم الطلبات من خلال البوابة، إدخال بيانات صحيحة، إرفاق المستندات المطلوبة، متابعة حالة الطلب، وتجنب تكرار الطلبات.
+      </div>
+    </div>
+
+    <h2 class="section-title">Business Rules / قواعد العمل</h2>
+
+    <div class="grid">
+      <div class="card">
+        <table>
+          <tbody>
+            <tr>
+              <td>Submitted requests cannot be edited after submission.</td>
+            </tr>
+            <tr>
+              <td>Each request follows a structured approval workflow based on its type.</td>
+            </tr>
+            <tr>
+              <td>Approvers can approve, reject, and add comments.</td>
+            </tr>
+            <tr>
+              <td>Employees can track status, approval progress, comments, documents, and rejection reasons.</td>
+            </tr>
+            <tr>
+              <td>Documents assigned for signature are visible only when it is the employee’s turn to sign.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card ar">
+        <table>
+          <tbody>
+            <tr>
+              <td>لا يمكن تعديل الطلبات بعد إرسالها.</td>
+            </tr>
+            <tr>
+              <td>كل طلب يتبع مسار اعتماد منظم حسب نوع الطلب.</td>
+            </tr>
+            <tr>
+              <td>يمكن للمعتمدين اعتماد الطلب أو رفضه وإضافة التعليقات.</td>
+            </tr>
+            <tr>
+              <td>يمكن للموظفين متابعة الحالة ومراحل الاعتماد والتعليقات والمستندات وأسباب الرفض.</td>
+            </tr>
+            <tr>
+              <td>المستندات المطلوب توقيعها تظهر للموظف فقط عندما يحين دوره في التوقيع.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <footer>
+      <div>
+        <strong>Document Owner:</strong> Administration / HR Department
+      </div>
+      <div class="ar">
+        <strong>مالك المستند:</strong> الإدارة / الموارد البشرية
+      </div>
+    </footer>
+
+  </div>
+</body>
+</html>
