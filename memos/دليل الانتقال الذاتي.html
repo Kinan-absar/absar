@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دليل الانتقال الذاتي في مطار باريس CDG</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter for English, Cairo for Arabic -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for airport iconography -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cdgNavy: '#002060',
+                        cdgRed: '#e30613',
+                        cdgGold: '#ffc000',
+                        cdgTeal: '#00a650',
+                        cdgBlue: '#0072bc',
+                    },
+                    fontFamily: {
+                        sans: ['Cairo', 'Inter', 'sans-serif'],
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        .font-ar { font-family: 'Cairo', sans-serif; }
+        .font-en { font-family: 'Inter', sans-serif; }
+        
+        [lang-content] {
+            transition: opacity 0.25s ease-in-out;
+        }
+        
+        .step-active {
+            border-color: #002060;
+            box-shadow: 0 10px 15px -3px rgba(0, 32, 96, 0.1), 0 4px 6px -2px rgba(0, 32, 96, 0.05);
+        }
+        
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col antialiased font-ar">
+
+    <header class="bg-cdgNavy text-white border-b-4 border-cdgGold sticky top-0 z-50 shadow-md">
+        <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center space-x-3 rtl:space-x-reverse">
+                <div class="bg-white p-2 rounded-lg text-cdgNavy flex items-center justify-center shadow-inner">
+                    <i class="fa-solid fa-plane-departure text-xl md:text-2xl animate-pulse"></i>
+                </div>
+                <div>
+                    <h1 class="text-base md:text-xl font-extrabold tracking-tight" id="header-title">مرشد الترانزيت الذكي في مطار CDG</h1>
+                    <p class="text-xs text-slate-300 font-medium" id="header-subtitle">مبنى الركاب 1 (الوصول) ➔ مبنى الركاب 2F (الخطوط الفرنسية إلى برلين)</p>
+                </div>
+            </div>
+            
+            <!-- Language Switcher Button (English is offered as the alternative) -->
+            <button onclick="toggleLanguage()" class="bg-white/10 hover:bg-white/20 text-white font-bold py-1.5 px-3 rounded-full border border-white/30 text-xs md:text-sm flex items-center space-x-2 transition-all duration-200">
+                <i class="fa-solid fa-globe"></i>
+                <span id="lang-btn-text">English</span>
+            </button>
+        </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto px-4 py-6 flex-grow space-y-6 w-full">
+        
+        <!-- Critical Strategy Alert Banner -->
+        <div class="bg-amber-50 border-r-4 border-cdgGold p-4 rounded-l-xl shadow-sm border-y border-l border-amber-200 flex flex-col md:flex-row items-start space-y-3 md:space-y-0 md:space-x-4 rtl:border-l-0 rtl:border-r-4 rtl:space-x-reverse">
+            <div class="bg-amber-100 text-amber-800 p-3 rounded-lg flex-shrink-0">
+                <i class="fa-solid fa-triangle-exclamation text-xl md:text-2xl"></i>
+            </div>
+            <div class="space-y-1">
+                <h3 class="font-bold text-amber-900 text-base md:text-lg" id="alert-title">⚠ تذكير استراتيجي هام للغاية</h3>
+                <p class="text-sm text-amber-800 leading-relaxed" id="alert-desc">
+                    لديك <strong>نافذة زمنية آمنة مدتها 8 ساعات</strong> (من الساعة 8:00 صباحاً حتى 4:00 مساءً)، مما يلغي تماماً أي قلق من تأخر الرحلات أو صفوف الجوازات. نظراً لأنك حجزت <strong>تذاكر منفصلة</strong>، يجب عليك استلام حقائبك المشحونة (حقيبتين كبيرتين) من مبنى الركاب 1، ثم الخروج تماماً عبر الجمارك، ونقلها معك إلى مبنى الركاب 2F لإعادة شحنها مجدداً.
+                </p>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                <div class="flex items-center space-x-2 rtl:space-x-reverse">
+                    <i class="fa-regular fa-clock text-cdgNavy text-xl"></i>
+                    <h3 class="font-bold text-slate-900" id="timing-title">مخطط الترانزيت الزمني التفاعلي</h3>
+                </div>
+                <span class="text-xs bg-emerald-50 text-emerald-700 font-bold px-2 py-1 rounded" id="timing-badge">وقت الانتظار الإجمالي: 8 ساعات</span>
+            </div>
+            
+            <p class="text-xs md:text-sm text-slate-500" id="timing-intro">قم بسحب المؤشر لتحديد وقت هبوط طائرتك الفعلي لتحديث التوقيتات المقدرة لرحلتك تلقائياً:</p>
+            
+            <!-- Time Slider Input -->
+            <div class="space-y-2">
+                <div class="flex justify-between text-xs font-bold text-slate-400">
+                    <span id="slider-min">08:00 ص (في الموعد)</span>
+                    <span id="current-slider-val" class="text-cdgNavy text-sm bg-blue-50 px-3 py-1 rounded-full">وقت الهبوط: 08:00 ص</span>
+                    <span id="slider-max">11:00 ص (متأخرة)</span>
+                </div>
+                <input type="range" id="timeSlider" min="8" max="11" step="0.5" value="8" oninput="updateTimetable(this.value)" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-cdgNavy">
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 pt-2">
+                <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 text-center">
+                    <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider" id="t-step-1">1. الحقائب والجمارك</span>
+                    <span id="time-step1" class="block text-sm md:text-base font-extrabold text-cdgNavy mt-1">09:15 ص</span>
+                </div>
+                <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 text-center">
+                    <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider" id="t-step-2">2. قطار CDGVAL</span>
+                    <span id="time-step2" class="block text-sm md:text-base font-extrabold text-cdgTeal mt-1">09:40 ص</span>
+                </div>
+                <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 text-center">
+                    <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider" id="t-step-3">3. المشي إلى 2F</span>
+                    <span id="time-step3" class="block text-sm md:text-base font-extrabold text-cdgBlue mt-1">09:55 ص</span>
+                </div>
+                <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 text-center">
+                    <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider" id="t-step-4">4. شحن الحقائب مجدداً</span>
+                    <span id="time-step4" class="block text-sm md:text-base font-extrabold text-cdgRed mt-1">10:30 ص</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 space-y-4 overflow-hidden">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                <div class="flex items-center space-x-2 rtl:space-x-reverse">
+                    <i class="fa-regular fa-map text-cdgNavy text-xl"></i>
+                    <h3 class="font-bold text-slate-900" id="map-header-title">مخطط مسار الترانزيت المرئي</h3>
+                </div>
+                <span class="text-xs text-slate-400 font-medium" id="map-helper">اضغط على أي مبنى للانتقال مباشرة إلى الخطوات التفصيلية المخصصة له</span>
+            </div>
+
+            <!-- Responsive SVG Map Container -->
+            <div class="relative bg-slate-50 rounded-xl p-2 border border-slate-100 flex justify-center">
+                <svg viewBox="0 0 800 300" class="w-full max-w-3xl h-auto" id="svg-map">
+                    <!-- Background Connection Tracks -->
+                    <line x1="120" y1="150" x2="680" y2="150" stroke="#cbd5e1" stroke-width="4" stroke-dasharray="6,6" />
+                    
+                    <!-- Free CDGVAL Route Line -->
+                    <path d="M 120 150 L 480 150" stroke="#00a650" stroke-width="8" stroke-linecap="round" fill="none" opacity="0.85" />
+                    <text x="300" y="130" font-size="12" font-weight="900" fill="#00a650" text-anchor="middle" id="map-text-train">قطار CDGVAL المجاني (8 دقائق)</text>
+                    <polygon points="295,145 305,150 295,155" fill="#ffffff" />
+                    
+                    <!-- Walkway Connection T2 Hub to T2F -->
+                    <path d="M 480 150 L 680 150" stroke="#0072bc" stroke-width="6" stroke-dasharray="4,4" fill="none" />
+                    <text x="580" y="130" font-size="11" font-weight="800" fill="#0072bc" text-anchor="middle" id="map-text-walk">ممشى داخلي (5-10 دقائق)</text>
+
+                    <!-- Terminal 1 Circle Node -->
+                    <g class="cursor-pointer group" onclick="scrollToStep(1)">
+                        <circle cx="120" cy="150" r="45" fill="#ffffff" stroke="#002060" stroke-width="4" class="transition-all group-hover:scale-105 duration-200" />
+                        <circle cx="120" cy="150" r="35" fill="#f1f5f9" />
+                        <text x="120" y="156" font-size="20" font-weight="900" text-anchor="middle" fill="#002060">T1</text>
+                        <text x="120" y="215" font-size="12" font-weight="bold" text-anchor="middle" fill="#334155" id="map-node1">1. الوصول والحقائب</text>
+                    </g>
+
+                    <!-- CDGVAL Hub Station Node -->
+                    <g class="cursor-pointer group" onclick="scrollToStep(2)">
+                        <rect x="440" y="115" width="80" height="70" rx="10" fill="#ffffff" stroke="#475569" stroke-width="3" class="transition-all group-hover:scale-105 duration-200" />
+                        <text x="480" y="148" font-size="12" font-weight="900" text-anchor="middle" fill="#1e293b">Gare TGV</text>
+                        <text x="480" y="165" font-size="10" font-weight="600" text-anchor="middle" fill="#64748b" id="map-node-sub">(مركز المحطات)</text>
+                        <text x="480" y="215" font-size="12" font-weight="bold" text-anchor="middle" fill="#334155" id="map-node2">2. محطة القطار</text>
+                    </g>
+
+                    <!-- Terminal 2F Node -->
+                    <g class="cursor-pointer group" onclick="scrollToStep(3)">
+                        <polygon points="640,110 720,110 700,190 640,190" fill="#ffffff" stroke="#002060" stroke-width="4" class="transition-all group-hover:scale-105 duration-200" />
+                        <text x="675" y="145" font-size="18" font-weight="900" text-anchor="middle" fill="#002060">T2F</text>
+                        <text x="672" y="165" font-size="11" font-weight="800" text-anchor="middle" fill="#e30613" id="map-airline">Air France</text>
+                        <text x="675" y="215" font-size="12" font-weight="bold" text-anchor="middle" fill="#334155" id="map-node3">3. صالة المغادرة</text>
+                    </g>
+                </svg>
+            </div>
+        </div>
+
+        <div class="space-y-6">
+            
+            <!-- STEP 1 CARD -->
+            <div id="step-1" class="step-card bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden transition-all duration-300">
+                <!-- Step Header -->
+                <div class="bg-slate-50 border-b border-slate-100 p-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div class="flex items-center space-x-3 rtl:space-x-reverse">
+                        <span class="w-10 h-10 bg-cdgNavy text-white rounded-full flex items-center justify-center font-extrabold text-lg shadow-sm">1</span>
+                        <div>
+                            <span class="text-xs font-bold text-cdgNavy uppercase tracking-wide" id="s1-badge">الخطوة 1</span>
+                            <h2 class="text-lg font-bold text-slate-800" id="s1-title">الهبوط واستلام الأمتعة (مبنى الركاب 1)</h2>
+                        </div>
+                    </div>
+                    <span class="self-start md:self-auto text-xs bg-blue-50 text-blue-700 font-bold px-3 py-1.5 rounded-full flex items-center gap-1.5">
+                        <i class="fa-solid fa-plane-arrival"></i>
+                        <span id="s1-meta">مبنى الركاب 1</span>
+                    </span>
+                </div>
+                
+                <!-- Main Step Image -->
+                <div class="relative h-48 md:h-64 w-full overflow-hidden bg-slate-100">
+                    <img src="https://images.unsplash.com/photo-1542296332-2e4473fac563?auto=format&fit=crop&w=1200&q=80" alt="CDG Terminal" class="object-cover w-full h-full" onerror="this.src='https://placehold.co/800x400/002060/ffffff?text=Paris+CDG+Terminal+1'">
+                    <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/60 to-transparent p-4">
+                        <p class="text-white text-xs font-semibold" id="s1-caption">التصميم الدائري الفريد لمبنى الركاب 1 وسيور استلام الأمتعة</p>
+                    </div>
+                </div>
+
+                <!-- Step Details & Checklist -->
+                <div class="p-5 space-y-4">
+                    <p class="text-sm text-slate-600 leading-relaxed" id="s1-intro">
+                        اهبط من الطائرة وتوجه مباشرة إلى المبنى الدائري المركزي التابع لمبنى الركاب 1.
+                    </p>
+                    
+                    <!-- Checklist -->
+                    <div class="space-y-2.5">
+                        <h4 class="font-bold text-slate-700 text-sm flex items-center gap-2" id="s1-chk-title">
+                            <i class="fa-solid fa-clipboard-list text-cdgNavy"></i> قائمة المهام والخطوات
+                        </h4>
+                        
+                        <label class="flex items-start p-3 bg-slate-50 hover:bg-slate-100/70 rounded-xl border border-slate-100 cursor-pointer transition-all">
+                            <input type="checkbox" onchange="toggleCheck(this)" class="mt-1 h-4.5 w-4.5 rounded border-gray-300 text-cdgNavy focus:ring-cdgNavy">
+                            <span class="ml-3 rtl:mr-3 text-sm text-slate-600 font-medium" id="s1-li1"><strong>احصل على عربة أمتعة:</strong> تتوفر عربات نقل الحقائب المعدنية بكثرة على طول الممرات؛ احصل على واحدة مبكراً لتسهيل حمل الحقيبتين الكبيرتين وحقيبة يدك.</span>
+                        </label>
+
+                        <label class="flex items-start p-3 bg-slate-50 hover:bg-slate-100/70 rounded-xl border border-slate-100 cursor-pointer transition-all">
+                            <input type="checkbox" onchange="toggleCheck(this)" class="mt-1 h-4.5 w-4.5 rounded border-gray-300 text-cdgNavy focus:ring-cdgNavy">
+                            <span class="ml-3 rtl:mr-3 text-sm text-slate-600 font-medium" id="s1-li2"><strong>مراقبة الجوازات:</strong> اعبر من خلال ممرات 'الخروج/الأمتعة' (Exit/Baggage). قد تبدو الطوابير طويلة ولكن وقتك الكافي (8 ساعات) سيضمن لك عبوراً مريحاً.</span>
+                        </label>
+
+                        <label class="flex items-start p-3 bg-slate-50 hover:bg-slate-100/70 rounded-xl border border-slate-100 cursor-pointer transition-all">
+                            <input type="checkbox" onchange="toggleCheck(this)" class="mt-1 h-4.5 w-4.5 rounded border-gray-300 text-cdgNavy focus:ring-cdgNavy">
+                            <span class="ml-3 rtl:mr-3 text-sm text-slate-600 font-medium" id="s1-li3"><strong>استلام الأمتعة:</strong> انتظر ظهور حقيبتيك الكبيرتين على السير المخصص، وضعهما بأمان على العربة، ثم اعبر من خلال الجمارك إلى صالة الوصول العامة.</span>
+                        </label>
+                    </div>
+
+                    <!-- Visual Signage Helper -->
+                    <div class="bg-amber-50 rounded-xl p-4 border border-amber-100 flex items-start space-x-3 rtl:space-x-reverse">
+                        <div class="bg-amber-100 text-amber-800 px-2.5 py-1 rounded-lg text-sm font-bold flex items-center justify-center">
+                            <i class="fa-solid fa-eye"></i>
+                        </div>
+                        <div>
+                            <span class="block font-bold text-xs text-amber-800 uppercase tracking-wider" id="s1-sign-label">دليل اللوحات الإرشادية:</span>
+                            <span class="text-sm font-bold text-amber-950" id="s1-sign-text">ابحث بدقة عن اللوحات الصفراء التي تحمل عبارة "Sortie / Bagages" (الخروج / استلام الحقائب).</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 2 CARD -->
+            <div id="step-2" class="step-card bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden transition-all duration-300">
+                <!-- Step Header -->
+                <div class="bg-slate-50 border-b border-slate-100 p-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div class="flex items-center space-x-3 rtl:space-x-reverse">
+                        <span class="w-10 h-10 bg-cdgTeal text-white rounded-full flex items-center justify-center font-extrabold text-lg shadow-sm">2</span>
+                        <div>
+                            <span class="text-xs font-bold text-cdgTeal uppercase tracking-wide" id="s2-badge">الخطوة 2</span>
+                            <h2 class="text-lg font-bold text-slate-800" id="s2-title">استقلال قطار التنقل الداخلي المجاني (CDGVAL)</h2>
+                        </div>
+                    </div>
+                    <span class="self-start md:self-auto text-xs bg-emerald-50 text-emerald-700 font-bold px-3 py-1.5 rounded-full flex items-center gap-1.5">
+                        <i class="fa-solid fa-train-subway"></i>
+                        <span id="s2-meta">رحلة القطار (8 دقائق)</span>
+                    </span>
+                </div>
+                
+                <!-- Step Image -->
+                <div class="relative h-48 md:h-64 w-full overflow-hidden bg-slate-100">
+                    <img src="https://images.unsplash.com/photo-1519501025264-65ba15a82390?auto=format&fit=crop&w=1200&q=80" alt="CDG Shuttle" class="object-cover w-full h-full" onerror="this.src='https://placehold.co/800x400/00a650/ffffff?text=CDGVAL+Free+Train+Shuttle'">
+                    <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/60 to-transparent p-4">
+                        <p class="text-white text-xs font-semibold" id="s2-caption">القطار الآلي الداخلي الواسع CDGVAL الذي يربط بين مباني المطار المختلفة</p>
+                    </div>
+                </div>
+
+                <!-- Step Details -->
+                <div class="p-5 space-y-4">
+                    <p class="text-sm text-slate-600 leading-relaxed" id="s2-intro">
+                        ابحث عن خط قطار التنقل الداخلي CDGVAL للانتقال سريعاً ومجاناً من مبنى 1 إلى مبنى 2.
+                    </p>
+
+                    <!-- Checklist -->
+                    <div class="space-y-2.5">
+                        <h4 class="font-bold text-slate-700 text-sm flex items-center gap-2" id="s2-chk-title">
+                            <i class="fa-solid fa-clipboard-list text-cdgTeal"></i> قائمة المهام والخطوات
+                        </h4>
+                        
+                        <label class="flex items-start p-3 bg-slate-50 hover:bg-slate-100/70 rounded-xl border border-slate-100 cursor-pointer transition-all">
+                            <input type="checkbox" onchange="toggleCheck(this)" class="mt-1 h-4.5 w-4.5 rounded border-gray-300 text-cdgTeal focus:ring-cdgTeal">
+                            <span class="ml-3 rtl:mr-3 text-sm text-slate-600 font-medium" id="s2-li1"><strong>ابحث عن المحطة:</strong> اتبع الأيقونات المعلقة التي تشير إلى قطار CDGVAL. استخدم المصعد الكهربائي للنزول إلى رصيف الركوب.</span>
+                        </label>
+
+                        <label class="flex items-start p-3 bg-slate-50 hover:bg-slate-100/70 rounded-xl border border-slate-100 cursor-pointer transition-all">
+                            <input type="checkbox" onchange="toggleCheck(this)" class="mt-1 h-4.5 w-4.5 rounded border-gray-300 text-cdgTeal focus:ring-cdgTeal">
+                            <span class="ml-3 rtl:mr-3 text-sm text-slate-600 font-medium" id="s2-li2"><strong>مسار القطار:</strong> اصعد إلى القطار الآلي المجاني. لست بحاجة إلى تذكرة؛ تفتح أبواب الرصيف والقطار تلقائياً.</span>
+                        </label>
+
+                        <label class="flex items-start p-3 bg-slate-50 hover:bg-slate-100/70 rounded-xl border border-slate-100 cursor-pointer transition-all">
+                            <input type="checkbox" onchange="toggleCheck(this)" class="mt-1 h-4.5 w-4.5 rounded border-gray-300 text-cdgTeal focus:ring-cdgTeal">
+                            <span class="ml-3 rtl:mr-3 text-sm text-slate-600 font-medium" id="s2-li3"><strong>محطة النزول:</strong> ابق في القطار لمدة 8 دقائق بالضبط. سيتجاوز القطار مواقف PR ومبنى 3. انزل في المحطة الأخيرة: <strong>Terminal 2 - Gare</strong>.</span>
+                        </label>
+                    </div>
+
+                    <!-- Visual Signage Helper -->
+                    <div class="bg-amber-50 rounded-xl p-4 border border-amber-100 flex items-start space-x-3 rtl:space-x-reverse">
+                        <div class="bg-amber-100 text-amber-800 px-2.5 py-1 rounded-lg text-sm font-bold flex items-center justify-center">
+                            <i class="fa-solid fa-eye"></i>
+                        </div>
+                        <div>
+                            <span class="block font-bold text-xs text-amber-800 uppercase tracking-wider" id="s2-sign-label">دليل اللوحات الإرشادية للقطار:</span>
+                            <span class="text-sm font-bold text-amber-950" id="s2-sign-text">اتبع اللوحات الزرقاء أو البيضاء التي تحمل شعار "CDGVAL". الممرات واسعة ومسطحة لتسهيل دفع عربات الأمتعة الكبيرة.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 3 CARD -->
+            <div id="step-3" class="step-card bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden transition-all duration-300">
+                <!-- Step Header -->
+                <div class="bg-slate-50 border-b border-slate-100 p-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div class="flex items-center space-x-3 rtl:space-x-reverse">
+                        <span class="w-10 h-10 bg-cdgBlue text-white rounded-full flex items-center justify-center font-extrabold text-lg shadow-sm">3</span>
+                        <div>
+                            <span class="text-xs font-bold text-cdgBlue uppercase tracking-wide" id="s3-badge">الخطوة 3</span>
+                            <h2 class="text-lg font-bold text-slate-800" id="s3-title">السير إلى صالة مغادرة مبنى 2F (الممشى المتحرك)</h2>
+                        </div>
+                    </div>
+                    <span class="self-start md:self-auto text-xs bg-blue-50 text-blue-700 font-bold px-3 py-1.5 rounded-full flex items-center gap-1.5">
+                        <i class="fa-solid fa-person-walking"></i>
+                        <span id="s3-meta">المشي إلى مبنى 2F</span>
+                    </span>
+                </div>
+                
+                <!-- Step Image -->
+                <div class="relative h-48 md:h-64 w-full overflow-hidden bg-slate-100">
+                    <img src="https://images.unsplash.com/photo-1508672019048-805c876b67e2?auto=format&fit=crop&w=1200&q=80" alt="CDG Walkways" class="object-cover w-full h-full" onerror="this.src='https://placehold.co/800x400/0072bc/ffffff?text=CDG+Terminal+2+Moving+Walkway'">
+                    <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/60 to-transparent p-4">
+                        <p class="text-white text-xs font-semibold" id="s3-caption">الممرات الداخلية المجهزة بمشايات متحركة لمساعدتك على نقل الأمتعة الثقيلة بكل أريحية</p>
+                    </div>
+                </div>
+
+                <!-- Step Details -->
+                <div class="p-5 space-y-4">
+                    <p class="text-sm text-slate-600 leading-relaxed" id="s3-intro">
+                        عند الخروج من رصيف القطار في مبنى 2، ستكون في صالة السكك الحديدية المركزية للمبنى رقم 2. كافة الممرات المتبقية مغطاة وداخلية بالكامل.
+                    </p>
+
+                    <!-- Checklist -->
+                    <div class="space-y-2.5">
+                        <h4 class="font-bold text-slate-700 text-sm flex items-center gap-2" id="s3-chk-title">
+                            <i class="fa-solid fa-clipboard-list text-cdgBlue"></i> قائمة المهام والخطوات
+                        </h4>
+                        
+                        <label class="flex items-start p-3 bg-slate-50 hover:bg-slate-100/70 rounded-xl border border-slate-100 cursor-pointer transition-all">
+                            <input type="checkbox" onchange="toggleCheck(this)" class="mt-1 h-4.5 w-4.5 rounded border-gray-300 text-cdgBlue focus:ring-cdgBlue">
+                            <span class="ml-3 rtl:mr-3 text-sm text-slate-600 font-medium" id="s3-li1"><strong>التحقق من الاتجاهات:</strong> بمجرد الخروج من رصيف القطار، انظر للأعلى للتحقق من اللوحات الإرشادية والشاشات لمعرفة اتجاه بوابات المغادرة.</span>
+                        </label>
+
+                        <label class="flex items-start p-3 bg-slate-50 hover:bg-slate-100/70 rounded-xl border border-slate-100 cursor-pointer transition-all">
+                            <input type="checkbox" onchange="toggleCheck(this)" class="mt-1 h-4.5 w-4.5 rounded border-gray-300 text-cdgBlue focus:ring-cdgBlue">
+                            <span class="ml-3 rtl:mr-3 text-sm text-slate-600 font-medium" id="s3-li2"><strong>اتبع الحرف F:</strong> واصل السير مباشرة على طول الممرات الداخلية باتجاه اللوحات التي تشير إلى <strong>Terminal 2F</strong>.</span>
+                        </label>
+
+                        <label class="flex items-start p-3 bg-slate-50 hover:bg-slate-100/70 rounded-xl border border-slate-100 cursor-pointer transition-all">
+                            <input type="checkbox" onchange="toggleCheck(this)" class="mt-1 h-4.5 w-4.5 rounded border-gray-300 text-cdgBlue focus:ring-cdgBlue">
+                            <span class="ml-3 rtl:mr-3 text-sm text-slate-600 font-medium" id="s3-li3"><strong>الممشى الكهربائي:</strong> استخدم المشايات المتحركة لتسهيل دفع عربة الحقائب الثقيلة. يستغرق هذا المشي الداخلي من 5 إلى 10 دقائق فقط.</span>
+                        </label>
+                    </div>
+
+                    <!-- Visual Signage Helper -->
+                    <div class="bg-amber-50 rounded-xl p-4 border border-amber-100 flex items-start space-x-3 rtl:space-x-reverse">
+                        <div class="bg-amber-100 text-amber-800 px-2.5 py-1 rounded-lg text-sm font-bold flex items-center justify-center">
+                            <i class="fa-solid fa-eye"></i>
+                        </div>
+                        <div>
+                            <span class="block font-bold text-xs text-amber-800 uppercase tracking-wider" id="s3-sign-label">دليل اللوحات الإرشادية للاتجاهات:</span>
+                            <span class="text-sm font-bold text-amber-950" id="s3-sign-text">ابحث عن الحروف الكبيرة المضيئة التي تشير إلى صالة المغادرة "Terminal 2F" بجانب شاشات الرحلات.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 4 CARD -->
+            <div id="step-4" class="step-card bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden transition-all duration-300">
+                <!-- Step Header -->
+                <div class="bg-slate-50 border-b border-slate-100 p-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div class="flex items-center space-x-3 rtl:space-x-reverse">
+                        <span class="w-10 h-10 bg-cdgRed text-white rounded-full flex items-center justify-center font-extrabold text-lg shadow-sm">4</span>
+                        <div>
+                            <span class="text-xs font-bold text-cdgRed uppercase tracking-wide" id="s4-badge">الخطوة 4</span>
+                            <h2 class="text-lg font-bold text-slate-800" id="s4-title">شحن الحقائب ذاتياً عبر الخطوط الفرنسية (مبنى 2F)</h2>
+                        </div>
+                    </div>
+                    <span class="self-start md:self-auto text-xs bg-red-50 text-red-700 font-bold px-3 py-1.5 rounded-full flex items-center gap-1.5">
+                        <i class="fa-solid fa-suitcase"></i>
+                        <span id="s4-meta">تسليم الحقائب ذكياً</span>
+                    </span>
+                </div>
+                
+                <!-- Step Image -->
+                <div class="relative h-48 md:h-64 w-full overflow-hidden bg-slate-100">
+                    <img src="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=1200&q=80" alt="Check In" class="object-cover w-full h-full" onerror="this.src='https://placehold.co/800x400/e30613/ffffff?text=Air+France+Baggage+Drop'">
+                    <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/60 to-transparent p-4">
+                        <p class="text-white text-xs font-semibold" id="s4-caption">الأجهزة اللوحية الذاتية وأحزمة شحن الأمتعة التلقائية في صالة المغادرة 2F</p>
+                    </div>
+                </div>
+
+                <!-- Step Details -->
+                <div class="p-5 space-y-4">
+                    <p class="text-sm text-slate-600 leading-relaxed" id="s4-intro">
+                        تجنب الطوابير الطويلة أمام موظفي الخدمة عبر الاستفادة من الأنظمة الإلكترونية الحديثة للخطوط الفرنسية.
+                    </p>
+
+                    <!-- Checklist -->
+                    <div class="space-y-2.5">
+                        <h4 class="font-bold text-slate-700 text-sm flex items-center gap-2" id="s4-chk-title">
+                            <i class="fa-solid fa-clipboard-list text-cdgRed"></i> قائمة المهام والخطوات
+                        </h4>
+                        
+                        <label class="flex items-start p-3 bg-slate-50 hover:bg-slate-100/70 rounded-xl border border-slate-100 cursor-pointer transition-all">
+                            <input type="checkbox" onchange="toggleCheck(this)" class="mt-1 h-4.5 w-4.5 rounded border-gray-300 text-cdgRed focus:ring-cdgRed">
+                            <span class="ml-3 rtl:mr-3 text-sm text-slate-600 font-medium" id="s4-li1"><strong>أجهزة الخدمة الذاتية:</strong> توجه مباشرة إلى أي جهاز أصفر وأبيض خاص بالخدمة الذاتية لشركة <strong>Air France</strong> وتخطى طوابير المكاتب التقليدية.</span>
+                        </label>
+
+                        <label class="flex items-start p-3 bg-slate-50 hover:bg-slate-100/70 rounded-xl border border-slate-100 cursor-pointer transition-all">
+                            <input type="checkbox" onchange="toggleCheck(this)" class="mt-1 h-4.5 w-4.5 rounded border-gray-300 text-cdgRed focus:ring-cdgRed">
+                            <span class="ml-3 rtl:mr-3 text-sm text-slate-600 font-medium" id="s4-li2"><strong>طباعة ملصقات الحقائب:</strong> امسح الرمز الشريطي (Barcode) لتذكرتك الرقمية على هاتفك أو امسح جواز سفرك، ثم اختر "Print Baggage Tags".</span>
+                        </label>
+
+                        <label class="flex items-start p-3 bg-slate-50 hover:bg-slate-100/70 rounded-xl border border-slate-100 cursor-pointer transition-all">
+                            <input type="checkbox" onchange="toggleCheck(this)" class="mt-1 h-4.5 w-4.5 rounded border-gray-300 text-cdgRed focus:ring-cdgRed">
+                            <span class="ml-3 rtl:mr-3 text-sm text-slate-600 font-medium" id="s4-li3"><strong>إرفاق الملصقات:</strong> انزع الشريط اللاصق ومرره عبر المقبض العلوي لكل من حقيبتيك الكبيرتين بعناية.</span>
+                        </label>
+
+                        <label class="flex items-start p-3 bg-slate-50 hover:bg-slate-100/70 rounded-xl border border-slate-100 cursor-pointer transition-all">
+                            <input type="checkbox" onchange="toggleCheck(this)" class="mt-1 h-4.5 w-4.5 rounded border-gray-300 text-cdgRed focus:ring-cdgRed">
+                            <span class="ml-3 rtl:mr-3 text-sm text-slate-600 font-medium" id="s4-li4"><strong>التسليم والمغادرة:</strong> خذ حقائبك الملصقة إلى أحزمة تسليم الأمتعة الآلية <strong>(Dépose Bagages)</strong>. امسح الرمز الشريطي للحقيبة بالماسح اليدوي، وسيأخذ السير حقيبتك تلقائياً إلى نظام الشحن.</span>
+                        </label>
+                    </div>
+
+                    <!-- Visual Signage Helper -->
+                    <div class="bg-amber-50 rounded-xl p-4 border border-amber-100 flex items-start space-x-3 rtl:space-x-reverse">
+                        <div class="bg-amber-100 text-amber-800 px-2.5 py-1 rounded-lg text-sm font-bold flex items-center justify-center">
+                            <i class="fa-solid fa-eye"></i>
+                        </div>
+                        <div>
+                            <span class="block font-bold text-xs text-amber-800 uppercase tracking-wider" id="s4-sign-label">دليل صالة مغادرة مبنى 2F:</span>
+                            <span class="text-sm font-bold text-amber-950" id="s4-sign-text">تضم مناطق تسليم الحقائب الذاتية في الخطوط الفرنسية طاقم عمل متجول لمساعدتك فوراً في مسح الملصقات إن احتجت للمساعدة.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+
+        <!-- Essential Multi-lingual Help Phrases -->
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 space-y-4">
+            <div class="flex items-center space-x-2 rtl:space-x-reverse border-b border-slate-100 pb-3">
+                <i class="fa-regular fa-comments text-cdgNavy text-xl"></i>
+                <h3 class="font-bold text-slate-900" id="phrases-header">عبارات وجمل ترانزيت هامة</h3>
+            </div>
+            <p class="text-xs text-slate-500" id="phrases-desc">اضغط على أي بطاقة لنسخ العبارة باللغة الفرنسية وتسهيل المحادثة مع موظفي المطار عند الحاجة:</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Phrase 1 -->
+                <div onclick="copyText('Excusez-moi, où est la navette CDGVAL s\'il vous plaît ?')" class="cursor-pointer bg-slate-50 hover:bg-blue-50/50 p-4 rounded-xl border border-slate-100 transition-all flex justify-between items-center group">
+                    <div class="space-y-1">
+                        <span class="block text-xs font-bold text-slate-400" id="phrase1-use">للسؤال عن قطار التنقل الداخلي CDGVAL:</span>
+                        <p class="text-sm font-bold text-slate-800">"Excusez-moi, où est la navette CDGVAL s'il vous plaît ?"</p>
+                        <p class="text-xs text-slate-500 italic" id="phrase1-trans">(عذراً، أين يقع قطار الترانزيت CDGVAL من فضلك؟)</p>
+                    </div>
+                    <i class="fa-regular fa-copy text-slate-400 group-hover:text-cdgNavy transition-colors ml-2"></i>
+                </div>
+
+                <!-- Phrase 2 -->
+                <div onclick="copyText('Où se trouve la zone de dépose bagages Air France ?')" class="cursor-pointer bg-slate-50 hover:bg-blue-50/50 p-4 rounded-xl border border-slate-100 transition-all flex justify-between items-center group">
+                    <div class="space-y-1">
+                        <span class="block text-xs font-bold text-slate-400" id="phrase2-use">للسؤال عن موقع تسليم حقائب الخطوط الفرنسية:</span>
+                        <p class="text-sm font-bold text-slate-800">"Où se trouve la zone de dépose bagages Air France ?"</p>
+                        <p class="text-xs text-slate-500 italic" id="phrase2-trans">(أين تقع منطقة شحن حقائب الخطوط الجوية الفرنسية الذاتية؟)</p>
+                    </div>
+                    <i class="fa-regular fa-copy text-slate-400 group-hover:text-cdgNavy transition-colors ml-2"></i>
+                </div>
+            </div>
+            
+            <!-- Toast Feedback -->
+            <div id="copy-toast" class="hidden text-center text-xs bg-slate-900 text-white py-2 px-4 rounded-lg w-fit mx-auto transition-all animate-bounce">
+                Copied to clipboard! / تم النسخ إلى الحافظة!
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="bg-slate-100 border-t border-slate-200 mt-12 py-8 text-center text-slate-500 text-xs md:text-sm">
+        <div class="max-w-4xl mx-auto px-4 space-y-2">
+            <p id="footer-text1" class="font-semibold">رافقتكم السلامة في رحلتكم إلى برلين! يرجى التحقق من تطبيق شركة الطيران بانتظام لمتابعة أي تغييرات بالبوابات.</p>
+            <p id="footer-text2" class="text-slate-400">مرشد الانتقال الذاتي في مطار باريس CDG • رحلة سعيدة</p>
+        </div>
+    </footer>
+
+    <script>
+        // Data containing Arabic (default) and English translations
+        const translations = {
+            ar: {
+                dir: "rtl",
+                headerTitle: "مرشد الترانزيت الذكي في مطار CDG",
+                headerSubtitle: "مبنى الركاب 1 (الوصول) ➔ مبنى الركاب 2F (الخطوط الفرنسية إلى برلين)",
+                langBtn: "English",
+                alertTitle: "⚠ تذكير استراتيجي هام للغاية",
+                alertDesc: "لديك <strong>نافذة زمنية آمنة مدتها 8 ساعات</strong> (من الساعة 8:00 صباحاً حتى 4:00 مساءً)، مما يلغي تماماً أي قلق من تأخر الرحلات أو صفوف الجوازات. نظراً لأنك حجزت <strong>تذاكر منفصلة</strong>، يجب عليك استلام حقائبك المشحونة (حقيبتين كبيرتين) من مبنى الركاب 1، ثم الخروج تماماً عبر الجمارك، ونقلها معك إلى مبنى الركاب 2F لإعادة شحنها مجدداً.",
+                
+                timingTitle: "مخطط الترانزيت الزمني التفاعلي",
+                timingBadge: "وقت الانتظار الإجمالي: 8 ساعات",
+                timingIntro: "قم بسحب المؤشر لتحديد وقت هبوط طائرتك الفعلي لتحديث التوقيتات المقدرة لرحلتك تلقائياً:",
+                sliderMin: "08:00 ص (في الموعد)",
+                sliderMax: "11:00 ص (متأخرة)",
+                currentSlider: "وقت الهبوط: ",
+                tStep1: "1. الحقائب والجمارك",
+                tStep2: "2. قطار CDGVAL",
+                tStep3: "3. المشي إلى 2F",
+                tStep4: "4. شحن الحقائب مجدداً",
+
+                mapHeader: "مخطط مسار الترانزيت المرئي",
+                mapHelper: "اضغط على أي مبنى للانتقال مباشرة إلى الخطوات التفصيلية المخصصة له",
+                mapNode1: "1. الوصول والحقائب",
+                mapNode2: "2. محطة القطار",
+                mapNode3: "3. صالة المغادرة",
+                mapNodeSub: "(مركز المحطات)",
+                mapTextTrain: "قطار CDGVAL المجاني (8 دقائق)",
+                mapTextWalk: "ممشى داخلي (5-10 دقائق)",
+
+                // Step 1
+                s1Badge: "الخطوة 1",
+                s1Title: "الهبوط واستلام الأمتعة (مبنى الركاب 1)",
+                s1Meta: "مبنى الركاب 1",
+                s1Caption: "التصميم الدائري الفريد لمبنى الركاب 1 وسيور استلام الأمتعة",
+                s1Intro: "اهبط من الطائرة وتوجه مباشرة إلى المبنى الدائري المركزي التابع لمبنى الركاب 1.",
+                s1ChkTitle: "قائمة المهام والخطوات",
+                s1Li1: "<strong>احصل على عربة أمتعة:</strong> تتوفر عربات نقل الحقائب المعدنية بكثرة على طول الممرات؛ احصل على واحدة مبكراً لتسهيل حمل الحقيبتين الكبيرتين وحقيبة يدك.",
+                s1Li2: "<strong>مراقبة الجوازات:</strong> اعبر من خلال ممرات 'الخروج/الأمتعة' (Exit/Baggage). قد تبدو الطوابير طويلة ولكن وقتك الكافي (8 ساعات) سيضمن لك عبوراً مريحاً.",
+                s1Li3: "<strong>استلام الأمتعة:</strong> انتظر ظهور حقيبتيك الكبيرتين على السير المخصص، وضعهما بأمان على العربة، ثم اعبر من خلال الجمارك إلى صالة الوصول العامة.",
+                s1SignLabel: "دليل اللوحات الإرشادية:",
+                s1SignText: "ابحث بدقة عن اللوحات الصفراء التي تحمل عبارة 'Sortie / Bagages' (الخروج / استلام الحقائب).",
+
+                // Step 2
+                s2Badge: "الخطوة 2",
+                s2Title: "استقلال قطار التنقل الداخلي المجاني (CDGVAL)",
+                s2Meta: "رحلة القطار (8 دقائق)",
+                s2Caption: "القطار الآلي الداخلي الواسع CDGVAL الذي يربط بين مباني المطار المختلفة",
+                s2Intro: "ابحث عن خط قطار التنقل الداخلي CDGVAL للانتقال سريعاً ومجاناً من مبنى 1 إلى مبنى 2.",
+                s2ChkTitle: "قائمة المهام والخطوات",
+                s2Li1: "<strong>ابحث عن المحطة:</strong> اتبع الأيقونات المعلقة التي تشير إلى قطار CDGVAL. استخدم المصعد الكهربائي للنزول إلى رصيف الركوب.",
+                s2Li2: "<strong>مسار القطار:</strong> اصعد إلى القطار الآلي المجاني. لست بحاجة إلى تذكرة؛ تفتح أبواب الرصيف والقطار تلقائياً.",
+                s2Li3: "<strong>محطة النزول:</strong> ابق في القطار لمدة 8 دقائق بالضبط. سيتجاوز القطار مواقف PR ومبنى 3. انزل في المحطة الأخيرة: Terminal 2 - Gare.",
+                s2SignLabel: "دليل اللوحات الإرشادية للقطار:",
+                s2SignText: "اتبع اللوحات الزرقاء أو البيضاء التي تحمل شعار 'CDGVAL'. الممرات واسعة ومسطحة لتسهيل دفع عربات الأمتعة الكبيرة.",
+
+                // Step 3
+                s3Badge: "الخطوة 3",
+                s3Title: "السير إلى صالة مغادرة مبنى 2F (الممشى المتحرك)",
+                s3Meta: "المشي إلى مبنى 2F",
+                s3Caption: "الممرات الداخلية المجهزة بمشايات متحركة لمساعدتك على نقل الأمتعة الثقيلة بكل أريحية",
+                s3Intro: "عند الخروج من رصيف القطار في مبنى 2، ستكون في صالة السكك الحديدية المركزية للمبنى رقم 2. كافة الممرات المتبقية مغطاة وداخلية بالكامل.",
+                s3ChkTitle: "قائمة المهام والخطوات",
+                s3Li1: "<strong>التحقق من الاتجاهات:</strong> بمجرد الخروج من رصيف القطار، انظر للأعلى للتحقق من اللوحات الإرشادية والشاشات لمعرفة اتجاه بوابات المغادرة.",
+                s3Li2: "<strong>اتبع الحرف F:</strong> واصل السير مباشرة على طول الممرات الداخلية باتجاه اللوحات التي تشير إلى <strong>Terminal 2F</strong>.",
+                s3Li3: "<strong>الممشى الكهربائي:</strong> استخدم المشايات المتحركة لتسهيل دفع عربة الحقائب الثقيلة. يستغرق هذا المشي الداخلي من 5 إلى 10 دقائق فقط.",
+                s3SignLabel: "دليل اللوحات الإرشادية للاتجاهات:",
+                s3SignText: "ابحث عن الحروف الكبيرة المضيئة التي تشير إلى صالة المغادرة 'Terminal 2F' بجانب شاشات الرحلات.",
+
+                // Step 4
+                s4Badge: "الخطوة 4",
+                s4Title: "شحن الحقائب ذاتياً عبر الخطوط الفرنسية (مبنى 2F)",
+                s4Meta: "تسليم الحقائب ذكياً",
+                s4Caption: "الأجهزة اللوحية الذاتية وأحزمة شحن الأمتعة التلقائية في صالة المغادرة 2F",
+                s4Intro: "تجنب الطوابير الطويلة أمام موظفي الخدمة عبر الاستفادة من الأنظمة الإلكترونية الحديثة للخطوط الفرنسية.",
+                s4ChkTitle: "قائمة المهام والخطوات",
+                s4Li1: "<strong>أجهزة الخدمة الذاتية:</strong> توجه مباشرة إلى أي جهاز أصفر وأبيض خاص بالخدمة الذاتية لشركة <strong>Air France</strong> وتخطى طوابير المكاتب التقليدية.",
+                s4Li2: "<strong>طباعة ملصقات الحقائب:</strong> امسح الرمز الشريطي (Barcode) لتذكرتك الرقمية على هاتفك أو امسح جواز سفرك، ثم اختر 'Print Baggage Tags'.",
+                s4Li3: "<strong>إرفاق الملصقات:</strong> انزع الشريط اللاصق ومرره عبر المقبض العلوي لكل من حقيبتيك الكبيرتين بعناية.",
+                s4Li4: "<strong>التسليم والمغادرة:</strong> خذ حقائبك الملصقة إلى أحزمة تسليم الأمتعة الآلية <strong>(Dépose Bagages)</strong>. امسح الرمز الشريطي للحقيبة بالماسح اليدوي، وسيأخذ السير حقيبتك تلقائياً إلى نظام الشحن.",
+                s4SignLabel: "دليل صالة مغادرة مبنى 2F:",
+                s4SignText: "تضم مناطق تسليم الحقائب الذاتية في الخطوط الفرنسية طاقم عمل متجول لمساعدتك فوراً في مسح الملصقات إن احتجت للمساعدة.",
+
+                phrasesHeader: "عبارات وجمل ترانزيت هامة",
+                phrasesDesc: "اضغط على أي بطاقة لنسخ العبارة باللغة الفرنسية وتسهيل المحادثة مع موظفي المطار عند الحاجة:",
+                phrase1Use: "للسؤال عن قطار التنقل الداخلي CDGVAL:",
+                phrase1Trans: "(عذراً، أين يقع قطار الترانزيت CDGVAL من فضلك؟)",
+                phrase2Use: "للسؤال عن موقع تسليم حقائب الخطوط الفرنسية:",
+                phrase2Trans: "(أين تقع منطقة شحن حقائب الخطوط الجوية الفرنسية الذاتية؟)",
+
+                footer1: "رافقتكم السلامة في رحلتكم إلى برلين! يرجى التحقق من تطبيق شركة الطيران بانتظام لمتابعة أي تغييرات بالبوابات.",
+                footer2: "مرشد الانتقال الذاتي في مطار باريس CDG • رحلة سعيدة"
+            },
+            en: {
+                dir: "ltr",
+                headerTitle: "CDG Self-Transfer Companion",
+                headerSubtitle: "Terminal 1 (Arrival) ➔ Terminal 2F (Air France to Berlin)",
+                langBtn: "العربية",
+                alertTitle: "⚠ Critical Strategy Reminder",
+                alertDesc: "You have an <strong>8-hour buffer window</strong> (8:00 AM to 4:00 PM), which completely eliminates risk from flight delays or border lines. Because you have <strong>separate tickets</strong>, you must collect your 2 checked bags at Terminal 1, exit customs completely, and take them with you over to Terminal 2F to check them back in.",
+                
+                timingTitle: "Interactive Layover Timing Estimator",
+                timingBadge: "Buffer Window: 8 Hours",
+                timingIntro: "Drag the slider to adjust your actual landing time to visualize your custom timeline projections:",
+                sliderMin: "08:00 AM (On-Time)",
+                sliderMax: "11:00 AM (Delayed)",
+                currentSlider: "Landing at: ",
+                tStep1: "1. Baggage & Exit",
+                tStep2: "2. CDGVAL Shuttle",
+                tStep3: "3. Walk to 2F",
+                tStep4: "4. Check-In & Gate",
+
+                mapHeader: "Visual Connection Path Map",
+                mapHelper: "Click nodes to scroll to detailed step-by-step guides",
+                mapNode1: "1. Arrival & Bags",
+                mapNode2: "2. Shuttle Stop",
+                mapNode3: "3. Departures",
+                mapNodeSub: "(Station Hub)",
+                mapTextTrain: "FREE CDGVAL METRO (8 mins)",
+                mapTextWalk: "Walkway (5-10m)",
+
+                // Step 1
+                s1Badge: "Step 1",
+                s1Title: "Landing & Ground Collection (Terminal 1)",
+                s1Meta: "Terminal 1 Zone",
+                s1Caption: "Terminal 1 Circular Architecture & Baggage Carousels",
+                s1Intro: "Deplane and walk out into the central circular building of Terminal 1.",
+                s1ChkTitle: "Action Checklist",
+                s1Li1: "<strong>Grab a Trolley:</strong> Luggage trolleys are readily available along the path; grab one early to balance your 2 large bags and handbag.",
+                s1Li2: "<strong>Passport Control:</strong> Walk through the main 'Exit/Baggage' lane. Lines can look long but your 8-hour window handles it seamlessly.",
+                s1Li3: "<strong>Baggage Carousel:</strong> Wait for your 2 large bags to appear on the carousel, place them safely on your trolley, and pass through customs into the public arrivals hall.",
+                s1SignLabel: "Airport Signage Reference:",
+                s1SignText: "Look strictly for yellow signs displaying 'Sortie / Bagages' (Exit / Baggage Claim).",
+
+                // Step 2
+                s2Badge: "Step 2",
+                s2Title: "Ride the Inter-Terminal Shuttle (CDGVAL)",
+                s2Meta: "8 Minute Shuttle",
+                s2Caption: "The automated, spacious CDGVAL trains that transport you across CDG terminals",
+                s2Intro: "Find the CDGVAL line to move from Terminal 1 to the Terminal 2 hub quickly and with zero cost.",
+                s2ChkTitle: "Action Checklist",
+                s2Li1: "<strong>Find the Station:</strong> Follow the overhead icons showing the CDGVAL train. Take the elevator down to the boarding platform.",
+                s2Li2: "<strong>The Route:</strong> Board the free automated train. You do not need a ticket. The platform doors open automatically.",
+                s2Li3: "<strong>Exit Stop:</strong> Stay on the train for exactly 8 minutes. Bypass the PR car park and Terminal 3. Step off at the final stop: Terminal 2 - Gare.",
+                s2SignLabel: "Transit Signage Reference:",
+                s2SignText: "Follow the bright blue or white signs labeled 'CDGVAL'. The pathways are broad and flat to accommodate large luggage carts.",
+
+                // Step 3
+                s3Badge: "Step 3",
+                s3Title: "Walk to Terminal 2F Departures (Moving Walkway)",
+                s3Meta: "Walk to 2F",
+                s3Caption: "Comfortable indoor connectors equipped with flat moving walkways to aid luggage transfers",
+                s3Intro: "Upon departing the train at Terminal 2, you enter the central hub to walk comfortably indoors.",
+                s3ChkTitle: "Action Checklist",
+                s3Li1: "<strong>Navigate the Hub:</strong> As you exit the train platform at Terminal 2, look up immediately to check the direction panels.",
+                s3Li2: "<strong>Follow the Letter F:</strong> Keep walking straight along the indoor corridors following the overhead signs pointing to Terminal 2F.",
+                s3Li3: "<strong>Transit Time:</strong> Use the moving walkways to make moving your heavy luggage carts easier. This indoor walk takes between 5 to 10 minutes.",
+                s3SignLabel: "Directional Reference:",
+                s3SignText: "Look for the large letters indicating Terminal 2F alongside flight display monitors showing gate allocations.",
+
+                // Step 4
+                s4Badge: "Step 4",
+                s4Title: "Air France Automated Baggage Drop (Terminal 2F)",
+                s4Meta: "Drop Luggage",
+                s4Caption: "Self-service kiosks and automated bag drops inside Terminal 2F",
+                s4Intro: "Avoid human counter line-ups using the smart automated check-in systems of Air France.",
+                s4ChkTitle: "Action Checklist",
+                s4Li1: "<strong>Check-In Kiosk:</strong> Skip the long lines of passengers waiting for desk agents. Walk directly up to any yellow-and-white Air France Self-Service Kiosk.",
+                s4Li2: "<strong>Print Tags:</strong> Scan the barcode on your digital boarding pass (from your phone) or scan your passport. Select 'Print Baggage Tags'.",
+                s4Li3: "<strong>Affix Tags:</strong> Peel the backing off and loop the sticky tags securely through the top handles of your 2 large luggage bags.",
+                s4Li4: "<strong>Drop and Go:</strong> Carry your tagged bags over to the automated Baggage Drop (Dépose Bagages) belts. Scan the bag's barcode, and the belt will take your luggage into the system.",
+                s4SignLabel: "Terminal 2F Check-In Reference:",
+                s4SignText: "Air France self-service drop zones are heavily staffed by roaming floor assistants who can instantly scan your tag if you need a hand.",
+
+                phrasesHeader: "Airport Conversation Phrase Guide",
+                phrasesDesc: "Tap to copy the French text to show to airport staff if you need direction help:",
+                phrase1Use: "To ask where the CDGVAL shuttle is:",
+                phrase1Trans: "(Excuse me, where is the CDGVAL shuttle, please?)",
+                phrase2Use: "To ask where the Air France baggage drop is:",
+                phrase2Trans: "(Where is the Air France baggage drop-off zone?)",
+
+                footer1: "Safe Travels to Berlin! Check your airline app regularly for any gate or schedule variations.",
+                footer2: "CDG Self-Transfer Companion • Interactive Layout"
+            }
+        };
+
+        let currentLang = 'ar'; // Default language set to Arabic
+
+        // Master function to apply translation dictionary dynamically to HTML DOM
+        function renderLanguage(lang) {
+            currentLang = lang;
+            const data = translations[lang];
+            
+            // Set Document Direction and Lang Attributes
+            document.documentElement.dir = data.dir;
+            document.documentElement.lang = lang;
+            
+            if (data.dir === 'rtl') {
+                document.body.classList.add('font-ar');
+                document.body.classList.remove('font-en');
+            } else {
+                document.body.classList.add('font-en');
+                document.body.classList.remove('font-ar');
+            }
+
+            // Update Header & Banner
+            document.getElementById('header-title').innerText = data.headerTitle;
+            document.getElementById('header-subtitle').innerText = data.headerSubtitle;
+            document.getElementById('lang-btn-text').innerText = data.langBtn;
+            document.getElementById('alert-title').innerHTML = data.alertTitle;
+            document.getElementById('alert-desc').innerHTML = data.alertDesc;
+
+            // Update Time Slider & Estimated Timings Title text
+            document.getElementById('timing-title').innerText = data.timingTitle;
+            document.getElementById('timing-badge').innerText = data.timingBadge;
+            document.getElementById('timing-intro').innerText = data.timingIntro;
+            document.getElementById('slider-min').innerText = data.sliderMin;
+            document.getElementById('slider-max').innerText = data.sliderMax;
+            document.getElementById('t-step-1').innerText = data.tStep1;
+            document.getElementById('t-step-2').innerText = data.tStep2;
+            document.getElementById('t-step-3').innerText = data.tStep3;
+            document.getElementById('t-step-4').innerText = data.tStep4;
+
+            // Update SVG map elements text content
+            document.getElementById('map-header-title').innerText = data.mapHeader;
+            document.getElementById('map-helper').innerText = data.mapHelper;
+            document.getElementById('map-node1').textContent = data.mapNode1;
+            document.getElementById('map-node2').textContent = data.mapNode2;
+            document.getElementById('map-node3').textContent = data.mapNode3;
+            document.getElementById('map-node-sub').textContent = data.mapNodeSub;
+            document.getElementById('map-text-train').textContent = data.mapTextTrain;
+            document.getElementById('map-text-walk').textContent = data.mapTextWalk;
+            document.getElementById('map-airline').textContent = (lang === 'ar' ? 'الخطوط الفرنسية' : 'Air France');
+
+            // Translate Step 1 Guide
+            document.getElementById('s1-badge').innerText = data.s1Badge;
+            document.getElementById('s1-title').innerText = data.s1Title;
+            document.getElementById('s1-meta').innerText = data.s1Meta;
+            document.getElementById('s1-caption').innerText = data.s1Caption;
+            document.getElementById('s1-intro').innerText = data.s1Intro;
+            document.getElementById('s1-chk-title').innerHTML = `<i class="fa-solid fa-clipboard-list text-cdgNavy"></i> ` + data.s1ChkTitle;
+            document.getElementById('s1-li1').innerHTML = data.s1Li1;
+            document.getElementById('s1-li2').innerHTML = data.s1Li2;
+            document.getElementById('s1-li3').innerHTML = data.s1Li3;
+            document.getElementById('s1-sign-label').innerText = data.s1SignLabel;
+            document.getElementById('s1-sign-text').innerText = data.s1SignText;
+
+            // Translate Step 2 Guide
+            document.getElementById('s2-badge').innerText = data.s2Badge;
+            document.getElementById('s2-title').innerText = data.s2Title;
+            document.getElementById('s2-meta').innerText = data.s2Meta;
+            document.getElementById('s2-caption').innerText = data.s2Caption;
+            document.getElementById('s2-intro').innerText = data.s2Intro;
+            document.getElementById('s2-chk-title').innerHTML = `<i class="fa-solid fa-clipboard-list text-cdgTeal"></i> ` + data.s2ChkTitle;
+            document.getElementById('s2-li1').innerHTML = data.s2Li1;
+            document.getElementById('s2-li2').innerHTML = data.s2Li2;
+            document.getElementById('s2-li3').innerHTML = data.s2Li3;
+            document.getElementById('s2-sign-label').innerText = data.s2SignLabel;
+            document.getElementById('s2-sign-text').innerText = data.s2SignText;
+
+            // Translate Step 3 Guide
+            document.getElementById('s3-badge').innerText = data.s3Badge;
+            document.getElementById('s3-title').innerText = data.s3Title;
+            document.getElementById('s3-meta').innerText = data.s3Meta;
+            document.getElementById('s3-caption').innerText = data.s3Caption;
+            document.getElementById('s3-intro').innerText = data.s3Intro;
+            document.getElementById('s3-chk-title').innerHTML = `<i class="fa-solid fa-clipboard-list text-cdgBlue"></i> ` + data.s3ChkTitle;
+            document.getElementById('s3-li1').innerHTML = data.s3Li1;
+            document.getElementById('s3-li2').innerHTML = data.s3Li2;
+            document.getElementById('s3-li3').innerHTML = data.s3Li3;
+            document.getElementById('s3-sign-label').innerText = data.s3SignLabel;
+            document.getElementById('s3-sign-text').innerText = data.s3SignText;
+
+            // Translate Step 4 Guide
+            document.getElementById('s4-badge').innerText = data.s4Badge;
+            document.getElementById('s4-title').innerText = data.s4Title;
+            document.getElementById('s4-meta').innerText = data.s4Meta;
+            document.getElementById('s4-caption').innerText = data.s4Caption;
+            document.getElementById('s4-intro').innerText = data.s4Intro;
+            document.getElementById('s4-chk-title').innerHTML = `<i class="fa-solid fa-clipboard-list text-cdgRed"></i> ` + data.s4ChkTitle;
+            document.getElementById('s4-li1').innerHTML = data.s4Li1;
+            document.getElementById('s4-li2').innerHTML = data.s4Li2;
+            document.getElementById('s4-li3').innerHTML = data.s4Li3;
+            document.getElementById('s4-li4').innerHTML = data.s4Li4;
+            document.getElementById('s4-sign-label').innerText = data.s4SignLabel;
+            document.getElementById('s4-sign-text').innerText = data.s4SignText;
+
+            // Translate Phrases section text
+            document.getElementById('phrases-header').innerText = data.phrasesHeader;
+            document.getElementById('phrases-desc').innerText = data.phrasesDesc;
+            document.getElementById('phrase1-use').innerText = data.phrase1Use;
+            document.getElementById('phrase1-trans').innerText = data.phrase1Trans;
+            document.getElementById('phrase2-use').innerText = data.phrase2Use;
+            document.getElementById('phrase2-trans').innerText = data.phrase2Trans;
+
+            // Translate Footers
+            document.getElementById('footer-text1').innerText = data.footer1;
+            document.getElementById('footer-text2').innerHTML = data.footer2;
+
+            // Refresh the time slider timeline using correct language symbols
+            updateTimetable(document.getElementById('timeSlider').value);
+        }
+
+        // Action when pressing the Language selection button
+        function toggleLanguage() {
+            const nextLang = currentLang === 'ar' ? 'en' : 'ar';
+            renderLanguage(nextLang);
+        }
+
+        function updateTimetable(val) {
+            const numVal = parseFloat(val);
+            const hourInt = Math.floor(numVal);
+            const mins = (numVal % 1) === 0.5 ? "30" : "00";
+            
+            let displayHour = hourInt > 12 ? hourInt - 12 : hourInt;
+            let displayPeriod = hourInt >= 12 ? "PM" : "AM";
+            if (currentLang === 'ar') {
+                displayPeriod = hourInt >= 12 ? "م" : "ص";
+            }
+
+            // Set dynamic slider values in display header
+            document.getElementById('current-slider-val').innerText = translations[currentLang].currentSlider + `${displayHour}:${mins} ${displayPeriod}`;
+
+            // Predict and output time schedules based on chosen landing time
+            const t1 = numVal + 1.25; // Baggage retrieval/border queues (~ 1hr 15m)
+            const t2 = t1 + 0.4;     // CDGVAL shuttle journey & platforms (~ 25 mins)
+            const t3 = t2 + 0.25;    // Undercover walkway to Terminal 2F (~ 15 mins)
+            const t4 = t3 + 0.6;     // Baggage check & security screening (~ 35 mins)
+
+            document.getElementById('time-step1').innerText = formatTimeOutput(t1);
+            document.getElementById('time-step2').innerText = formatTimeOutput(t2);
+            document.getElementById('time-step3').innerText = formatTimeOutput(t3);
+            document.getElementById('time-step4').innerText = formatTimeOutput(t4);
+        }
+
+        // Helper tool to print standardized bilingual hours and times
+        function formatTimeOutput(numTime) {
+            const hours = Math.floor(numTime);
+            const minutesFraction = numTime % 1;
+            let minutes = Math.round(minutesFraction * 60);
+            if (minutes < 10) { minutes = "0" + minutes; }
+            
+            let displayHours = hours > 12 ? hours - 12 : hours;
+            if (displayHours === 0) displayHours = 12;
+
+            let ampm = hours >= 12 ? "PM" : "AM";
+            if (currentLang === 'ar') {
+                ampm = hours >= 12 ? "م" : "ص";
+            }
+
+            return `${displayHours}:${minutes} ${ampm}`;
+        }
+
+        function toggleCheck(checkbox) {
+            const parentLabel = checkbox.closest('label');
+            if (checkbox.checked) {
+                parentLabel.classList.remove('bg-slate-50', 'border-slate-100');
+                parentLabel.classList.add('bg-emerald-50/50', 'border-emerald-200/60');
+            } else {
+                parentLabel.classList.add('bg-slate-50', 'border-slate-100');
+                parentLabel.classList.remove('bg-emerald-50/50', 'border-emerald-200/60');
+            }
+        }
+
+        // Scroll to specific step view when tapping custom map circles
+        function scrollToStep(stepNum) {
+            const element = document.getElementById('step-' + stepNum);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                element.classList.add('step-active');
+                setTimeout(() => {
+                    element.classList.remove('step-active');
+                }, 1800);
+            }
+        }
+
+        // Quick phrase clipboard copy helper
+        function copyText(text) {
+            const tempInput = document.createElement("input");
+            tempInput.value = text;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand("copy");
+            document.body.removeChild(tempInput);
+
+            // Trigger visible feedback toast notification
+            const toast = document.getElementById('copy-toast');
+            toast.classList.remove('hidden');
+            setTimeout(() => {
+                toast.classList.add('hidden');
+            }, 2500);
+        }
+
+        // Initialize with Arabic content on startup
+        window.onload = function() {
+            renderLanguage('ar');
+        }
+    </script>
+</body>
+</html>
