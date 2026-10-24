@@ -328,6 +328,9 @@ function calc() {
     const d1 = Math.min(start.getUTCDate(), 30), d2 = Math.min(end.getUTCDate(), 30);
     const benefitDays360 = Math.max(0, 360 * (y2 - y1) + 30 * (m2 - m1) + d2 - d1);
     const annualExtraBenefit = salary * benefitDays360 / 360;
+    const benefitYears = Math.floor(benefitDays360 / 360);
+    const benefitMonths = Math.floor((benefitDays360 % 360) / 30);
+    const benefitDays = benefitDays360 % 30;
     
     document.getElementById('m-years').innerText = totalYears.toFixed(2) + " Yrs";
     document.getElementById('m-base').innerText = salary.toLocaleString() + " SAR";
@@ -393,8 +396,9 @@ function calc() {
     }
 
     rows.push({
-        labelEn: "Annual Benefit",
-        labelAr: "المنفعة السنوية",
+        labelEn: "Annual Leave Salary",
+        labelAr: "راتب الإجازة السنوي",
+        description: `Monthly salary × (${benefitYears} years + ${benefitMonths}/12 months + ${benefitDays}/360 days)`,
         value: annualExtraBenefit,
         isExtra: true
     });
@@ -422,6 +426,7 @@ function calc() {
             <div>
                 <div class="text-xs font-semibold ${r.isExtra ? 'text-saudi-800' : 'text-slate-700'}">${r.labelEn}</div>
                 <div class="text-[10px] font-bold ${r.isExtra ? 'text-saudi-600' : 'text-slate-400'} font-arabic">${r.labelAr}</div>
+                ${r.description ? `<div class="text-[10px] text-slate-500 mt-1">${r.description}</div>` : ''}
             </div>
             <div class="text-sm font-bold ${r.isExtra ? 'text-saudi-700' : 'text-slate-800'}">${Math.round(r.value).toLocaleString()} SAR</div>
         </div>`;
